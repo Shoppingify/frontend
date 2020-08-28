@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const config = {
@@ -22,7 +23,7 @@ const config = {
       {
         test: /\.css$/,
         use: [
-          'style-loader',
+          MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader',
             options: {
@@ -40,7 +41,7 @@ const config = {
       {
         test: /\.scss$/,
         use: [
-          'style-loader',
+          MiniCssExtractPlugin.loader,
           'css-loader',
           'sass-loader'
         ]
@@ -80,6 +81,7 @@ const config = {
     new CopyPlugin({
       patterns: [{ from: 'src/index.html' }],
     }),
+    new MiniCssExtractPlugin(),
     new CleanWebpackPlugin()
   ]
 };
