@@ -4,13 +4,15 @@ import React from 'react';
 import { Route, Redirect } from "react-router-dom";
 
 // Utils
-import { checkAuth } from "../../auth/checkAuth";
+import {useRecoilValue} from "recoil/dist";
+import {userState} from "../../App";
 
 // @ts-ignore
 function PrivateRoute({ component: Component, ...rest}) {
+  const user = useRecoilValue(userState);
   return (
     <Route {...rest} render={props => (
-      checkAuth() ? (
+      user.valid ? (
         <Component {...props} />
       ) : (
         <Redirect to={{ pathname: '/login' }} />

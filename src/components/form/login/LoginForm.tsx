@@ -41,7 +41,8 @@ function LoginForm() {
       localStorage.setItem('token', token);
       setUser((current) => ({
         ...current,
-        token
+        token,
+        valid: true
       }))
       history.push('/items');
     }
