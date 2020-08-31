@@ -51,6 +51,12 @@ const config = {
         use: 'file-loader'
       },
       {
+        test: /\.(woff|woff2|eot|ttf|otf)$/,
+        use: [
+          'file-loader',
+        ],
+      },
+      {
         test: /\.png$/,
         use: [
           {

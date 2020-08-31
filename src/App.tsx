@@ -41,6 +41,7 @@ function App() {
    * On mount effect
    */
   useEffect(() => {
+    // TODO check token exp, if expired redirect to login
     const token = localStorage.getItem('token');
 
     async function checkToken() {
