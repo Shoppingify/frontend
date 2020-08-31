@@ -3,12 +3,16 @@ import React, { useEffect, useState } from 'react';
 // Libs
 import { useRecoilValue } from "recoil/dist";
 import { userState } from "../../App";
+import { v4 as uuidv4 } from 'uuid';
+import Item from "../../components/cards/Item";
+
 
 interface List {
   category: string;
   items: Array<any>;
 }
 
+// TODO refactor
 function ItemsPage() {
 
   const user = useRecoilValue(userState);
@@ -40,22 +44,18 @@ function ItemsPage() {
   }, [])
 
   return (
-    <div>
-      <h1 className="text-4xl">Items page</h1>
+    <div className="bg-gray-extra-light px-20">
+      <h1 className="text-4xl mb-5">Items page</h1>
       <ul>
         {
           lists.map((list: List) => (
-            <li key={list.category}>
-              { list.category}
+            <li key={uuidv4()} className="mb-5">
+              <h3 className="text-2xl font-bold">{ list.category}</h3>
               { list.items.length > 0 && (
-                <ul>
+                <ul className="grid grid-cols-4 gap-5">
                   {
                     list.items.map((item: any) => (
-                      <li>
-                        {
-                          item.name
-                        }
-                      </li>
+                      <Item data={item} key={uuidv4()} />
                     ))
                   }
                 </ul>
