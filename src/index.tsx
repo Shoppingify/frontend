@@ -2,17 +2,24 @@ import * as React from 'react';
 import * as ReactDOM from "react-dom";
 
 import App from './App';
+
+// Styles
 import "./styles/styles.css";
 import "./styles/styles.scss";
+
+// Fonts
+require('typeface-quicksand');
+
+// Libs
 import { RecoilRoot } from "recoil/dist";
-import {BrowserRouter as Router} from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 
 const mountNode = document.getElementById("app");
 
 ReactDOM.render(
   <Router>
     <RecoilRoot>
-      <App />
+      <App/>
     </RecoilRoot>
   </Router>,
   mountNode
