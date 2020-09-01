@@ -1,5 +1,8 @@
 import React from 'react';
 
+/**
+ * Login loader
+ */
 function LoggingLoader() {
   return (
     <div>

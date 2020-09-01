@@ -1,5 +1,8 @@
 import React from 'react';
 
+/**
+ * Simple statistics page component
+ */
 function StatisticsPage() {
   return (
     <div>
