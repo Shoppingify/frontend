@@ -12,7 +12,10 @@ interface List {
   items: Array<any>;
 }
 
-// TODO refactor
+// TODO refactor, example of a bad component. Refactor the logic into its own components
+/**
+ * Simple items page component
+ */
 function ItemsPage() {
 
   const user = useRecoilValue(userState);
@@ -55,7 +58,10 @@ function ItemsPage() {
                 <ul className="grid grid-cols-4 gap-5">
                   {
                     list.items.map((item: any) => (
-                      <Item data={item} key={uuidv4()} />
+                      <Item
+                        data={item}
+                        key={uuidv4()}
+                      />
                     ))
                   }
                 </ul>

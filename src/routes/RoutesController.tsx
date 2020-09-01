@@ -11,6 +11,10 @@ import StatisticsPage from "../pages/statistics/StatisticsPage";
 // Route types
 import PrivateRoute from "../components/route/PrivateRoute";
 
+// TODO refactor, last route is currently public, might cause bugs
+/**
+ * Private routes controller
+ */
 function RoutesController() {
   return (
     <Switch>

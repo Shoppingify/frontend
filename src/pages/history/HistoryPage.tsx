@@ -1,5 +1,8 @@
 import React from 'react';
 
+/**
+ * Simple history page component
+ */
 function HistoryPage() {
   return (
     <div>

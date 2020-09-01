@@ -1,6 +1,10 @@
 import React  from 'react';
 import LoginForm from "../../components/form/login/LoginForm";
 
+/**
+ * Simple login page component
+ */
+
 function LoginPage() {
   return (
     <div className="container mx-auto">
