@@ -1,26 +1,26 @@
-import { hot } from "react-hot-loader/root"
-import React, { useEffect } from "react"
+import { hot } from 'react-hot-loader/root'
+import React, { useEffect } from 'react'
 
 // Libs
-import { BrowserRouter as Router, Switch, useHistory } from "react-router-dom"
-import { useRecoilState, atom } from "recoil/dist"
+import { BrowserRouter as Router, Switch, useHistory } from 'react-router-dom'
+import { useRecoilState, atom } from 'recoil/dist'
 
 // Router components
-import RoutesController from "./routes/RoutesController"
+import RoutesController from './routes/RoutesController'
 
 // Components
-import Navbar from "./components/navbar/Navbar"
-import Sidebar from "./components/sidebar/Sidebar"
-import LoggingLoader from "./components/loader/LoggingLoader"
-import PublicRoute from "./components/route/PublicRoute"
-import LoginPage from "./pages/login/LoginPage"
-import { validateToken } from "./auth/validateToken"
+import Navbar from './components/navbar/Navbar'
+import Sidebar from './components/sidebar/Sidebar'
+import LoggingLoader from './components/loader/LoggingLoader'
+import PublicRoute from './components/route/PublicRoute'
+import LoginPage from './pages/login/LoginPage'
+import { validateToken } from './auth/validateToken'
 
 // Recoil atom
 export const userState = atom({
-  key: "userState",
+  key: 'userState',
   default: {
-    token: "",
+    token: '',
     valid: false,
     loadingLogin: false,
   },
@@ -42,7 +42,7 @@ function App() {
    */
   useEffect(() => {
     // TODO check token exp, if expired redirect to login
-    const token = localStorage.getItem("token")
+    const token = localStorage.getItem('token')
 
     async function checkToken() {
       const valid = await validateToken(token)
@@ -57,7 +57,7 @@ function App() {
 
       console.log(valid)
 
-      if (!valid) history.push("/login")
+      if (!valid) history.push('/login')
 
       if (valid) {
         // Fake login timeout
