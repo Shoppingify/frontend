@@ -4,6 +4,7 @@ import { format } from 'date-fns'
 import { useRecoilValue } from 'recoil'
 import { userState } from '../../App'
 import List from '../../components/cards/List'
+import client from '../../api/client'
 
 /**
  * Simple history page component
@@ -11,22 +12,15 @@ import List from '../../components/cards/List'
 const HistoryPage = () => {
     const [lists, setLists] = useState([])
     const [loading, setLoading] = useState(true)
-    const user: any = useRecoilValue(userState)
 
     /**
      * Fetch the user's lists
      */
     const fetchLists = useCallback(async () => {
         try {
-            const headers = new Headers()
-            headers.append('Authorization', `Bearer ${user.token}`)
+            const response = await client.get('lists')
 
-            const response = await fetch('http://localhost:3000/api/lists', {
-                method: 'GET',
-                headers,
-            })
-            const { data } = await response.json()
-
+            const { data } = response.data
             // Group data by date
             const sorted = groupByDate(data)
 
@@ -71,7 +65,7 @@ const HistoryPage = () => {
     }, [])
 
     return (
-        <div className="px-10 bg-gray-extra-light h-full">
+        <div className="flex flex-col px-10 bg-gray-extra-light h-full">
             <h1 className="text-2xl font-bold pt-8">Shopping History</h1>
 
             {/* TODO: Make a proper loader */}
@@ -79,7 +73,7 @@ const HistoryPage = () => {
 
             {/* Lists */}
             {lists.map((item: any) => (
-                <div className="mt-10" key={item.date}>
+                <div className="mt-10 px-4 overflow-y-auto" key={item.date}>
                     <h3 className="text-sm mb-4 font-medium">{item.date}</h3>
                     <ul>
                         {item.lists.map((list: any) => (
