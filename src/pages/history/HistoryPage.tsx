@@ -5,6 +5,9 @@ import { useRecoilValue } from "recoil";
 import { userState } from "../../App";
 import List from "../../components/cards/List";
 
+/**
+ * Simple history page component
+ */
 function HistoryPage() {
   const [lists, setLists] = useState([]);
   const [loading, setLoading] = useState(true);

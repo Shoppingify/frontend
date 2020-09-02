@@ -18,11 +18,22 @@ const LoginSchema = Yup.object().shape({
   password: Yup.string()
     .required('Required')
 })
-// TODO cleanup
+
+// TODO cleanup into own components
+/**
+ * Login form component
+ * @constructor
+ */
 function LoginForm() {
   const history = useHistory();
   const [user, setUser] = useRecoilState(userState);
 
+  /**
+   * Handles login from passed data
+   *
+   * @param {string} email
+   * @param {string} password
+   */
   async function handleLogin({ email, password }: any) {
     const response = await fetch('http://localhost:3000/api/login', {
       method: 'POST',
@@ -47,12 +58,22 @@ function LoginForm() {
       history.push('/items');
     }
   }
+
+  /**
+   * Handles login form submit
+   *
+   * @param {object} data
+   *  Data from the login form
+   * @param {function} setSubmitting
+   *  setSubmitting function
+   */
   async function handleSubmit(data: any, { setSubmitting }: any) {
     setSubmitting(true);
     await handleLogin(data);
     setSubmitting(false);
   }
 
+  // TODO more cleanup
   return (
     <Formik
       initialValues={{

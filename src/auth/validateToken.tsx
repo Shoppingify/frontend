@@ -1,9 +1,10 @@
 /**
  * Validate token using the api, returns true or false
  *
- * @param {any} token
+ * @param {string} token
  *  token to be validated
  */
+// TODO fix ts
 export async function validateToken(token: any) {
   const headers = new Headers();
   headers.append('Authorization', `Bearer ${token}`);

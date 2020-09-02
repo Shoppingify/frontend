@@ -3,6 +3,9 @@ import React from 'react';
 // Components
 import LoginForm from "../../components/form/login/LoginForm";
 
+/**
+ * Simple homepage component
+ */
 function Home() {
   return (
     <div>
