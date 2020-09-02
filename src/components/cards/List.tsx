@@ -1,46 +1,89 @@
-import React from "react";
-import { format } from "date-fns";
+import React from "react"
+import { format } from "date-fns"
+import { RiCalendarTodoLine } from "react-icons/ri"
+import { FaChevronRight } from "react-icons/fa"
+import { Link } from "react-router-dom"
 
-interface List {
-  id?: number;
-  name?: string;
-  status?: string;
-  created_at?: string;
+/**
+ * Move the interfaces to their own folder
+ */
+type ListProps = {
+  list: List
 }
 
-function List({ list: { id, name, status, created_at } }: any) {
-  const formattedDate = (date: any) => {
-    return format(new Date(date), "iii d.M.yyyy ");
-  };
+type List = {
+  id?: number
+  name?: string
+  status?: string
+  user_id?: number
+  created_at?: string
+}
 
-  const statusColor = (status: any) => {
+/**
+ * TODO: Check if we have other icons with the same size to extract that in a class
+ * or extends tailwind width/height properties
+ * Icon style
+ */
+const iconStyle = {
+  height: "20px",
+  width: "20px",
+}
+
+/**
+ * @param {ListProps} list
+ */
+function List({ list: { id, name, status, created_at } }: ListProps) {
+  /**
+   * Format the date
+   * @param date
+   * @returns {string}
+   */
+  const formattedDate = (date: string): string => {
+    return format(new Date(date), "iii d.M.yyyy ")
+  }
+
+  const statusColor = (status: string): string => {
     switch (status) {
       case "active":
-        return "primary";
+        return "primary"
       case "completed":
-        return "secondary";
+        return "secondary"
       case "canceled":
-        return "danger";
+        return "danger"
       default:
-        return "active";
+        return "active"
     }
-  };
+  }
   return (
-    <div className="flex w-full p-4 shadow rounded-xl justify-between mb-8 bg-white">
-      <div className="font-bold">{name}</div>
-      {/* Icon */}
-      <div className="flex items-center">
-        <div className="mr-2">{formattedDate(created_at)}</div>
-        <div
-          className={`border rounded-xl border-${statusColor(
-            status
-          )} px-2 text-${statusColor(status)}`}
-        >
-          {status}
+    <Link to={`/history/${id}`}>
+      <div className="flex w-full p-4 shadow rounded-lg justify-between items-center mb-8 bg-white hover:bg-gray-extra-light transition-colors duration-300">
+        {/* List name */}
+        <div className="font-bold">{name}</div>
+
+        <div className="flex items-center w-1/2 justify-around">
+          {/* Icon + Date */}
+          <div className="flex items-center">
+            <RiCalendarTodoLine
+              style={iconStyle}
+              className="text-gray-light mr-2"
+            />
+            <div className=" text-gray-light text-sm font-medium">
+              {formattedDate(created_at!)}
+            </div>
+          </div>
+          {/* Status */}
+          <div
+            className={`border mx-6 rounded-lg border-${statusColor(
+              status!
+            )} px-2 text-${statusColor(status!)}`}
+          >
+            {status}
+          </div>
+          <FaChevronRight className="text-primary" />
         </div>
       </div>
-    </div>
-  );
+    </Link>
+  )
 }
 
-export default List;
+export default List

@@ -18,10 +18,5 @@ module.exports = {
     fontFamily: {
       body: ["Quicksand", "sans-serif"],
     },
-    extend: {
-      borderRadius: {
-        xl: "24px",
-      },
-    },
   },
 };
