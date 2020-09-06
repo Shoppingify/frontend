@@ -19,6 +19,7 @@
     "axios": "^0.20.0",
     "date-fns": "^2.16.1",
     "formik": "^2.1.5",
+    "framer-motion": "^2.6.6",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-hot-loader": "^4.12.21",
