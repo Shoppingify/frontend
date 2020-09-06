@@ -1,11 +1,11 @@
-import React from 'react';
+import React from 'react'
 
-// Icons TODO check if correct
-import { FaPlus } from 'react-icons/fa';
+import { MdAdd } from 'react-icons/md'
 
 // Recoil
-import { useRecoilState } from "recoil/dist";
-import { sidebarState } from "../../global-state/atoms";
+import { shopListDataState } from '../../global-state/atoms'
+import { useSetRecoilState } from 'recoil'
+import { ItemType } from '../../types/items/types'
 
 // TODO how to handle long item names? Fix word breaking
 // TODO how to align plus symbol to the item name, multilines item name issue
@@ -24,34 +24,62 @@ import { sidebarState } from "../../global-state/atoms";
  * @param {string} image
  *  Image src of the item
  */
-function Item({ data: { name, note, id, image } }: any) {
+function Item({ data, category }: any) {
+    const setShopList = useSetRecoilState(shopListDataState)
 
-  const [sidebarValues, setSidebarValues] = useRecoilState(sidebarState);
+    function handleClick() {
+        console.log('Before set state')
+        //@ts-ignore
+        // TODO refactor, setting app state
+        setShopList((current: any) => {
+            const currentItem: ItemType = { ...data, quantity: 1, category }
 
-  function handleClick() {
+            const { id } = currentItem
+            const newItems = JSON.parse(JSON.stringify(current))
 
+            // In current state check if object with category clicked already exists
+            const catIndex = current.findIndex(
+                (x: any) => x.category === category
+            )
 
-    setSidebarValues((current: any) => {
-      const currentItem = { name, note, id, image }
-      const newItems = [...current.items];
-      newItems.push(currentItem)
+            // Category already present in the state
+            if (catIndex > -1) {
+                // Try to find item in category.items
+                const itemIndex = current[catIndex].items.findIndex(
+                    (item: ItemType) => {
+                        return item.id === id
+                    }
+                )
 
-      return {
-        ...current,
-        items: newItems
-      }
-    })
-  }
+                // Item already present in category.items
+                if (itemIndex > -1) {
+                    newItems[catIndex].items[itemIndex].quantity += 1
+                } else {
+                    newItems[catIndex].items.push(currentItem)
+                }
+            } else {
+                newItems.push({
+                    category: category,
+                    items: [currentItem],
+                })
+            }
 
-  return (
-    <button
-      onClick={handleClick}
-      className="bg-white rounded-lg flex justify-between p-4"
-    >
-      <h4 className="font-medium flex-grow-1 break-all pr-4">{ name }</h4>
-      <FaPlus className="w-1/6" />
-    </button>
-  );
+            return newItems
+        })
+    }
+
+    return (
+        <>
+            <button className="bg-white rounded-lg flex justify-between p-4">
+                <h4 className="font-medium flex-grow-1 break-all pr-4">
+                    {data.name}
+                </h4>
+            </button>
+            <button onClick={handleClick}>
+                <MdAdd size={24} className="w-1/6" />
+            </button>
+        </>
+    )
 }
 
-export default Item;
+export default Item
