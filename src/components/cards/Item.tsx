@@ -5,6 +5,7 @@ import { MdAdd } from 'react-icons/md'
 // Recoil
 import { shopListDataState } from '../../global-state/atoms'
 import { useSetRecoilState } from 'recoil'
+import { ItemType } from '../../types/items/types'
 
 // TODO how to handle long item names? Fix word breaking
 // TODO how to align plus symbol to the item name, multilines item name issue
@@ -23,7 +24,7 @@ import { useSetRecoilState } from 'recoil'
  * @param {string} image
  *  Image src of the item
  */
-function Item({ data: { name, note, id, image }, category }: any) {
+function Item({ data, category }: any) {
     const setShopList = useSetRecoilState(shopListDataState)
 
     function handleClick() {
@@ -31,25 +32,27 @@ function Item({ data: { name, note, id, image }, category }: any) {
         //@ts-ignore
         // TODO refactor, setting app state
         setShopList((current: any) => {
-            const currentItem = { name, note, id, image, quantity: 1, category }
+            const currentItem: ItemType = { ...data, quantity: 1, category }
+
+            const { id } = currentItem
             const newItems = JSON.parse(JSON.stringify(current))
 
             // In current state check if object with category clicked already exists
-            const catIndex = current.findIndex((x: any) => x.category === category)
-            console.log(id);
+            const catIndex = current.findIndex(
+                (x: any) => x.category === category
+            )
+
             // Category already present in the state
             if (catIndex > -1) {
-                console.log('Category found when clicking on item in items page')
                 // Try to find item in category.items
                 const itemIndex = current[catIndex].items.findIndex(
-                    (item: any) => {
+                    (item: ItemType) => {
                         return item.id === id
                     }
                 )
 
                 // Item already present in category.items
                 if (itemIndex > -1) {
-                    console.log('Item found when clicking on item in items page')
                     newItems[catIndex].items[itemIndex].quantity += 1
                 } else {
                     newItems[catIndex].items.push(currentItem)
@@ -69,7 +72,7 @@ function Item({ data: { name, note, id, image }, category }: any) {
         <>
             <button className="bg-white rounded-lg flex justify-between p-4">
                 <h4 className="font-medium flex-grow-1 break-all pr-4">
-                    {name}
+                    {data.name}
                 </h4>
             </button>
             <button onClick={handleClick}>

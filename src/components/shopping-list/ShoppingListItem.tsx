@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react'
 
-import { motion, useAnimation } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { useSetRecoilState } from 'recoil'
 import { shopListDataState } from '../../global-state/atoms'
-import { MdRemove, MdAdd } from 'react-icons/md'
+import { MdRemove, MdAdd, MdDelete } from 'react-icons/md'
+import { ItemType } from '../../types/items/types'
 
 interface Props {
     name: string
@@ -30,7 +31,7 @@ const buttonVariants = {
     },
     hover: {
         opacity: 1,
-        width: 24,
+        width: 'auto',
     },
 }
 
@@ -46,8 +47,6 @@ const ShoppingListItem: React.FC<Props> = ({
         }
     }, [])
 
-    const controls = useAnimation()
-
     const setShopList = useSetRecoilState(shopListDataState)
 
     function handleClick(incOrDec: string) {
@@ -57,9 +56,11 @@ const ShoppingListItem: React.FC<Props> = ({
             const newItems = JSON.parse(JSON.stringify(current))
 
             // Find the item in current state
-            const catIndex = newItems.findIndex((x: any) => x.category === category)
+            const catIndex = newItems.findIndex(
+                (x: any) => x.category === category
+            )
             const itemIndex = newItems[catIndex].items.findIndex(
-                (x: any) => x.id === id
+                (x: ItemType) => x.id === id
             )
 
             if (incOrDec === 'inc')
@@ -78,28 +79,34 @@ const ShoppingListItem: React.FC<Props> = ({
             animate="show"
             className="flex justify-between items-center mb-6 xl:flex-wrap group"
         >
-            <h2 className="xl:w-full">{name}</h2>
+            <h2 className="lg:w-full xl:w-auto">{name}</h2>
             <motion.div
                 initial="rest"
                 whileHover="hover"
                 animate="rest"
-                className="flex hover:bg-white rounded-lg py-1"
+                className="flex hover:bg-white rounded-12 overflow-hidden"
             >
                 <motion.button
                     variants={buttonVariants}
+                    className="bg-primary rounded-12 p-1"
+                >
+                    <MdDelete color="#fff" size={24} />
+                </motion.button>
+                <motion.button
+                    variants={buttonVariants}
                     onClick={() => handleClick('dec')}
-                    className="group-hover:mx-2"
+                    className="mx-2"
                 >
                     <MdRemove color="#F9A109" size={24} />
                 </motion.button>
-                <h3 className="rounded-24 border-primary border-2 text-primary font-bold text-sm px-4 py-2">
+                <h3 className="rounded-24 border-primary border-2 text-primary font-bold text-sm px-4 py-2 my-1">
                     <span>{quantity}</span>
                     {quantity > 1 ? ' pcs' : ' pc'}
                 </h3>
                 <motion.button
                     variants={buttonVariants}
                     onClick={() => handleClick('inc')}
-                    className="group-hover:mx-2"
+                    className="mx-2"
                 >
                     <MdAdd color="#F9A109" size={24} />
                 </motion.button>

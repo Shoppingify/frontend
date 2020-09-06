@@ -6,6 +6,7 @@ import { userState } from '../../App'
 import { v4 as uuidv4 } from 'uuid'
 import Item from '../../components/cards/Item'
 import { motion } from 'framer-motion'
+import { ItemType } from '../../types/items/types'
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -72,7 +73,7 @@ function ItemsPage() {
                         <h3 className="text-2xl font-bold">{list.category}</h3>
                         {list.items.length > 0 && (
                             <ul className="grid grid-cols-4 gap-5">
-                                {list.items.map((item: any) => (
+                                {list.items.map((item: ItemType) => (
                                     <motion.li
                                         variants={itemVariants}
                                         key={uuidv4()}
