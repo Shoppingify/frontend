@@ -1,11 +1,10 @@
-import React from 'react';
+import React from 'react'
 
-// Icons TODO check if correct
-import { FaPlus } from 'react-icons/fa';
+import { MdAdd } from 'react-icons/md'
 
 // Recoil
-import { useRecoilState } from "recoil/dist";
-import { sidebarState } from "../../global-state/atoms";
+import { shopListDataState } from '../../global-state/atoms'
+import { useSetRecoilState } from 'recoil'
 
 // TODO how to handle long item names? Fix word breaking
 // TODO how to align plus symbol to the item name, multilines item name issue
@@ -24,34 +23,60 @@ import { sidebarState } from "../../global-state/atoms";
  * @param {string} image
  *  Image src of the item
  */
-function Item({ data: { name, note, id, image } }: any) {
+function Item({ data: { name, note, id, image }, category }: any) {
+    const setShopList = useSetRecoilState(shopListDataState)
 
-  const [sidebarValues, setSidebarValues] = useRecoilState(sidebarState);
+    function handleClick() {
+        console.log('Before set state')
+        //@ts-ignore
+        // TODO refactor, setting app state
+        setShopList((current: any) => {
+            const currentItem = { name, note, id, image, quantity: 1, category }
+            const newItems = JSON.parse(JSON.stringify(current))
 
-  function handleClick() {
+            // In current state check if object with category clicked already exists
+            const catIndex = current.findIndex((x: any) => x.category === category)
+            console.log(id);
+            // Category already present in the state
+            if (catIndex > -1) {
+                console.log('Category found when clicking on item in items page')
+                // Try to find item in category.items
+                const itemIndex = current[catIndex].items.findIndex(
+                    (item: any) => {
+                        return item.id === id
+                    }
+                )
 
+                // Item already present in category.items
+                if (itemIndex > -1) {
+                    console.log('Item found when clicking on item in items page')
+                    newItems[catIndex].items[itemIndex].quantity += 1
+                } else {
+                    newItems[catIndex].items.push(currentItem)
+                }
+            } else {
+                newItems.push({
+                    category: category,
+                    items: [currentItem],
+                })
+            }
 
-    setSidebarValues((current: any) => {
-      const currentItem = { name, note, id, image }
-      const newItems = [...current.items];
-      newItems.push(currentItem)
+            return newItems
+        })
+    }
 
-      return {
-        ...current,
-        items: newItems
-      }
-    })
-  }
-
-  return (
-    <button
-      onClick={handleClick}
-      className="bg-white rounded-lg flex justify-between p-4"
-    >
-      <h4 className="font-medium flex-grow-1 break-all pr-4">{ name }</h4>
-      <FaPlus className="w-1/6" />
-    </button>
-  );
+    return (
+        <>
+            <button className="bg-white rounded-lg flex justify-between p-4">
+                <h4 className="font-medium flex-grow-1 break-all pr-4">
+                    {name}
+                </h4>
+            </button>
+            <button onClick={handleClick}>
+                <MdAdd size={24} className="w-1/6" />
+            </button>
+        </>
+    )
 }
 
-export default Item;
+export default Item

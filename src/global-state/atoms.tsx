@@ -1,9 +1,7 @@
-import { atom } from "recoil";
+import { atom } from 'recoil'
 
-// TODO Refactor this when considering shopping list
-export const sidebarState = atom({
-  key: 'sidebarState',
-  default: {
-    items: []
-  }
+// Shopping list state
+export const shopListDataState = atom({
+    key: 'shopList',
+    default: [],
 })
