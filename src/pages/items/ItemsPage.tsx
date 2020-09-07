@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 
 // Libs
-import { useRecoilValue } from 'recoil/dist'
+import { useRecoilValue, useRecoilState } from 'recoil/dist'
 import { userState } from '../../App'
 import { v4 as uuidv4 } from 'uuid'
 import Item from '../../components/cards/Item'
 import { motion } from 'framer-motion'
+import client from '../../api/client'
+import { userItemsState } from '../../global-state/atoms'
 import { ItemType } from '../../types/items/types'
 
 const containerVariants = {
@@ -36,37 +38,26 @@ function ItemsPage() {
     const user = useRecoilValue(userState)
 
     // Local state
-    const [lists, setLists] = useState([])
+    // const [lists, setLists] = useState([])
+    const [lists, setLists] = useRecoilState(userItemsState)
 
     useEffect(() => {
         async function getItems() {
-            const headers = new Headers()
-            headers.append('Authorization', `Bearer ${user.token}`)
-
-            const response = await fetch('http://localhost:3000/api/items', {
-                method: 'GET',
-                headers,
-            })
-            const { status, data } = await response.json()
-
-            console.log(data)
-
-            if (status === 'success' && data) setLists(data)
+            const res = await client.get('items')
+            console.log('res', res.data)
+            setLists(res.data.data)
         }
-
-        if (user.token && user.valid) {
-            // Fetch items
-            getItems()
-        }
+        getItems()
     }, [])
 
     return (
-        <div className="bg-gray-extra-light px-20">
+        <div className="flex flex-col h-full bg-gray-extra-light px-20">
             <h1 className="text-4xl mb-5">Items page</h1>
             <motion.ul
                 variants={containerVariants}
                 initial="hidden"
                 animate="show"
+                className="overflow-y-auto"
             >
                 {lists.map((list: List) => (
                     <li key={uuidv4()} className="mb-5">

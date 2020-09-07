@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import { shopListDataState } from '../../global-state/atoms'
+import {
+    shopListDataState,
+    sidebarState,
+    ADD_NEW_ITEM,
+} from '../../global-state/atoms'
 import ShoppingListItem from './ShoppingListItem'
 import client from '../../api/client'
 
 const ShoppingList: React.FC = () => {
     const [shopList, setShopList] = useRecoilState(shopListDataState)
+    const [sidebarType, setSidebarType] = useRecoilState(sidebarState)
     const [activeId, setActiveId] = useState(-1)
 
     // On load get active list
@@ -35,6 +40,8 @@ const ShoppingList: React.FC = () => {
 
     // Runs when global shop list changes, send post to api
     useEffect(() => {
+        console.log('Current shopping list')
+        console.log(shopList)
         if (activeId === -1) return
 
         async function updateList() {
@@ -69,6 +76,9 @@ const ShoppingList: React.FC = () => {
 
     return (
         <div>
+            <div onClick={() => setSidebarType(ADD_NEW_ITEM)}>
+                Add a new item
+            </div>
             <h2 className="font-bold text-2xl mb-8">Shopping list</h2>
             {shopList.map((category: any, index: number) => (
                 <div key={index} className="mb-16">

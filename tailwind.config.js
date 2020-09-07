@@ -16,7 +16,9 @@ module.exports = {
             black: '#000000',
             gray: '#454545',
             'gray-light': '#c1c1c4',
+            'gray-medium-light': '#F2F2F2;',
             'gray-extra-light': '#FAFAFE',
+            'gray-input': '#BDBDBD',
         },
         fontFamily: {
             body: ['Quicksand', 'sans-serif'],
