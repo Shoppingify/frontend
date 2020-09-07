@@ -4,12 +4,12 @@ import {
     sidebarState,
     ADD_SHOPPING_LIST,
     ADD_NEW_ITEM,
+    SHOW_SHOPPING_LIST,
 } from '../../global-state/atoms'
 // Libs
 import ShoppingList from '../shopping-list/ShoppingList'
 import AddItemSidebar from './AddItemSidebar'
 
-// TODO Refactor list into own component
 /**
  * Sidebar of the app, displays shopping list
  */
@@ -30,7 +30,7 @@ function Sidebar() {
     return (
         <div
             className={`w-1/3 ${
-                sidebarType === ADD_SHOPPING_LIST
+                sidebarType === SHOW_SHOPPING_LIST
                     ? 'bg-primary-light'
                     : 'bg-white'
             } p-12`}

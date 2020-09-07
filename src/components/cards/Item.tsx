@@ -3,7 +3,7 @@ import React from 'react'
 import { MdAdd } from 'react-icons/md'
 
 // Recoil
-import { shopListDataState } from '../../global-state/atoms'
+import { shopListDataState } from '../../global-state/shopListState'
 import { useSetRecoilState } from 'recoil'
 import { ItemType } from '../../types/items/types'
 
@@ -69,16 +69,21 @@ function Item({ data, category }: any) {
     }
 
     return (
-        <>
-            <button className="bg-white rounded-lg flex justify-between p-4">
-                <h4 className="font-medium flex-grow-1 break-all pr-4">
-                    {data.name}
-                </h4>
+        <div className="relative bg-white overflow-hidden rounded-lg flex justify-between">
+            <button className="p-4 w-full">
+                <h4 className="font-medium text-left">{data.name}</h4>
             </button>
-            <button onClick={handleClick}>
-                <MdAdd size={24} className="w-1/6" />
+            <button
+                className="pt-4 pr-4"
+                onClick={handleClick}
+                style={{
+                    height: 'fit-content',
+                    width: 'fit-content',
+                }}
+            >
+                <MdAdd size={24} />
             </button>
-        </>
+        </div>
     )
 }
 

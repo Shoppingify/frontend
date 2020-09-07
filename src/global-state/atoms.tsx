@@ -6,16 +6,10 @@ export const SHOW_SHOPPING_LIST = 'show_shopping_list'
 export const ADD_NEW_ITEM = 'add_new_item'
 export const SHOW_ITEM = 'show_item'
 
-// Shopping list state
-export const shopListDataState = atom({
-    key: 'shopList',
-    default: [],
-})
-
 // Sidebar state to switch between sidebars
 export const sidebarState = atom({
     key: 'sidebar',
-    default: ADD_NEW_ITEM,
+    default: SHOW_SHOPPING_LIST,
 })
 
 // All user's items

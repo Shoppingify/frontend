@@ -1,19 +1,37 @@
 import React, { useEffect, useState } from 'react'
-import { useRecoilState } from 'recoil'
-import {
-    shopListDataState,
-    sidebarState,
-    ADD_NEW_ITEM,
-} from '../../global-state/atoms'
-import ShoppingListItem from './ShoppingListItem'
+
+// Api client
 import client from '../../api/client'
 
-const ShoppingList: React.FC = () => {
-    const [shopList, setShopList] = useRecoilState(shopListDataState)
-    const [sidebarType, setSidebarType] = useRecoilState(sidebarState)
-    const [activeId, setActiveId] = useState(-1)
+// Libs
+import { MdCreate } from 'react-icons/md'
 
-    // On load get active list
+// state
+import { useRecoilState, useSetRecoilState } from 'recoil'
+import { sidebarState, ADD_NEW_ITEM } from '../../global-state/atoms'
+import { shopListDataState } from '../../global-state/shopListState'
+
+// Components
+import ShoppingListItem from './ShoppingListItem'
+
+/**
+ * Main shopping list component
+ */
+const ShoppingList: React.FC = () => {
+    // Global state
+    const [shopList, setShopList] = useRecoilState(shopListDataState)
+    const setSidebarType = useSetRecoilState(sidebarState)
+
+    // Local state
+    const [activeId, setActiveId] = useState(-1)
+    const [editing, setEditing] = useState(false)
+
+    // For shopping list title edit
+    const [shopListName, setShopListName] = useState<string>('')
+
+    /**
+     * Component mounted effect
+     */
     useEffect(() => {
         async function initialData() {
             const response = await client.get('lists?status=active')
@@ -23,11 +41,13 @@ const ShoppingList: React.FC = () => {
             const activeListId = activeList.id
 
             setActiveId(activeListId)
+            setShopListName(activeList.name)
 
             // Another request to fetch items
             const responseItems = await client.get(
                 `lists/${activeListId}/items`
             )
+
             const {
                 data: { items: itemsData },
             } = await responseItems.data
@@ -38,7 +58,9 @@ const ShoppingList: React.FC = () => {
         initialData()
     }, [])
 
-    // Runs when global shop list changes, send post to api
+    /**
+     * State of shopList changed effect
+     */
     useEffect(() => {
         console.log('Current shopping list')
         console.log(shopList)
@@ -79,7 +101,23 @@ const ShoppingList: React.FC = () => {
             <div onClick={() => setSidebarType(ADD_NEW_ITEM)}>
                 Add a new item
             </div>
-            <h2 className="font-bold text-2xl mb-8">Shopping list</h2>
+            <div className="flex justify-between mb-8 items-center">
+                {editing ? (
+                    <input
+                        className="font-bold text-2xl"
+                        type="text"
+                        value={shopListName}
+                        onChange={(e) => setShopListName(e.target.value)}
+                    />
+                ) : (
+                    <h2 className="font-bold text-2xl">{shopListName}</h2>
+                )}
+                <button
+                    onClick={() => setEditing((current: boolean) => !current)}
+                >
+                    <MdCreate size={24} />
+                </button>
+            </div>
             {shopList.map((category: any, index: number) => (
                 <div key={index} className="mb-16">
                     <h3 className="text-gray-light text-sm mb-6">
@@ -92,6 +130,7 @@ const ShoppingList: React.FC = () => {
                             name={item.name}
                             category={item.categoryName}
                             id={item.id}
+                            editing={editing}
                         />
                     ))}
                 </div>
