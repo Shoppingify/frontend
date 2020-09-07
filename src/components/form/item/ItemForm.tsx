@@ -8,8 +8,8 @@ import Button from '../../button/Button'
 import { useRecoilState } from 'recoil'
 import {
     sidebarState,
-    SHOW_SHOPPING_LIST,
     userItemsState,
+    ADD_SHOPPING_LIST,
 } from '../../../global-state/atoms'
 import client from '../../../api/client'
 
@@ -26,7 +26,7 @@ const ItemForm: React.FC = () => {
     const [sidebarType, setSidebarType] = useRecoilState(sidebarState)
 
     // Add a new item
-    const addItem = async (values: any, { setSubmitting }: any) => {
+    const addItem = async (values: any, { setSubmitting, resetForm }: any) => {
         console.log('Values', values)
         setSubmitting(true)
         try {
@@ -54,17 +54,12 @@ const ItemForm: React.FC = () => {
                     category: values.category,
                     items: [].concat(res.data.data),
                 })
-                // newLists = [
-                //     ...newLists,
-                // {
-                //     category: values.category,
-                //     items: [].concat(res.data.data),
-                // },
-                // ]
                 console.log('New lists here', newLists)
                 setLists(newLists)
             }
-
+            // TODO Change to show the added item
+            resetForm({ name: '', note: '', image: '', category: '' })
+            setSidebarType(ADD_SHOPPING_LIST)
             console.log('res', res.data)
         } catch (e) {
             console.log('Add item error', e)
@@ -74,9 +69,9 @@ const ItemForm: React.FC = () => {
     }
 
     // Cancel the addition of a new item
-    const cancel = useCallback(() => {
-        setSidebarType(SHOW_SHOPPING_LIST)
-    }, [])
+    const cancel = () => {
+        setSidebarType(ADD_SHOPPING_LIST)
+    }
 
     return (
         <Formik

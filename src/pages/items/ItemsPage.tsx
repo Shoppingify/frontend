@@ -50,12 +50,13 @@ function ItemsPage() {
     }, [])
 
     return (
-        <div className="bg-gray-extra-light px-20">
+        <div className="flex flex-col h-full bg-gray-extra-light px-20">
             <h1 className="text-4xl mb-5">Items page</h1>
             <motion.ul
                 variants={containerVariants}
                 initial="hidden"
                 animate="show"
+                className="overflow-y-auto"
             >
                 {lists.map((list: List) => (
                     <li key={uuidv4()} className="mb-5">

@@ -20,17 +20,22 @@ const CategorySelect = ({ label, ...props }: any) => {
     const [showAutocomplete, setShowAutocomplete] = useState(false)
 
     useEffect(() => {
+        /**
+         * Get all the categories from a user
+         */
         const getCategories = async () => {
             const res = await client.get('categories')
-            console.log('data', res.data)
             setCategories(res.data.data)
         }
 
         getCategories()
     }, [])
 
+    /**
+     * Filter the categories while the user is typing
+     * @param e
+     */
     const autocomplete = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log('autocomplete', e.target.value)
         if (e.target.value.length > 0) {
             setShowAutocomplete(true)
         } else {
@@ -44,6 +49,11 @@ const CategorySelect = ({ label, ...props }: any) => {
         field.onChange(e)
     }
 
+    /**
+     * Set the category if a existing category is clicked
+     * @param e
+     * @param cat
+     */
     const onClick = (
         e: React.MouseEvent<HTMLLIElement, MouseEvent>,
         cat: Category
@@ -53,6 +63,11 @@ const CategorySelect = ({ label, ...props }: any) => {
         setShowAutocomplete(false)
     }
 
+    /**
+     * Handle keyboard navigation for the categories listing
+     * @param e
+     * @param cat
+     */
     const onKeyDown = (e: React.KeyboardEvent, cat: Category) => {
         if (e.key === 'Enter') {
             helpers.setValue(cat.name, true)
@@ -70,7 +85,6 @@ const CategorySelect = ({ label, ...props }: any) => {
                 className="p-3 rounded-lg border-2 border-gray-input"
                 onChange={autocomplete}
                 {...props}
-                // {...field}
             />
             <ErrorMessage name={props.name}>
                 {(msg) => (
