@@ -70,7 +70,6 @@ function LoginForm() {
     async function handleSubmit(data: any, { setSubmitting }: any) {
         setSubmitting(true)
         await handleLogin(data)
-        setSubmitting(false)
     }
 
     // TODO more cleanup
