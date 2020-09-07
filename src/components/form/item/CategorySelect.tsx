@@ -20,19 +20,21 @@ const CategorySelect = ({ label, ...props }: any) => {
     const [showAutocomplete, setShowAutocomplete] = useState(false)
 
     useEffect(() => {
-        const fetchCategories = async () => {
+        const getCategories = async () => {
             const res = await client.get('categories')
             console.log('data', res.data)
             setCategories(res.data.data)
         }
 
-        fetchCategories()
+        getCategories()
     }, [])
 
     const autocomplete = (e: React.ChangeEvent<HTMLInputElement>) => {
         console.log('autocomplete', e.target.value)
         if (e.target.value.length > 0) {
             setShowAutocomplete(true)
+        } else {
+            setShowAutocomplete(false)
         }
         const categoriesFiltered = categories.filter((cat: Category) =>
             cat.name.toLowerCase().startsWith(e.target.value.toLowerCase())
