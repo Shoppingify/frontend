@@ -2,6 +2,21 @@
 
 @tailwind components;
 
+/* Navbar */
+.navbar__item {
+    @apply flex justify-center w-full text-2xl py-2 my-6 relative;
+}
+
+.navbar__item::before {
+    @apply absolute top-0 bottom-0 left-0 bg-primary opacity-0 transition-opacity duration-500;
+    content: '';
+    width: 6px;
+    border-radius: 0 4px 4px 0;
+}
+.navbar__item.active::before,
+.navbar__item:hover::before {
+    @apply opacity-100;
+}
 /* width */
 ::-webkit-scrollbar {
     width: 6px;

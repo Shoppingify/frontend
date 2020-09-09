@@ -28,6 +28,9 @@ module.exports = {
                 24: '24px',
                 12: '12px',
             },
+            width: {
+                sidebar: '390px',
+            },
         },
     },
 }
