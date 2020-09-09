@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { motion } from 'framer-motion'
-import { useSetRecoilState } from 'recoil'
+import { useSetRecoilState, useRecoilValue } from 'recoil'
 import { shopListDataState } from '../../global-state/shopListState'
 import { MdRemove, MdAdd, MdDelete } from 'react-icons/md'
 import { ItemType } from '../../types/items/types'
+import client from '../../api/client'
+import { appConfigState } from '../../global-state/atoms'
 
 // Prop Types
 interface PropTypes {
@@ -13,6 +15,7 @@ interface PropTypes {
     category: string
     id: number
     editing: boolean
+    done: boolean
 }
 
 // Framer motion variants - animations
@@ -53,6 +56,7 @@ const ShoppingListItem: React.FC<PropTypes> = ({
     id,
     category,
     editing,
+    done,
 }) => {
     useEffect(() => {
         return () => {
@@ -60,9 +64,15 @@ const ShoppingListItem: React.FC<PropTypes> = ({
         }
     }, [])
 
+    // Local state
+    const [complete, setComplete] = useState(done)
+    const [mounted, setMounted] = useState(false)
+
+    // Global state - read only
+    const appConfig = useRecoilValue(appConfigState)
     const setShopList = useSetRecoilState(shopListDataState)
 
-    function handleClick(incOrDec: string) {
+    function handleInOrDecBtnClick(incOrDec: string) {
         //@ts-ignore
         // TODO refactor
         setShopList((current: any) => {
@@ -76,14 +86,57 @@ const ShoppingListItem: React.FC<PropTypes> = ({
                 (x: ItemType) => x.id === id
             )
 
-            if (incOrDec === 'inc')
-                newItems[catIndex].items[itemIndex].quantity += 1
-            if (incOrDec === 'dec')
-                newItems[catIndex].items[itemIndex].quantity -= 1
+            newItems[catIndex].items[itemIndex].quantity +=
+                incOrDec === 'inc' ? 1 : -1
 
             return newItems
         })
     }
+
+    function handleItemDelete() {
+        client.delete(`/lists/${appConfig.activeListId}/items`, {
+            data: {
+                item_id: id,
+                list_id: appConfig.activeListId,
+            },
+        })
+    }
+
+    useEffect(() => {
+        setMounted(true)
+    }, [])
+
+    useEffect(() => {
+        if (!mounted) return
+        // Handle 0 quantity, remove it
+        if (quantity === 0) {
+            client.delete(`/lists/${appConfig.activeListId}/items`, {
+                data: {
+                    item_id: id,
+                    list_id: appConfig.activeListId,
+                },
+            })
+
+            return
+        }
+
+        client.put(`/lists/${appConfig.activeListId}/items`, {
+            item_id: id,
+            list_id: appConfig.activeListId,
+            quantity,
+            done: false,
+        })
+    }, [quantity])
+
+    useEffect(() => {
+        if (!mounted) return
+        client.put(`/lists/${appConfig.activeListId}/items`, {
+            item_id: id,
+            list_id: appConfig.activeListId,
+            quantity,
+            done: complete,
+        })
+    }, [complete])
 
     return (
         <motion.div
@@ -95,10 +148,24 @@ const ShoppingListItem: React.FC<PropTypes> = ({
             <div className="flex items-center">
                 {/** Checkbox */}
                 {!editing && (
-                    <input type="checkbox" name="complete" className="mr-2" />
+                    <input
+                        type="checkbox"
+                        checked={complete}
+                        onChange={() =>
+                            setComplete((current: boolean) => !current)
+                        }
+                        name="complete"
+                        className="mr-2"
+                    />
                 )}
                 {/** Item name */}
-                <h2 className="lg:w-full xl:w-auto">{name}</h2>
+                <h2
+                    className={`lg:w-full xl:w-auto ${
+                        complete ? 'line-through' : undefined
+                    }`}
+                >
+                    {name}
+                </h2>
             </div>
             {/** Container for edit buttons and quantity */}
             <motion.div
@@ -117,13 +184,14 @@ const ShoppingListItem: React.FC<PropTypes> = ({
                     style={{
                         pointerEvents: editing ? 'all' : 'none',
                     }}
+                    onClick={handleItemDelete}
                 >
                     <MdDelete color="#fff" size={24} />
                 </motion.button>
                 {/** Quantity increment button */}
                 <motion.button
                     variants={buttonVariants}
-                    onClick={() => handleClick('dec')}
+                    onClick={() => handleInOrDecBtnClick('dec')}
                     className="mx-2"
                     disabled={!editing}
                     style={{
@@ -140,7 +208,7 @@ const ShoppingListItem: React.FC<PropTypes> = ({
                 {/** Quantity decrement button */}
                 <motion.button
                     variants={buttonVariants}
-                    onClick={() => handleClick('inc')}
+                    onClick={() => handleInOrDecBtnClick('inc')}
                     className="mx-2"
                     disabled={!editing}
                     style={{

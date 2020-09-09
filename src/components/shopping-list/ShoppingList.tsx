@@ -4,11 +4,15 @@ import React, { useEffect, useState } from 'react'
 import client from '../../api/client'
 
 // Libs
-import { MdCreate } from 'react-icons/md'
+import { MdCreate, MdSave } from 'react-icons/md'
 
 // state
 import { useRecoilState, useSetRecoilState } from 'recoil'
-import { sidebarState, ADD_NEW_ITEM } from '../../global-state/atoms'
+import {
+    sidebarState,
+    ADD_NEW_ITEM,
+    appConfigState,
+} from '../../global-state/atoms'
 import { shopListDataState } from '../../global-state/shopListState'
 
 // Components
@@ -21,9 +25,10 @@ const ShoppingList: React.FC = () => {
     // Global state
     const [shopList, setShopList] = useRecoilState(shopListDataState)
     const setSidebarType = useSetRecoilState(sidebarState)
+    const [appConfig, setAppConfig] = useRecoilState(appConfigState)
 
     // Local state
-    const [activeId, setActiveId] = useState(-1)
+    const [mounted, setMounted] = useState(false)
     const [editing, setEditing] = useState(false)
 
     // For shopping list title edit
@@ -33,6 +38,7 @@ const ShoppingList: React.FC = () => {
      * Component mounted effect
      */
     useEffect(() => {
+        setMounted(true)
         async function initialData() {
             const response = await client.get('lists?status=active')
             const { data: listData } = await response.data
@@ -40,7 +46,9 @@ const ShoppingList: React.FC = () => {
             const activeList = listData[0]
             const activeListId = activeList.id
 
-            setActiveId(activeListId)
+            // Set global active list id
+            setAppConfig((current: any) => ({ ...current, activeListId }))
+            // Set local state for shopping list name
             setShopListName(activeList.name)
 
             // Another request to fetch items
@@ -51,6 +59,9 @@ const ShoppingList: React.FC = () => {
             const {
                 data: { items: itemsData },
             } = await responseItems.data
+
+            console.log('Items data')
+            console.log(itemsData)
 
             setShopList(itemsData)
         }
@@ -64,7 +75,7 @@ const ShoppingList: React.FC = () => {
     useEffect(() => {
         console.log('Current shopping list')
         console.log(shopList)
-        if (activeId === -1) return
+        if (appConfig.activeListId === -1) return
 
         async function updateList() {
             // Format data
@@ -82,19 +93,33 @@ const ShoppingList: React.FC = () => {
                 //@ts-ignore
                 items: items.flat(),
             }
-            console.log(dataToBeSent)
 
             const response = await client.post(
-                `lists/${activeId}/items`,
+                `lists/${appConfig.activeListId}/items`,
                 dataToBeSent
             )
             const data = await response.data
-
-            console.log(data)
         }
 
-        updateList()
+        // updateList()
     }, [shopList])
+
+    /**
+     * Editing change
+     */
+    useEffect(() => {
+        if (!mounted) return
+
+        if (!editing) {
+            // Save list data
+            // TODO need to store url in variable
+            // TODO store old name in reference, perhaps use useRef?
+            client.put(`lists/${appConfig.activeListId}`, {
+                name: shopListName,
+                status: 'active',
+            })
+        }
+    }, [editing])
 
     return (
         <div>
@@ -115,7 +140,7 @@ const ShoppingList: React.FC = () => {
                 <button
                     onClick={() => setEditing((current: boolean) => !current)}
                 >
-                    <MdCreate size={24} />
+                    {editing ? <MdSave size={24} /> : <MdCreate size={24} />}
                 </button>
             </div>
             {shopList.map((category: any, index: number) => (
@@ -123,16 +148,19 @@ const ShoppingList: React.FC = () => {
                     <h3 className="text-gray-light text-sm mb-6">
                         {category.category}
                     </h3>
-                    {category.items.map((item: any, indexItem: number) => (
-                        <ShoppingListItem
-                            key={indexItem}
-                            quantity={item.quantity}
-                            name={item.name}
-                            category={item.categoryName}
-                            id={item.id}
-                            editing={editing}
-                        />
-                    ))}
+                    {category.items.map((item: any, indexItem: number) => {
+                        return (
+                            <ShoppingListItem
+                                key={indexItem}
+                                quantity={item.quantity}
+                                name={item.name}
+                                category={item.categoryName}
+                                id={item.id}
+                                editing={editing}
+                                done={item.done}
+                            />
+                        )
+                    })}
                 </div>
             ))}
         </div>

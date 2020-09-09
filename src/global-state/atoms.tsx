@@ -6,6 +6,13 @@ export const SHOW_SHOPPING_LIST = 'show_shopping_list'
 export const ADD_NEW_ITEM = 'add_new_item'
 export const SHOW_ITEM = 'show_item'
 
+export const appConfigState = atom({
+    key: 'appConfigState',
+    default: {
+        activeListId: -1,
+    },
+})
+
 // Sidebar state to switch between sidebars
 export const sidebarState = atom({
     key: 'sidebar',
