@@ -35,50 +35,54 @@ interface List {
  * Simple items page component
  */
 function ItemsPage() {
-    const user = useRecoilValue(userState)
-
     // Local state
-    // const [lists, setLists] = useState([])
     const [lists, setLists] = useRecoilState(userItemsState)
 
     useEffect(() => {
         async function getItems() {
-            const res = await client.get('items')
-            console.log('res', res.data)
-            setLists(res.data.data)
+            try {
+                const res = await client.get('items')
+                setLists(res.data.data)
+            } catch (e) {
+                console.log('Error', e)
+            }
         }
         getItems()
     }, [])
 
     return (
-        <div className="flex flex-col h-full bg-gray-extra-light px-20">
-            <h1 className="text-4xl mb-5">Items page</h1>
+        <div className="flex flex-col h-full bg-gray-extra-light">
+            <h1 className="text-4xl mb-5 px-20">Items page</h1>
             <motion.ul
                 variants={containerVariants}
                 initial="hidden"
                 animate="show"
-                className="overflow-y-auto"
+                className="overflow-y-auto px-20"
             >
-                {lists.map((list: List) => (
-                    <li key={uuidv4()} className="mb-5">
-                        <h3 className="text-2xl font-bold">{list.category}</h3>
-                        {list.items.length > 0 && (
-                            <ul className="grid grid-cols-4 gap-5">
-                                {list.items.map((item: ItemType) => (
-                                    <motion.li
-                                        variants={itemVariants}
-                                        key={uuidv4()}
-                                    >
-                                        <Item
-                                            data={item}
-                                            category={list.category}
-                                        />
-                                    </motion.li>
-                                ))}
-                            </ul>
-                        )}
-                    </li>
-                ))}
+                {lists
+                    .filter((list) => list.items.length > 0)
+                    .map((list: List) => (
+                        <li key={uuidv4()} className="mb-5">
+                            <h3 className="text-2xl font-bold">
+                                {list.category}
+                            </h3>
+                            {list.items.length > 0 && (
+                                <ul className="grid grid-cols-4 gap-5">
+                                    {list.items.map((item: ItemType) => (
+                                        <motion.li
+                                            variants={itemVariants}
+                                            key={uuidv4()}
+                                        >
+                                            <Item
+                                                data={item}
+                                                category={list.category}
+                                            />
+                                        </motion.li>
+                                    ))}
+                                </ul>
+                            )}
+                        </li>
+                    ))}
             </motion.ul>
         </div>
     )

@@ -31,40 +31,15 @@ const ItemForm: React.FC = () => {
 
     // Add a new item
     const addItem = async (values: any, { setSubmitting, resetForm }: any) => {
-        console.log('Values', values)
         setSubmitting(true)
         try {
-            const res = await client.post('items', values)
+            const response = await client.post('items', values)
+            const itemsResponse = await client.get('items')
+            setLists(itemsResponse.data.data)
 
-            // Add the item to the list
-            const index = lists.findIndex(
-                (list: any) =>
-                    list.category.toLowerCase() ===
-                    values.category.toLowerCase()
-            )
-            // I already have the category
-            if (index > -1) {
-                const newLists: any = [...lists]
-                newLists[index] = {
-                    ...newLists[index],
-                    items: newLists[index]['items'].concat(res.data.data),
-                }
-                console.log('newLists', newLists)
-                setLists(newLists)
-            } else {
-                // I don't have the category
-                let newLists: any = [...lists]
-                newLists.push({
-                    category: values.category,
-                    items: [].concat(res.data.data),
-                })
-                console.log('New lists here', newLists)
-                setLists(newLists)
-            }
             resetForm({ name: '', note: '', image: '', category: '' })
-            setCurrentItem(res.data.data)
+            setCurrentItem(response.data.data)
             setSidebarType(SHOW_ITEM)
-            console.log('res', res.data)
         } catch (e) {
             console.log('Add item error', e)
             setSubmitting(false)
@@ -79,116 +54,13 @@ const ItemForm: React.FC = () => {
         console.log('values in update', values)
         setSubmitting(true)
         try {
-            const res = await client.put(`items/${currentItem.id}`, values)
+            const response = await client.put(`items/${currentItem.id}`, values)
 
-            // If the category is the same, I just need to update the item
-            if (
-                values.category.toLowerCase() ===
-                currentItem.categoryName.toLowerCase()
-            ) {
-                const index = lists.findIndex((list: any) => {
-                    return (
-                        list.category.toLowerCase() ===
-                        currentItem.categoryName.toLowerCase()
-                    )
-                })
-                console.log('index', index)
-                // This category already exists
-                if (index > -1) {
-                    const itemIndex = lists[index].items.findIndex(
-                        (item) => item.id === currentItem.id
-                    )
+            const itemsResponse = await client.get('items')
+            setLists(itemsResponse.data.data)
 
-                    console.log('itemIndex', itemIndex)
-                    // I found the item so I can update it
-                    if (itemIndex > -1) {
-                        let newLists = [...lists]
-                        console.log('newlists[index]', newLists[index])
-                        console.log(
-                            'newLits items',
-                            newLists[index].items[itemIndex]
-                        )
-                        let newItems = [...newLists[index].items]
-                        newItems[itemIndex] = res.data.data
-                        console.log('lists in update method', newItems)
-                        newLists[index] = {
-                            ...newLists[index],
-                            items: newItems,
-                        }
-                        setLists(newLists)
-                    }
-                }
-            }
-
-            // If the category has changed, I need to remove the previous item
-            if (
-                values.category.toLowerCase() !==
-                currentItem.categoryName.toLocaleLowerCase()
-            ) {
-                // If the category exists
-
-                // Index of the "old" category
-                const oldIndex = lists.findIndex((list: any) => {
-                    return (
-                        list.category.toLowerCase() ===
-                        currentItem.categoryName.toLowerCase()
-                    )
-                })
-
-                const newIndex = lists.findIndex((list: any) => {
-                    return (
-                        list.category.toLowerCase() ===
-                        values.category.toLowerCase()
-                    )
-                })
-
-                if (oldIndex > -1) {
-                    // I need to remove the item from the old category
-                    const itemIndex = lists[oldIndex].items.findIndex(
-                        (item) => item.id === currentItem.id
-                    )
-
-                    let newLists = [...lists]
-
-                    if (itemIndex > -1) {
-                        let oldItems = [...newLists[oldIndex].items]
-                        oldItems.splice(itemIndex, 1)
-                        console.log('Old items', oldItems)
-
-                        // If I don't have any items in that category
-                        // I remove the category from the lists array
-
-                        if (oldItems.length === 0) {
-                            // Not sure if I should remove the category
-                            // newLists.splice(oldIndex, 1)
-                        } else {
-                            newLists[oldIndex] = {
-                                ...newLists[oldIndex],
-                                items: oldItems,
-                            }
-                        }
-                    }
-
-                    // The new Category exists
-                    if (newIndex > -1) {
-                        let newItems = [...newLists[newIndex].items]
-                        newItems.push(res.data.data)
-                        newLists[newIndex] = {
-                            ...newLists[newIndex],
-                            items: newItems,
-                        }
-                    } else {
-                        // It's a brand new category
-                        newLists.push({
-                            category: values.category,
-                            items: [].concat(res.data.data),
-                        })
-                    }
-                    setLists(newLists)
-                }
-            }
             resetForm({ name: '', note: '', image: '', category: '' })
-            setCurrentItem(res.data.data)
+            setCurrentItem(response.data.data)
             setSidebarType(SHOW_ITEM)
         } catch (e) {
             console.log('Error updating', e)

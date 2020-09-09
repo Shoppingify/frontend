@@ -33,7 +33,7 @@ function Sidebar() {
 
     return (
         <div
-            className={`w-1/3 ${
+            className={`w-sidebar ${
                 sidebarType === ADD_SHOPPING_LIST ||
                 sidebarType === SHOW_SHOPPING_LIST
                     ? 'bg-primary-light'
