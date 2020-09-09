@@ -8,20 +8,14 @@
 }
 
 .navbar__item::before {
+    @apply absolute top-0 bottom-0 left-0 bg-primary opacity-0 transition-opacity duration-500;
     content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
     width: 6px;
-    background-color: orange;
     border-radius: 0 4px 4px 0;
-    opacity: 0;
-    transition: opacity 0.5s ease;
 }
 .navbar__item.active::before,
 .navbar__item:hover::before {
-    opacity: 1;
+    @apply opacity-100;
 }
 /* width */
 ::-webkit-scrollbar {

@@ -1,61 +1,49 @@
-import React, { useEffect } from 'react'
-
-// Libs
-import { Link, useLocation } from 'react-router-dom'
+import React from 'react'
 import {
-    AiOutlineUnorderedList,
-    AiOutlineReload,
-    AiOutlineShoppingCart,
-} from 'react-icons/ai'
-import { IoMdStats } from 'react-icons/io'
+    MdInsertChart,
+    MdList,
+    MdRefresh,
+    MdShoppingCart,
+} from 'react-icons/md'
+// Libs
+import { NavLink } from 'react-router-dom'
 import logo from '../../assets/logo.svg'
+
 /**
  * Simple navbar component
  */
 // TODO refactor
 const Navbar = () => {
-    const location = useLocation()
-
-    useEffect(() => {
-        console.log('location', location)
-    }, [location])
-
     return (
         <nav className="w-24 flex-none flex flex-col items-center mt-10">
             <img src={logo} alt="logo" />
             <ul className="flex flex-col w-full h-full justify-center items-center">
-                <li
-                    className={`navbar__item ${
-                        location && location.pathname === '/items'
-                            ? 'active'
-                            : ''
-                    }`}
-                >
-                    <Link to="/items">
-                        <AiOutlineUnorderedList />
-                    </Link>
+                <li className="w-full">
+                    <NavLink
+                        className="navbar__item"
+                        to="/items"
+                        activeClassName="active"
+                    >
+                        <MdList />
+                    </NavLink>
                 </li>
-                <li
-                    className={`navbar__item ${
-                        location && location.pathname === '/history'
-                            ? 'active'
-                            : ''
-                    }`}
-                >
-                    <Link to="/history">
-                        <AiOutlineReload />
-                    </Link>
+                <li className="w-full">
+                    <NavLink
+                        className="navbar__item"
+                        to="/history"
+                        activeClassName="active"
+                    >
+                        <MdRefresh />
+                    </NavLink>
                 </li>
-                <li
-                    className={`navbar__item ${
-                        location && location.pathname === '/statistics'
-                            ? 'active'
-                            : ''
-                    }`}
-                >
-                    <Link to="/statistics">
-                        <IoMdStats />
-                    </Link>
+                <li className="w-full">
+                    <NavLink
+                        className="navbar__item"
+                        to="/statistics"
+                        activeClassName="active"
+                    >
+                        <MdInsertChart />
+                    </NavLink>
                 </li>
             </ul>
             <div className="w-16 h-16 flex justify-center items-center relative">
@@ -66,7 +54,7 @@ const Navbar = () => {
                     3
                 </div>
                 <div className="rounded-full flex justify-center items-center bg-primary w-10 h-10  text-white text-xl">
-                    <AiOutlineShoppingCart />
+                    <MdShoppingCart />
                 </div>
             </div>
         </nav>
