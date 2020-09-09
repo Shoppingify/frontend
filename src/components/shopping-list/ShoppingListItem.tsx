@@ -94,12 +94,25 @@ const ShoppingListItem: React.FC<PropTypes> = ({
     }
 
     function handleItemDelete() {
-        client.delete(`/lists/${appConfig.activeListId}/items`, {
-            data: {
-                item_id: id,
-                list_id: appConfig.activeListId,
-            },
-        })
+        client
+            .delete(`/lists/${appConfig.activeListId}/items`, {
+                data: {
+                    item_id: id,
+                    list_id: appConfig.activeListId,
+                },
+            })
+            .then(async () => {
+                // refetch list data
+                const responseItems = await client.get(
+                    `lists/${appConfig.activeListId}/items`
+                )
+
+                const {
+                    data: { items: itemsData },
+                } = await responseItems.data
+
+                setShopList(itemsData)
+            })
     }
 
     useEffect(() => {
@@ -110,12 +123,25 @@ const ShoppingListItem: React.FC<PropTypes> = ({
         if (!mounted) return
         // Handle 0 quantity, remove it
         if (quantity === 0) {
-            client.delete(`/lists/${appConfig.activeListId}/items`, {
-                data: {
-                    item_id: id,
-                    list_id: appConfig.activeListId,
-                },
-            })
+            client
+                .delete(`/lists/${appConfig.activeListId}/items`, {
+                    data: {
+                        item_id: id,
+                        list_id: appConfig.activeListId,
+                    },
+                })
+                .then(async () => {
+                    // refetch list data
+                    const responseItems = await client.get(
+                        `lists/${appConfig.activeListId}/items`
+                    )
+
+                    const {
+                        data: { items: itemsData },
+                    } = await responseItems.data
+
+                    setShopList(itemsData)
+                })
 
             return
         }
@@ -145,7 +171,7 @@ const ShoppingListItem: React.FC<PropTypes> = ({
             animate="show"
             className="flex justify-between items-center mb-6 xl:flex-wrap group"
         >
-            <div className="flex items-center">
+            <label className="flex items-center">
                 {/** Checkbox */}
                 {!editing && (
                     <input
@@ -166,7 +192,7 @@ const ShoppingListItem: React.FC<PropTypes> = ({
                 >
                     {name}
                 </h2>
-            </div>
+            </label>
             {/** Container for edit buttons and quantity */}
             <motion.div
                 initial="rest"

@@ -10,6 +10,7 @@ import {
     sidebarState,
     userItemsState,
     ADD_SHOPPING_LIST,
+    SHOW_SHOPPING_LIST,
 } from '../../../global-state/atoms'
 import client from '../../../api/client'
 
@@ -70,7 +71,7 @@ const ItemForm: React.FC = () => {
 
     // Cancel the addition of a new item
     const cancel = () => {
-        setSidebarType(ADD_SHOPPING_LIST)
+        setSidebarType(SHOW_SHOPPING_LIST)
     }
 
     return (

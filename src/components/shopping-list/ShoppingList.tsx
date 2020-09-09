@@ -5,6 +5,7 @@ import client from '../../api/client'
 
 // Libs
 import { MdCreate, MdSave } from 'react-icons/md'
+import { v4 as uuidv4 } from 'uuid'
 
 // state
 import { useRecoilState, useSetRecoilState } from 'recoil'
@@ -60,49 +61,11 @@ const ShoppingList: React.FC = () => {
                 data: { items: itemsData },
             } = await responseItems.data
 
-            console.log('Items data')
-            console.log(itemsData)
-
             setShopList(itemsData)
         }
 
         initialData()
     }, [])
-
-    /**
-     * State of shopList changed effect
-     */
-    useEffect(() => {
-        console.log('Current shopping list')
-        console.log(shopList)
-        if (appConfig.activeListId === -1) return
-
-        async function updateList() {
-            // Format data
-            // First grab all items - only ids and quantity
-            const items = shopList.map((category: any) => {
-                return category.items.map((item: any) => {
-                    return {
-                        id: item.id,
-                        quantity: item.quantity,
-                    }
-                })
-            })
-
-            const dataToBeSent = {
-                //@ts-ignore
-                items: items.flat(),
-            }
-
-            const response = await client.post(
-                `lists/${appConfig.activeListId}/items`,
-                dataToBeSent
-            )
-            const data = await response.data
-        }
-
-        // updateList()
-    }, [shopList])
 
     /**
      * Editing change
@@ -148,10 +111,11 @@ const ShoppingList: React.FC = () => {
                     <h3 className="text-gray-light text-sm mb-6">
                         {category.category}
                     </h3>
+                    {/** TODO figure out why the components remount all the time */}
                     {category.items.map((item: any, indexItem: number) => {
                         return (
                             <ShoppingListItem
-                                key={indexItem}
+                                key={`${item.name}__${indexItem}`}
                                 quantity={item.quantity}
                                 name={item.name}
                                 category={item.categoryName}
