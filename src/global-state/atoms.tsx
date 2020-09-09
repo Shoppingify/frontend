@@ -1,4 +1,5 @@
 import { atom } from 'recoil'
+import { ItemType, ListOfItems } from '../types/items/types'
 
 // Sidebar state constants
 export const ADD_SHOPPING_LIST = 'add_shopping_list'
@@ -13,7 +14,7 @@ export const sidebarState = atom({
 })
 
 // All user's items
-export const userItemsState = atom({
+export const userItemsState = atom<ListOfItems[]>({
     key: 'items',
     default: [],
 })
@@ -24,7 +25,7 @@ export const userCategoriesState = atom({
     default: [],
 })
 
-export const currentItemState = atom({
+export const currentItemState = atom<ItemType | null>({
     key: 'currentItem',
     default: null,
 })

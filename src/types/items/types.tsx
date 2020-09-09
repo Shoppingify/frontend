@@ -1,6 +1,6 @@
 export interface ItemType {
     category_id: number
-    category?: string
+    categoryName: string
     created_at: string
     id: number
     image: string
@@ -17,4 +17,9 @@ export interface CategoryType {
     user_id: number
     created_at: string
     updated_at: string
+}
+
+export interface ListOfItems {
+    category: string
+    items: ItemType[] | []
 }

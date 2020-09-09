@@ -1,5 +1,5 @@
 import React from 'react'
-import { useRecoilValue, useRecoilState } from 'recoil'
+import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil'
 import {
     currentItemState,
     userCategoriesState,
@@ -13,18 +13,8 @@ const ShowItemSidebar = () => {
     const categories = useRecoilValue<CategoryType[] | any[]>(
         userCategoriesState
     )
-    const [sidebarType, setSidebarType] = useRecoilState(sidebarState)
+    const setSidebarType = useSetRecoilState(sidebarState)
 
-    const getCategory = (catId: number | undefined) => {
-        if (catId) {
-            const cat: CategoryType = categories.find((cat) => {
-                console.log('CAtegory', cat)
-                cat.id === catId
-            })
-            return cat.name
-        }
-        return null
-    }
     return (
         <div>
             <a
@@ -49,9 +39,7 @@ const ShowItemSidebar = () => {
             </div>
             <div className="mb-4">
                 <div className="text-sm text-gray-light">Category</div>
-                <div className="text-xl mt-2">
-                    {getCategory(currentItem?.category_id)}
-                </div>
+                <div className="text-xl mt-2">{currentItem?.categoryName}</div>
             </div>
             {currentItem?.note && (
                 <div className="mb-4">

@@ -1,11 +1,15 @@
 import React from 'react'
-import {} from 'recoil'
+import { useRecoilValue } from 'recoil'
 import ItemForm from '../form/item/ItemForm'
+import { currentItemState } from '../../global-state/atoms'
 
 const AddItemSidebar: React.FC = () => {
+    const currentItem = useRecoilValue(currentItemState)
     return (
         <div className="flex flex-col h-full">
-            <h3 className="text-2xl mb-6 font-medium">Add a new item</h3>
+            <h3 className="text-2xl mb-6 font-medium">
+                {currentItem ? 'Edit an ' : 'Add a new '}item
+            </h3>
             <ItemForm />
         </div>
     )
