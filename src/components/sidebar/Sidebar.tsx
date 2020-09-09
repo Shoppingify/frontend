@@ -5,10 +5,12 @@ import {
     ADD_SHOPPING_LIST,
     ADD_NEW_ITEM,
     SHOW_SHOPPING_LIST,
+    SHOW_ITEM,
 } from '../../global-state/atoms'
 // Libs
 import ShoppingList from '../shopping-list/ShoppingList'
 import AddItemSidebar from './AddItemSidebar'
+import ShowItemSidebar from './ShowItemSidebar'
 
 /**
  * Sidebar of the app, displays shopping list
@@ -22,6 +24,8 @@ function Sidebar() {
                 return <ShoppingList />
             case ADD_NEW_ITEM:
                 return <AddItemSidebar />
+            case SHOW_ITEM:
+                return <ShowItemSidebar />
             default:
                 return <ShoppingList />
         }
@@ -30,11 +34,13 @@ function Sidebar() {
     return (
         <div
             className={`w-1/3 ${
+                sidebarType === ADD_SHOPPING_LIST ||
                 sidebarType === SHOW_SHOPPING_LIST
                     ? 'bg-primary-light'
                     : 'bg-white'
             } p-12`}
         >
+            {console.log('sidebarType', sidebarType)}
             {/* <ShoppingList /> */}
             {selectSidebar()}
         </div>

@@ -10,6 +10,8 @@ import {
     sidebarState,
     userItemsState,
     ADD_SHOPPING_LIST,
+    SHOW_ITEM,
+    currentItemState,
 } from '../../../global-state/atoms'
 import client from '../../../api/client'
 
@@ -24,6 +26,7 @@ const ItemSchema = Yup.object().shape({
 const ItemForm: React.FC = () => {
     const [lists, setLists] = useRecoilState(userItemsState)
     const [sidebarType, setSidebarType] = useRecoilState(sidebarState)
+    const [currentItem, setCurrentItem] = useRecoilState(currentItemState)
 
     // Add a new item
     const addItem = async (values: any, { setSubmitting, resetForm }: any) => {
@@ -59,11 +62,11 @@ const ItemForm: React.FC = () => {
             }
             // TODO Change to show the added item
             resetForm({ name: '', note: '', image: '', category: '' })
-            setSidebarType(ADD_SHOPPING_LIST)
+            setCurrentItem(res.data.data)
+            setSidebarType(SHOW_ITEM)
             console.log('res', res.data)
         } catch (e) {
             console.log('Add item error', e)
-        } finally {
             setSubmitting(false)
         }
     }

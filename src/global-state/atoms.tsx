@@ -23,3 +23,8 @@ export const userCategoriesState = atom({
     key: 'categories',
     default: [],
 })
+
+export const currentItemState = atom({
+    key: 'currentItem',
+    default: null,
+})
