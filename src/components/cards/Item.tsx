@@ -6,6 +6,8 @@ import { MdAdd } from 'react-icons/md'
 import { shopListDataState } from '../../global-state/shopListState'
 import { useSetRecoilState } from 'recoil'
 import { ItemType } from '../../types/items/types'
+import { currentItemState } from '../../global-state/currentItemState'
+import { sidebarState, SHOW_ITEM } from '../../global-state/sidebarState'
 
 // TODO how to handle long item names? Fix word breaking
 // TODO how to align plus symbol to the item name, multilines item name issue
@@ -26,6 +28,14 @@ import { ItemType } from '../../types/items/types'
  */
 function Item({ data, category }: any) {
     const setShopList = useSetRecoilState(shopListDataState)
+    const setSidebarType = useSetRecoilState(sidebarState)
+    const setCurrentItem = useSetRecoilState(currentItemState)
+
+    const showItem = () => {
+        console.log('data', data)
+        setCurrentItem(data)
+        setSidebarType(SHOW_ITEM)
+    }
 
     function handleClick() {
         console.log('Before set state')
@@ -70,7 +80,7 @@ function Item({ data, category }: any) {
 
     return (
         <div className="relative bg-white overflow-hidden rounded-lg flex justify-between">
-            <button className="p-4 w-full">
+            <button className="p-4 w-full" onClick={showItem}>
                 <h4 className="font-medium text-left">{data.name}</h4>
             </button>
             <button

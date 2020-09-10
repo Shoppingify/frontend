@@ -1,9 +1,8 @@
-import React, { useEffect, useCallback, useState } from 'react'
-import client from '../../../api/client'
+import { ErrorMessage, Field, useField } from 'formik'
+import React, { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import { userCategoriesState } from '../../../global-state/atoms'
-import { Field, Formik, useField, ErrorMessage } from 'formik'
-import BasicInput from './BasicInput'
+import client from '../../api/client'
+import { categoriesState } from '../../global-state/categoriesState'
 
 interface Category {
     id: number
@@ -14,7 +13,7 @@ interface Category {
 }
 
 const CategorySelect = ({ label, ...props }: any) => {
-    const [categories, setCategories] = useRecoilState(userCategoriesState)
+    const [categories, setCategories] = useRecoilState(categoriesState)
     const [field, meta, helpers] = useField(props)
     const [filtered, setFiltered] = useState([])
     const [showAutocomplete, setShowAutocomplete] = useState(false)
