@@ -7,7 +7,7 @@ import {
     SHOW_SHOPPING_LIST,
 } from '../../global-state/atoms'
 // Libs
-import ShoppingList from '../shopping-list/ShoppingList'
+import ShoppingList from '../shopping-list/shopping-list/ShoppingList'
 import AddItemSidebar from './AddItemSidebar'
 
 /**
@@ -29,7 +29,7 @@ function Sidebar() {
 
     return (
         <div
-            className={`w-1/3 ${
+            className={`w-1/3 relative overflow-y-auto ${
                 sidebarType === SHOW_SHOPPING_LIST
                     ? 'bg-primary-light'
                     : 'bg-white'

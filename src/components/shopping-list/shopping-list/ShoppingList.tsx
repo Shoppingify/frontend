@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 // Api client
-import client from '../../api/client'
+import client from '../../../api/client'
 
 // Libs
 import { MdCreate, MdSave } from 'react-icons/md'
@@ -13,11 +13,12 @@ import {
     sidebarState,
     ADD_NEW_ITEM,
     appConfigState,
-} from '../../global-state/atoms'
-import { shopListDataState } from '../../global-state/shopListState'
+} from '../../../global-state/atoms'
+import { shopListDataState } from '../../../global-state/shopListState'
 
 // Components
-import ShoppingListItem from './ShoppingListItem'
+import ShoppingListItem from '../shopping-list__item/ShoppingListItem'
+import Button from '../../button/Button'
 
 /**
  * Main shopping list component
@@ -85,7 +86,7 @@ const ShoppingList: React.FC = () => {
     }, [editing])
 
     return (
-        <div>
+        <div className="h-full">
             <div onClick={() => setSidebarType(ADD_NEW_ITEM)}>
                 Add a new item
             </div>
@@ -111,7 +112,6 @@ const ShoppingList: React.FC = () => {
                     <h3 className="text-gray-light text-sm mb-6">
                         {category.category}
                     </h3>
-                    {/** TODO figure out why the components remount all the time */}
                     {category.items.map((item: any, indexItem: number) => {
                         return (
                             <ShoppingListItem
@@ -119,14 +119,24 @@ const ShoppingList: React.FC = () => {
                                 quantity={item.quantity}
                                 name={item.name}
                                 category={item.categoryName}
-                                id={item.id}
+                                item_id={item.id}
                                 editing={editing}
                                 done={item.done}
+                                catIndex={index}
+                                itemIndex={indexItem}
                             />
                         )
                     })}
                 </div>
             ))}
+            {!editing && (
+                <div className="fixed bottom-0 h-40 w-1/3 right-0 bg-white flex justify-center items-center">
+                    <Button modifier="danger" className="mr-3">
+                        Cancel
+                    </Button>
+                    <Button modifier="secondary">Complete</Button>
+                </div>
+            )}
         </div>
     )
 }
