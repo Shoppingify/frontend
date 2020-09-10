@@ -1,7 +1,7 @@
 import React from 'react'
 import { useRecoilValue } from 'recoil'
 import ItemForm from '../form/item/ItemForm'
-import { currentItemState } from '../../global-state/atoms'
+import { currentItemState } from '../../global-state/currentItemState'
 
 const AddItemSidebar: React.FC = () => {
     const currentItem = useRecoilValue(currentItemState)

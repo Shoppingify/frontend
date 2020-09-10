@@ -1,16 +1,16 @@
 import React from 'react'
-import { useRecoilValue, RecoilState, RecoilValue } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import {
-    sidebarState,
-    ADD_SHOPPING_LIST,
     ADD_NEW_ITEM,
-    SHOW_SHOPPING_LIST,
+    ADD_SHOPPING_LIST,
     SHOW_ITEM,
-} from '../../global-state/atoms'
+    SHOW_SHOPPING_LIST,
+    sidebarState,
+} from '../../global-state/sidebarState'
 // Libs
 import ShoppingList from '../shopping-list/ShoppingList'
-import AddItemSidebar from './AddItemSidebar'
-import ShowItemSidebar from './ShowItemSidebar'
+import AddItemSidebar from '../item-sidebars/AddItemSidebar'
+import ShowItemSidebar from '../item-sidebars/ShowItemSidebar'
 
 /**
  * Sidebar of the app, displays shopping list

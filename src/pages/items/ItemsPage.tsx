@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from 'react'
-
-// Libs
-import { useRecoilValue, useRecoilState } from 'recoil/dist'
-import { userState } from '../../App'
-import { v4 as uuidv4 } from 'uuid'
-import Item from '../../components/cards/Item'
 import { motion } from 'framer-motion'
+import React, { useEffect } from 'react'
+// Libs
+import { useRecoilState } from 'recoil/dist'
+import { v4 as uuidv4 } from 'uuid'
 import client from '../../api/client'
-import { userItemsState } from '../../global-state/atoms'
+import Item from '../../components/cards/Item'
+import { itemsState } from '../../global-state/itemsState'
 import { ItemType } from '../../types/items/types'
 
 const containerVariants = {
@@ -36,7 +34,7 @@ interface List {
  */
 function ItemsPage() {
     // Local state
-    const [lists, setLists] = useRecoilState(userItemsState)
+    const [lists, setLists] = useRecoilState(itemsState)
 
     useEffect(() => {
         async function getItems() {

@@ -1,20 +1,18 @@
-import React, { useCallback } from 'react'
-
-import { Formik, Form, Field, ErrorMessage } from 'formik'
-import * as Yup from 'yup'
-import BasicInput from './BasicInput'
-import CategorySelect from './CategorySelect'
-import Button from '../../button/Button'
+import { Form, Formik } from 'formik'
+import React from 'react'
 import { useRecoilState, useSetRecoilState } from 'recoil'
+import * as Yup from 'yup'
+import client from '../../../api/client'
+import { itemsState } from '../../../global-state/itemsState'
+import { currentItemState } from '../../../global-state/currentItemState'
 import {
-    sidebarState,
-    userItemsState,
     ADD_SHOPPING_LIST,
     SHOW_ITEM,
-    currentItemState,
-} from '../../../global-state/atoms'
-import client from '../../../api/client'
-import { ItemType, ListOfItems } from '../../../types/items/types'
+    sidebarState,
+} from '../../../global-state/sidebarState'
+import Button from '../../button/Button'
+import BasicInput from '../../form-elements/BasicInput'
+import CategorySelect from '../../form-elements/CategorySelect'
 
 // Validation schema
 const ItemSchema = Yup.object().shape({
@@ -25,7 +23,7 @@ const ItemSchema = Yup.object().shape({
 })
 
 const ItemForm: React.FC = () => {
-    const [lists, setLists] = useRecoilState(userItemsState)
+    const setLists = useSetRecoilState(itemsState)
     const setSidebarType = useSetRecoilState(sidebarState)
     const [currentItem, setCurrentItem] = useRecoilState(currentItemState)
 

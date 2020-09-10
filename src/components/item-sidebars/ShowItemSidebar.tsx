@@ -1,25 +1,21 @@
 import React from 'react'
-import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil'
-import {
-    currentItemState,
-    userCategoriesState,
-    sidebarState,
-    ADD_NEW_ITEM,
-    userItemsState,
-    SHOW_SHOPPING_LIST,
-} from '../../global-state/atoms'
-import { ItemType, CategoryType } from '../../types/items/types'
-import Button from '../button/Button'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 import client from '../../api/client'
+import { itemsState } from '../../global-state/itemsState'
+import { currentItemState } from '../../global-state/currentItemState'
+import {
+    ADD_NEW_ITEM,
+    SHOW_SHOPPING_LIST,
+    sidebarState,
+} from '../../global-state/sidebarState'
+import { ItemType } from '../../types/items/types'
+import Button from '../button/Button'
 
 const ShowItemSidebar = () => {
     const [currentItem, setCurrentItem] = useRecoilState<ItemType | null>(
         currentItemState
     )
-    const setLists = useSetRecoilState(userItemsState)
-    const categories = useRecoilValue<CategoryType[] | any[]>(
-        userCategoriesState
-    )
+    const setLists = useSetRecoilState(itemsState)
     const setSidebarType = useSetRecoilState(sidebarState)
 
     const addItem = async () => {

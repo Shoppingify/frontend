@@ -8,7 +8,7 @@ import { MdCreate } from 'react-icons/md'
 
 // state
 import { useRecoilState, useSetRecoilState } from 'recoil'
-import { sidebarState, ADD_NEW_ITEM } from '../../global-state/atoms'
+import { sidebarState, ADD_NEW_ITEM } from '../../global-state/sidebarState'
 import { shopListDataState } from '../../global-state/shopListState'
 
 // Components

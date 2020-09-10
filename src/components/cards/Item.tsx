@@ -6,11 +6,8 @@ import { MdAdd } from 'react-icons/md'
 import { shopListDataState } from '../../global-state/shopListState'
 import { useSetRecoilState } from 'recoil'
 import { ItemType } from '../../types/items/types'
-import {
-    sidebarState,
-    currentItemState,
-    SHOW_ITEM,
-} from '../../global-state/atoms'
+import { currentItemState } from '../../global-state/currentItemState'
+import { sidebarState, SHOW_ITEM } from '../../global-state/sidebarState'
 
 // TODO how to handle long item names? Fix word breaking
 // TODO how to align plus symbol to the item name, multilines item name issue
