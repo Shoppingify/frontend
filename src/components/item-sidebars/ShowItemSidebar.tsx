@@ -11,8 +11,9 @@ import {
 } from '../../global-state/sidebarState'
 import { ItemType } from '../../types/items/types'
 import Button from '../button/Button'
-import { Img } from 'react-image'
-import { MdLocalPizza, MdModeEdit } from 'react-icons/md'
+import { MdModeEdit } from 'react-icons/md'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
+import 'react-lazy-load-image-component/src/effects/blur.css'
 
 const ShowItemSidebar = () => {
     const [currentItem, setCurrentItem] = useRecoilState<ItemType | null>(
@@ -97,14 +98,22 @@ const ShowItemSidebar = () => {
                 </div>
 
                 {currentItem?.image && (
-                    <Img
-                        className="rounded-24 w-full mb-12 object-cover"
+                    <LazyLoadImage
+                        effect="blur"
                         style={{ maxHeight: '200px' }}
-                        src={[currentItem.image, randomImageError()]}
+                        className="rounded-24 w-full mb-12 object-cover"
+                        src={currentItem.image}
                         alt={currentItem.name}
-                        loader={loader()}
-                        key={currentItem.id + currentItem.image}
+                        placeholder={loader()}
                     />
+                    // <Img
+                    //     className="rounded-24 w-full mb-12 object-cover"
+                    //     style={{ maxHeight: '200px' }}
+                    //     src={[currentItem.image, randomImageError()]}
+                    //     alt={currentItem.name}
+                    //     loader={loader()}
+                    //     key={currentItem.id + currentItem.image}
+                    // />
                 )}
 
                 <div className="mb-4">
