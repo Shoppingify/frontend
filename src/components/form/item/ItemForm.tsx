@@ -14,8 +14,6 @@ import Button from '../../button/Button'
 import BasicInput from '../../form-elements/BasicInput'
 import CategorySelect from '../../form-elements/CategorySelect'
 
-import client from '../../../api/client'
-
 // Validation schema
 const ItemSchema = Yup.object().shape({
     name: Yup.string().required('Required'),

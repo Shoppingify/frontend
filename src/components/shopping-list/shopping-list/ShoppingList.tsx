@@ -5,16 +5,12 @@ import client from '../../../api/client'
 
 // Libs
 import { MdCreate, MdSave } from 'react-icons/md'
-import { v4 as uuidv4 } from 'uuid'
 
 // state
 import { useRecoilState, useSetRecoilState } from 'recoil'
-import {
-    sidebarState,
-    ADD_NEW_ITEM,
-    appConfigState,
-} from '../../../global-state/sidebarState'
+import { sidebarState, ADD_NEW_ITEM } from '../../../global-state/sidebarState'
 import { shopListDataState } from '../../../global-state/shopListState'
+import { appConfigState } from '../../../global-state/atoms'
 
 // Components
 import ShoppingListItem from '../shopping-list__item/ShoppingListItem'
@@ -130,7 +126,7 @@ const ShoppingList: React.FC = () => {
                 </div>
             ))}
             {!editing && (
-                <div className="fixed bottom-0 h-40 w-1/3 right-0 bg-white flex justify-center items-center">
+                <div className="fixed bottom-0 h-40 w-sidebar right-0 bg-white flex justify-center items-center">
                     <Button modifier="danger" className="mr-3">
                         Cancel
                     </Button>
