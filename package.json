@@ -24,6 +24,7 @@
         "react-dom": "^16.13.1",
         "react-hot-loader": "^4.12.21",
         "react-icons": "^3.11.0",
+        "react-image": "^4.0.3",
         "react-router-dom": "^5.2.0",
         "recoil": "0.0.10",
         "tailwindcss": "^1.7.3",

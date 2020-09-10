@@ -10,6 +10,8 @@ import {
 } from '../../global-state/sidebarState'
 import { ItemType } from '../../types/items/types'
 import Button from '../button/Button'
+import { Img } from 'react-image'
+import { MdLocalPizza } from 'react-icons/md'
 
 const ShowItemSidebar = () => {
     const [currentItem, setCurrentItem] = useRecoilState<ItemType | null>(
@@ -40,6 +42,31 @@ const ShowItemSidebar = () => {
         }
     }
 
+    const loader = () => {
+        return (
+            <div
+                style={{ minHeight: '150px' }}
+                className="w-full bg-gray-light rounded-24 mb-12"
+            ></div>
+        )
+    }
+
+    /**
+     * Completely useless error images
+     * Useless therefore essential ;)
+     */
+    const randomImageError = () => {
+        const images = [
+            'https://media1.tenor.com/images/5020db30df28f5e56129752ab68732e3/tenor.gif?itemid=3407679',
+            'https://media1.tenor.com/images/b3fef669ae866655eee51d59728e9065/tenor.gif?itemid=13908286',
+            'https://media1.tenor.com/images/963dbf83410067b8216bf3fbeec50874/tenor.gif?itemid=5012719',
+            'https://media.tenor.com/images/9117a39f59b1e089e3581687687cea1c/tenor.gif',
+            'https://media.tenor.com/images/8d483e909ec3618f521e9700d6fbf2e1/tenor.gif',
+        ]
+
+        return images[Math.floor(Math.random() * images.length)]
+    }
+
     return (
         <div className="flex flex-col h-full justify-between">
             <div>
@@ -52,11 +79,14 @@ const ShowItemSidebar = () => {
                 </a>
 
                 {currentItem?.image && (
-                    <img
-                        style={{ maxHeight: '200px' }}
+                    <Img
                         className="rounded-24 w-full mb-12 object-cover"
-                        src={currentItem.image}
+                        style={{ maxHeight: '200px' }}
+                        src={[currentItem.image, randomImageError()]}
                         alt={currentItem.name}
+                        loader={loader()}
+                        key={currentItem.id}
+                        crossorigin="anonymous"
                     />
                 )}
 
