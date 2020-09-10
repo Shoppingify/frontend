@@ -1,11 +1,12 @@
-import React from 'react'
-import { useRecoilValue } from 'recoil'
+import React, { useEffect } from 'react'
+import { useRecoilValue, useSetRecoilState, useRecoilState } from 'recoil'
 import {
     ADD_NEW_ITEM,
     ADD_SHOPPING_LIST,
     SHOW_ITEM,
     SHOW_SHOPPING_LIST,
     sidebarState,
+    sidebarHistoryState,
 } from '../../global-state/sidebarState'
 // Libs
 import ShoppingList from '../shopping-list/ShoppingList'
@@ -17,6 +18,9 @@ import ShowItemSidebar from '../item-sidebars/ShowItemSidebar'
  */
 function Sidebar() {
     const sidebarType = useRecoilValue(sidebarState)
+    const [sidebarHistory, setSidebarHistory] = useRecoilState(
+        sidebarHistoryState
+    )
 
     const selectSidebar = () => {
         switch (sidebarType) {
@@ -30,6 +34,13 @@ function Sidebar() {
                 return <ShoppingList />
         }
     }
+
+    useEffect(() => {
+        if (sidebarHistory[0] !== sidebarType) {
+            setSidebarHistory((history) => [...history, sidebarType])
+        }
+        console.log('sidebarHistory', sidebarHistory)
+    }, [sidebarType])
 
     return (
         <div

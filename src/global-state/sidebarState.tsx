@@ -10,3 +10,8 @@ export const sidebarState = atom({
     key: 'sidebar',
     default: SHOW_SHOPPING_LIST,
 })
+
+export const sidebarHistoryState = atom({
+    key: 'sidebar_history',
+    default: [SHOW_SHOPPING_LIST],
+})
