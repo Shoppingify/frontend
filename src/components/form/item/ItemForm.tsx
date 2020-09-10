@@ -1,17 +1,19 @@
-import React, { useCallback } from 'react'
-
-import { Formik, Form, Field, ErrorMessage } from 'formik'
+import { Form, Formik } from 'formik'
+import React from 'react'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 import * as Yup from 'yup'
-import BasicInput from './BasicInput'
-import CategorySelect from './CategorySelect'
-import Button from '../../button/Button'
-import { useRecoilState } from 'recoil'
+import client from '../../../api/client'
+import { itemsState } from '../../../global-state/itemsState'
+import { currentItemState } from '../../../global-state/currentItemState'
 import {
-    sidebarState,
-    userItemsState,
     ADD_SHOPPING_LIST,
-    SHOW_SHOPPING_LIST,
-} from '../../../global-state/atoms'
+    SHOW_ITEM,
+    sidebarState,
+} from '../../../global-state/sidebarState'
+import Button from '../../button/Button'
+import BasicInput from '../../form-elements/BasicInput'
+import CategorySelect from '../../form-elements/CategorySelect'
+
 import client from '../../../api/client'
 
 // Validation schema
@@ -23,62 +25,69 @@ const ItemSchema = Yup.object().shape({
 })
 
 const ItemForm: React.FC = () => {
-    const [lists, setLists] = useRecoilState(userItemsState)
-    const [sidebarType, setSidebarType] = useRecoilState(sidebarState)
+    const setLists = useSetRecoilState(itemsState)
+    const setSidebarType = useSetRecoilState(sidebarState)
+    const [currentItem, setCurrentItem] = useRecoilState(currentItemState)
 
     // Add a new item
     const addItem = async (values: any, { setSubmitting, resetForm }: any) => {
-        console.log('Values', values)
         setSubmitting(true)
         try {
-            const res = await client.post('items', values)
+            const response = await client.post('items', values)
+            const itemsResponse = await client.get('items')
+            setLists(itemsResponse.data.data)
 
-            // Add the item to the list
-            const index = lists.findIndex(
-                (list: any) =>
-                    list.category.toLowerCase() ===
-                    values.category.toLowerCase()
-            )
-            // I already have the category
-            if (index > -1) {
-                const newLists: any = [...lists]
-                newLists[index] = {
-                    ...newLists[index],
-                    items: newLists[index]['items'].concat(res.data.data),
-                }
-                console.log('newLists', newLists)
-                setLists(newLists)
-            } else {
-                // I don't have the category
-                let newLists: any = [...lists]
-                newLists.push({
-                    category: values.category,
-                    items: [].concat(res.data.data),
-                })
-                console.log('New lists here', newLists)
-                setLists(newLists)
-            }
-            // TODO Change to show the added item
             resetForm({ name: '', note: '', image: '', category: '' })
-            setSidebarType(ADD_SHOPPING_LIST)
-            console.log('res', res.data)
+            setCurrentItem(response.data.data)
+            setSidebarType(SHOW_ITEM)
         } catch (e) {
             console.log('Add item error', e)
-        } finally {
+            setSubmitting(false)
+        }
+    }
+
+    const updateItem = async (
+        values: any,
+        { setSubmitting, resetForm }: any
+    ) => {
+        if (!currentItem) return
+        console.log('values in update', values)
+        setSubmitting(true)
+        try {
+            const response = await client.put(`items/${currentItem.id}`, values)
+
+            const itemsResponse = await client.get('items')
+            setLists(itemsResponse.data.data)
+
+            resetForm({ name: '', note: '', image: '', category: '' })
+            setCurrentItem(response.data.data)
+            setSidebarType(SHOW_ITEM)
+        } catch (e) {
+            console.log('Error updating', e)
             setSubmitting(false)
         }
     }
 
     // Cancel the addition of a new item
     const cancel = () => {
-        setSidebarType(SHOW_SHOPPING_LIST)
+        setCurrentItem(null)
+        setSidebarType(ADD_SHOPPING_LIST)
+    }
+
+    const getInitialValues = () => {
+        return {
+            name: currentItem?.name || '',
+            note: currentItem?.note || '',
+            image: currentItem?.image || '',
+            category: currentItem?.categoryName || '',
+        }
     }
 
     return (
         <Formik
-            initialValues={{ name: '', note: '', image: '', category: '' }}
+            initialValues={getInitialValues()}
             validationSchema={ItemSchema}
-            onSubmit={addItem}
+            onSubmit={!currentItem ? addItem : updateItem}
         >
             {({ isSubmitting }) => (
                 <Form className="flex flex-col h-full justify-between">
@@ -116,7 +125,7 @@ const ItemForm: React.FC = () => {
                             modifier="primary"
                             disabled={isSubmitting}
                         >
-                            save
+                            {`${currentItem ? 'Edit' : 'Save'}`}
                         </Button>
                     </div>
                 </Form>

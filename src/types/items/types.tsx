@@ -1,5 +1,6 @@
 export interface ItemType {
     category_id: number
+    categoryName: string
     created_at: string
     id: number
     image: string
@@ -9,4 +10,9 @@ export interface ItemType {
     user_id: number
     quantity?: number
     done: boolean
+}
+
+export interface ListOfItems {
+    category: string
+    items: ItemType[] | []
 }

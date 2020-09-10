@@ -13,7 +13,7 @@ import {
     sidebarState,
     ADD_NEW_ITEM,
     appConfigState,
-} from '../../../global-state/atoms'
+} from '../../../global-state/sidebarState'
 import { shopListDataState } from '../../../global-state/shopListState'
 
 // Components
