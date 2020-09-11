@@ -8,24 +8,18 @@ interface PropTypes extends React.HTMLProps<HTMLHeadingElement> {
 const headingStyles: { [key: number]: string } = {
     1: 'text-4xl',
     2: 'text-2xl',
-    3: 'text-sm'
+    3: 'text-sm',
 }
 
-const Heading: React.FC<PropTypes> = ({ level, ...rest}) => {
+const Heading: React.FC<PropTypes> = React.memo(({ level, ...rest }) => {
     const Tag = 'h' + level
 
     const headingProps = {
         ...rest,
-        className: headingStyles[level] + ' ' + rest.className
+        className: headingStyles[level] + ' ' + rest.className,
     }
 
-    return (
-        <Tag {...headingProps}>
-            {
-                rest.children
-            }
-        </Tag>
-    )
-}
+    return <Tag {...headingProps}>{rest.children}</Tag>
+})
 
 export default Heading

@@ -38,7 +38,7 @@ const nameConfig: Config = {
 /**
  * Main shopping list component
  */
-const ShoppingList: React.FC = () => {
+const ShoppingList: React.FC = React.memo(() => {
     // Global state
     const [shopList, setShopList] = useRecoilState(shopListDataState)
     const [appConfig, setAppConfig] = useRecoilState(appConfigState)
@@ -175,12 +175,29 @@ const ShoppingList: React.FC = () => {
         }
     }, [])
 
+    // Functions that won't change during component lifecycle
+    /**
+     * Handles state of editing
+     */
+    const handleSetEditing = useCallback(
+        () => setEditing((current: boolean) => !current),
+        []
+    )
+
+    /**
+     * Handles setting of shop list name
+     */
+    const handleSetShopListName = useCallback(
+        (e) => setShopListName(e.target.value),
+        []
+    )
+
     return (
         <div className="h-full">
             <ShoppingListTitle
                 editing={editing}
-                setShopListName={(e) => setShopListName(e.target.value)}
-                setEditing={() => setEditing((current: boolean) => !current)}
+                setShopListName={handleSetShopListName}
+                setEditing={handleSetEditing}
                 shopListName={shopListName}
             />
             {shopList.map((category: any, index: number) => (
@@ -223,6 +240,6 @@ const ShoppingList: React.FC = () => {
             </AnimatePresence>
         </div>
     )
-}
+})
 
 export default ShoppingList
