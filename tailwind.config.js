@@ -29,7 +29,9 @@ module.exports = {
                 12: '12px',
             },
             width: {
-                sidebar: '390px',
+                sidebar: '410px',
+                '1/8': '12.5%',
+                '7/8': '87.5%',
             },
         },
     },

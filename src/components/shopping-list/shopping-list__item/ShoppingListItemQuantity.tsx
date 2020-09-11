@@ -3,11 +3,11 @@ import { motion } from 'framer-motion'
 import { MdDelete, MdRemove, MdAdd } from 'react-icons/md'
 
 const buttonVariants = {
-    rest: {
+    hide: {
         opacity: 0,
         width: 0,
     },
-    hover: {
+    show: {
         opacity: 1,
         width: 'auto',
     },
@@ -28,11 +28,10 @@ const ShoppingListItemQuantity: React.FC<PropTypes> = ({
 }) => {
     return (
         <motion.div
-            initial="rest"
-            whileHover={editing ? 'hover' : ''}
-            animate="rest"
+            initial="hide"
+            animate={editing ? 'show' : 'hide'}
             className={`flex ${
-                editing ? 'hover:bg-white' : undefined
+                editing ? 'bg-white' : undefined
             } rounded-12 overflow-hidden`}
         >
             {/** Delete button */}

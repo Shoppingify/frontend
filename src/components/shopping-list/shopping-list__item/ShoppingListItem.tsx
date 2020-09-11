@@ -1,12 +1,20 @@
 import React, { useEffect, useState } from 'react'
 
-import { motion } from 'framer-motion'
+// Libs
+import { motion, AnimatePresence } from 'framer-motion'
+
+// Api client
+import client from '../../../api/client'
+
+// Global state
 import { useSetRecoilState, useRecoilValue } from 'recoil'
 import { shopListDataState } from '../../../global-state/shopListState'
-import { MdRemove, MdAdd, MdDelete } from 'react-icons/md'
-import { ItemType } from '../../../types/items/types'
-import client from '../../../api/client'
 import { appConfigState } from '../../../global-state/atoms'
+
+// Hooks
+import useMounted from '../../../hooks/useMount'
+
+// Components
 import ShoppingListItemQuantity from './ShoppingListItemQuantity'
 
 // Prop Types
@@ -42,53 +50,34 @@ const itemVariants = {
  *  @param {string} category
  *  @param {boolean} editing
  */
-const ShoppingListItem: React.FC<PropTypes> = ({
-    name,
-    quantity,
-    item_id,
-    category,
-    editing,
-    done,
-    catIndex,
-    itemIndex,
-}) => {
-    useEffect(() => {
-        return () => {
-            console.log('Unmounting single item')
-        }
-    }, [])
+const ShoppingListItem: React.FC<PropTypes> = React.memo(
+    ({ name, quantity, item_id, editing, done, catIndex, itemIndex }) => {
+        console.log('Component rendering')
+        // Local state
+        const mounted = useMounted()
 
-    // Local state
-    const [complete, setComplete] = useState(done)
-    const [mounted, setMounted] = useState(false)
+        // Global state - read only
+        const appConfig = useRecoilValue(appConfigState)
+        const setShopList = useSetRecoilState(shopListDataState)
 
-    // Global state - read only
-    const appConfig = useRecoilValue(appConfigState)
-    const setShopList = useSetRecoilState(shopListDataState)
+        /**
+         * Effect runs on quantity change
+         */
+        useEffect(() => {
+            if (!mounted.current) return
 
-    /**
-     * Effect runs on component mount
-     */
-    useEffect(() => {
-        setMounted(true)
-    }, [])
+            const handleZeroQuantity = async () => {
+                try {
+                    await client.delete(
+                        `/lists/${appConfig.activeListId}/items`,
+                        {
+                            data: {
+                                item_id,
+                                list_id: appConfig.activeListId,
+                            },
+                        }
+                    )
 
-    /**
-     * Effect runs on quantity change
-     */
-    useEffect(() => {
-        if (!mounted) return
-
-        // Handle 0 quantity, remove item from shopping list
-        if (quantity === 0) {
-            client
-                .delete(`/lists/${appConfig.activeListId}/items`, {
-                    data: {
-                        item_id,
-                        list_id: appConfig.activeListId,
-                    },
-                })
-                .then(async () => {
                     // refetch list data
                     const responseItems = await client.get(
                         `lists/${appConfig.activeListId}/items`
@@ -99,85 +88,92 @@ const ShoppingListItem: React.FC<PropTypes> = ({
                     } = await responseItems.data
 
                     setShopList(itemsData)
-                })
+                } catch (error) {
+                    // TODO Handle notifications
+                    console.log(error)
+                }
+            }
 
-            return
+            // Handle 0 quantity, remove item from shopping list
+            if (quantity === 0) {
+                handleZeroQuantity()
+                return
+            }
+
+            // If quantity is higher than 0 update the shop list, no need for app state update since the app state shop list update triggers this effect
+            client.put(`/lists/${appConfig.activeListId}/items`, {
+                item_id,
+                list_id: appConfig.activeListId,
+                quantity,
+                done,
+            })
+        }, [quantity])
+
+        /**
+         * Effect runs on done status change
+         */
+        useEffect(() => {
+            if (!mounted.current) return
+
+            client.put(`/lists/${appConfig.activeListId}/items`, {
+                item_id,
+                list_id: appConfig.activeListId,
+                quantity,
+                done,
+            })
+        }, [done])
+
+        /**
+         * Handles increment or decrement of the item quantity
+         * If inc is true add to quantity else remove one
+         *
+         * This sets local shop list update, which triggers PUT method
+         *
+         * @param {boolean} inc
+         *  If true inc else dec
+         */
+        const handleInOrDecBtnClick = (inc: boolean) => {
+            //@ts-ignore
+            setShopList((current: any) => {
+                const newItems = JSON.parse(JSON.stringify(current))
+
+                newItems[catIndex].items[itemIndex].quantity += inc ? 1 : -1
+
+                return newItems
+            })
         }
 
-        // If quantity is high than 0 update the shop list, no need for app state update since the app state shop list update triggers this effect
-        client.put(`/lists/${appConfig.activeListId}/items`, {
-            item_id,
-            list_id: appConfig.activeListId,
-            quantity,
-            done: false,
-        })
-    }, [quantity])
+        /**
+         * Handles the change of complete status
+         * First change local shop list state which then triggers the
+         */
+        const handleCompleteStatus = () => {
+            // Update complete property of current item
+            setShopList((current: any) => {
+                const tempShopList = JSON.parse(JSON.stringify(current))
 
-    /**
-     * Effect runs on done status change
-     */
-    useEffect(() => {
-        if (!mounted) return
+                // Find the item in current state and update its done status
+                tempShopList[catIndex].items[itemIndex].done = !tempShopList[
+                    catIndex
+                ].items[itemIndex].done
 
-        client.put(`/lists/${appConfig.activeListId}/items`, {
-            item_id,
-            list_id: appConfig.activeListId,
-            quantity,
-            done,
-        })
-    }, [done])
-
-    /**
-     * Handles increment or decrement of the item quantity
-     * If inc is true add to quantity else remove one
-     *
-     * This sets local shop list update, which triggers PUT method
-     *
-     * @param {boolean} inc
-     *  If true inc else dec
-     */
-    const handleInOrDecBtnClick = (inc: boolean) => {
-        //@ts-ignore
-        setShopList((current: any) => {
-            const newItems = JSON.parse(JSON.stringify(current))
-
-            newItems[catIndex].items[itemIndex].quantity += inc ? 1 : -1
-
-            return newItems
-        })
-    }
-
-    /**
-     * Handles the change of complete status
-     * First change local shop list state which then triggers the
-     */
-    const handleCompleteStatus = () => {
-        // Update complete property of current item
-        setShopList((current: any) => {
-            const tempShopList = JSON.parse(JSON.stringify(current))
-
-            // Find the item in current state and update its done status
-            tempShopList[catIndex].items[itemIndex].done = !tempShopList[
-                catIndex
-            ].items[itemIndex].done
-
-            return tempShopList
-        })
-    }
-
-    /**
-     * Handles the deletion of the item from the list
-     * After DELETE method is finished, refetch list data and update app shoplist state
-     */
-    const handleItemDelete = () => {
-        client
-            .delete(`/lists/${appConfig.activeListId}/items`, {
-                data: {
-                    item_id,
-                    list_id: appConfig.activeListId,
-                },
+                return tempShopList
             })
-            .then(async () => {
+        }
+
+        /**
+         * Handles the deletion of the item from the list
+         * After DELETE method is finished, refetch list data and update app shoplist state
+         */
+        const handleItemDelete = async () => {
+            try {
+                await client.delete(`/lists/${appConfig.activeListId}/items`, {
+                    data: {
+                        item_id,
+                        list_id: appConfig.activeListId,
+                    },
+                })
+
                 const responseItems = await client.get(
                     `lists/${appConfig.activeListId}/items`
                 )
@@ -187,44 +183,57 @@ const ShoppingListItem: React.FC<PropTypes> = ({
                 } = await responseItems.data
 
                 setShopList(itemsData)
-            })
-    }
+            } catch (error) {
+                // TODO Handle notifications
+                console.log(error)
+            }
+        }
 
-    return (
-        <motion.div
-            variants={itemVariants}
-            initial="hidden"
-            animate="show"
-            className="flex justify-between items-center mb-6 xl:flex-wrap group"
-        >
-            <label className="flex items-center">
-                {/** Checkbox */}
-                {!editing && (
-                    <input
-                        type="checkbox"
-                        checked={done}
-                        onChange={handleCompleteStatus}
-                        name="complete"
-                        className="mr-2"
-                    />
-                )}
-                {/** Item name */}
-                <h2
-                    className={`lg:w-full xl:w-auto ${
-                        done ? 'line-through' : undefined
-                    }`}
-                >
-                    {name}
-                </h2>
-            </label>
-            <ShoppingListItemQuantity
-                quantity={quantity}
-                editing={editing}
-                handleItemDelete={handleItemDelete}
-                handleInOrDecBtnClick={handleInOrDecBtnClick}
-            />
-        </motion.div>
-    )
-}
+        return (
+            <motion.div
+                variants={itemVariants}
+                initial="hidden"
+                animate="show"
+                className="flex justify-between items-center mb-6 xl:flex-wrap group pl-2"
+            >
+                <label className="flex items-center relative">
+                    {/** Checkbox */}
+                    <AnimatePresence>
+                        {!editing && (
+                            <motion.input
+                                initial={{ x: -20, opacity: 0 }}
+                                animate={{ x: 0, opacity: 1 }}
+                                exit={{ x: -20, opacity: 0 }}
+                                type="checkbox"
+                                checked={done}
+                                onChange={handleCompleteStatus}
+                                name="complete"
+                                className="mr-2 absolute"
+                            />
+                        )}
+                    </AnimatePresence>
+                    {/** Item name */}
+                    <h2
+                        className={`lg:w-full xl:w-auto ${
+                            done ? 'line-through' : undefined
+                        }`}
+                        style={{
+                            transition: 'all 0.3s ease-out',
+                            transform: `translateX(${editing ? 0 : '20px'})`,
+                        }}
+                    >
+                        {name}
+                    </h2>
+                </label>
+                <ShoppingListItemQuantity
+                    quantity={quantity}
+                    editing={editing}
+                    handleItemDelete={handleItemDelete}
+                    handleInOrDecBtnClick={handleInOrDecBtnClick}
+                />
+            </motion.div>
+        )
+    }
+)
 
 export default ShoppingListItem

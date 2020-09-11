@@ -39,7 +39,6 @@ const ItemForm: React.FC = () => {
             setCurrentItem(response.data.data)
             setSidebarType(SHOW_ITEM)
         } catch (e) {
-            console.log('Add item error', e)
             setSubmitting(false)
         }
     }
@@ -49,7 +48,6 @@ const ItemForm: React.FC = () => {
         { setSubmitting, resetForm }: any
     ) => {
         if (!currentItem) return
-        console.log('values in update', values)
         setSubmitting(true)
         try {
             const response = await client.put(`items/${currentItem.id}`, values)
@@ -61,7 +59,6 @@ const ItemForm: React.FC = () => {
             setCurrentItem(response.data.data)
             setSidebarType(SHOW_ITEM)
         } catch (e) {
-            console.log('Error updating', e)
             setSubmitting(false)
         }
     }

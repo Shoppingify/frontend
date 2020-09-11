@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react'
-import { useRecoilValue, useSetRecoilState, useRecoilState } from 'recoil'
+
+// Global state
+import { useRecoilState } from 'recoil'
 import {
     ADD_NEW_ITEM,
     ADD_SHOPPING_LIST,
@@ -8,16 +10,18 @@ import {
     sidebarState,
     sidebarHistoryState,
 } from '../../global-state/sidebarState'
-// Libs
-import ShoppingList from '../shopping-list/shopping-list/ShoppingList'
+
+// Components
+import ShoppingList from '../shopping-list/shopping-list__main/ShoppingList'
 import AddItemSidebar from '../item-sidebars/AddItemSidebar'
 import ShowItemSidebar from '../item-sidebars/ShowItemSidebar'
+import AddNewItem from '../add-item/AddNewItem'
 
 /**
- * Sidebar of the app, displays shopping list
+ * Sidebar of the app
  */
 function Sidebar() {
-    const sidebarType = useRecoilValue(sidebarState)
+    const [sidebarType, setSidebarType] = useRecoilState(sidebarState)
     const [sidebarHistory, setSidebarHistory] = useRecoilState(
         sidebarHistoryState
     )
@@ -25,13 +29,23 @@ function Sidebar() {
     const selectSidebar = () => {
         switch (sidebarType) {
             case ADD_SHOPPING_LIST:
-                return <ShoppingList />
+                return (
+                    <>
+                        <AddNewItem />
+                        <ShoppingList />
+                    </>
+                )
             case ADD_NEW_ITEM:
                 return <AddItemSidebar />
             case SHOW_ITEM:
                 return <ShowItemSidebar />
             default:
-                return <ShoppingList />
+                return (
+                    <>
+                        <AddNewItem />
+                        <ShoppingList />
+                    </>
+                )
         }
     }
 
@@ -51,7 +65,6 @@ function Sidebar() {
                     : 'bg-white'
             } p-12`}
         >
-            {console.log('sidebarType', sidebarType)}
             {/* <ShoppingList /> */}
             {selectSidebar()}
         </div>

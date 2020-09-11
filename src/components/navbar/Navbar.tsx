@@ -21,7 +21,6 @@ import useMounted from '../../hooks/useMount'
 // TODO refactor
 const Navbar = () => {
     const shopList = useRecoilValue(shopListDataState)
-    console.log(shopList)
 
     const [remainingItemCount, setRemainingItemCount] = useState(0)
 

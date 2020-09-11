@@ -34,14 +34,12 @@ function Item({ data, category }: any) {
     const setCurrentItem = useSetRecoilState(currentItemState)
 
     const showItem = () => {
-        console.log('data', data)
         setCurrentItem(data)
         setSidebarType(SHOW_ITEM)
     }
     const appConfig = useRecoilValue(appConfigState)
 
     function addItemToShopList() {
-        console.log('Before set state')
         //@ts-ignore
         // TODO refactor, setting app state
         setShopList((current: any) => {
