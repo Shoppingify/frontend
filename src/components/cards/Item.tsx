@@ -96,12 +96,12 @@ function Item({ data, category }: any) {
     }
 
     return (
-        <div className="relative bg-white overflow-hidden rounded-lg flex justify-between">
-            <button className="p-4 w-full" onClick={showItem}>
+        <div className="relative m-2 bg-white overflow-hidden shadow-md rounded-lg flex justify-between items-center">
+            <button className="p-3 m-1 w-full" onClick={showItem}>
                 <h4 className="font-medium text-left">{data.name}</h4>
             </button>
             <button
-                className="pt-4 pr-4"
+                className="m-2 hover:text-primary transition-colors duration-300"
                 onClick={addItemToShopList}
                 style={{
                     height: 'fit-content',
