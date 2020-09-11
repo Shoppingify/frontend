@@ -106,14 +106,6 @@ const ShowItemSidebar = () => {
                         alt={currentItem.name}
                         placeholder={loader()}
                     />
-                    // <Img
-                    //     className="rounded-24 w-full mb-12 object-cover"
-                    //     style={{ maxHeight: '200px' }}
-                    //     src={[currentItem.image, randomImageError()]}
-                    //     alt={currentItem.name}
-                    //     loader={loader()}
-                    //     key={currentItem.id + currentItem.image}
-                    // />
                 )}
 
                 <div className="mb-4">
@@ -135,7 +127,11 @@ const ShowItemSidebar = () => {
             </div>
             {/* Buttons */}
             <div className="flex justify-center items-center">
-                <Button onClick={deleteItem} modifier="" className="text-black">
+                <Button
+                    onClick={deleteItem}
+                    modifier="danger"
+                    className="text-white mr-2"
+                >
                     Delete
                 </Button>
                 <Button onClick={addItem} type="submit" modifier="primary">

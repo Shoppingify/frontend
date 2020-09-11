@@ -112,7 +112,11 @@ const ItemForm: React.FC = () => {
                         />
                     </div>
                     <div className="flex justify-center items-center">
-                        <Button onClick={cancel} modifier="">
+                        <Button
+                            className="text-black mr-2"
+                            onClick={cancel}
+                            modifier=""
+                        >
                             cancel
                         </Button>
                         <Button
