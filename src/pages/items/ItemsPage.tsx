@@ -65,7 +65,7 @@ function ItemsPage() {
                                 {list.category}
                             </h3>
                             {list.items.length > 0 && (
-                                <ul className="grid grid-cols-4 gap-5">
+                                <ul className="flex flex-wrap w-full">
                                     {list.items.map((item: ItemType) => (
                                         <motion.li
                                             variants={itemVariants}
