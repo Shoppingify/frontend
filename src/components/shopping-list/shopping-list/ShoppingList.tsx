@@ -86,11 +86,10 @@ const ShoppingList: React.FC = () => {
             <div onClick={() => setSidebarType(ADD_NEW_ITEM)}>
                 Add a new item
             </div>
-            <div className="flex justify-between mb-8 items-center">
+            <div className="flex justify-between mb-8 items-center pr-2">
                 {editing ? (
-                    <input
+                    <textarea
                         className="font-bold text-2xl"
-                        type="text"
                         value={shopListName}
                         onChange={(e) => setShopListName(e.target.value)}
                     />
@@ -99,6 +98,7 @@ const ShoppingList: React.FC = () => {
                 )}
                 <button
                     onClick={() => setEditing((current: boolean) => !current)}
+                    className="w-6"
                 >
                     {editing ? <MdSave size={24} /> : <MdCreate size={24} />}
                 </button>
