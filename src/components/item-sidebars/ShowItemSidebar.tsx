@@ -135,13 +135,12 @@ const ShowItemSidebar = () => {
             </div>
             {/* Buttons */}
             <div className="flex justify-center items-center">
-                <Button onClick={deleteItem} modifier="" text="Delete" />
-                <Button
-                    onClick={addItem}
-                    type="submit"
-                    modifier="primary"
-                    text="Add to list"
-                />
+                <Button onClick={deleteItem} modifier="" className="text-black">
+                    Delete
+                </Button>
+                <Button onClick={addItem} type="submit" modifier="primary">
+                    Add to list
+                </Button>
             </div>
         </div>
     )

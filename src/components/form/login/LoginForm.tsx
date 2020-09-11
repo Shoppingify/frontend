@@ -105,11 +105,12 @@ function LoginForm() {
                         ) : null}
                     </div>
                     <Button
-                        text="Login"
                         type="submit"
                         modifier="primary"
                         disabled={isSubmitting}
-                    />
+                    >
+                        login
+                    </Button>
                 </Form>
             )}
         </Formik>

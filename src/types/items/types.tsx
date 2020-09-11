@@ -9,6 +9,7 @@ export interface ItemType {
     updated_at: string
     user_id: number
     quantity?: number
+    done: boolean
 }
 
 export interface ListOfItems {

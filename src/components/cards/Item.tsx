@@ -4,10 +4,12 @@ import { MdAdd } from 'react-icons/md'
 
 // Recoil
 import { shopListDataState } from '../../global-state/shopListState'
-import { useSetRecoilState } from 'recoil'
+import { useSetRecoilState, useRecoilValue } from 'recoil'
 import { ItemType } from '../../types/items/types'
 import { currentItemState } from '../../global-state/currentItemState'
 import { sidebarState, SHOW_ITEM } from '../../global-state/sidebarState'
+import client from '../../api/client'
+import { appConfigState } from '../../global-state/atoms'
 
 // TODO how to handle long item names? Fix word breaking
 // TODO how to align plus symbol to the item name, multilines item name issue
@@ -32,17 +34,20 @@ function Item({ data, category }: any) {
     const setCurrentItem = useSetRecoilState(currentItemState)
 
     const showItem = () => {
-        console.log('data', data)
         setCurrentItem(data)
         setSidebarType(SHOW_ITEM)
     }
+    const appConfig = useRecoilValue(appConfigState)
 
-    function handleClick() {
-        console.log('Before set state')
+    function addItemToShopList() {
         //@ts-ignore
         // TODO refactor, setting app state
         setShopList((current: any) => {
-            const currentItem: ItemType = { ...data, quantity: 1, category }
+            const currentItem: ItemType = {
+                ...data,
+                quantity: 1,
+                categoryName: category,
+            }
 
             const { id } = currentItem
             const newItems = JSON.parse(JSON.stringify(current))
@@ -66,8 +71,20 @@ function Item({ data, category }: any) {
                     newItems[catIndex].items[itemIndex].quantity += 1
                 } else {
                     newItems[catIndex].items.push(currentItem)
+                    // send post to api to add new item
+                    client.post(`lists/${appConfig.activeListId}/items`, {
+                        item_id: id,
+                        list_id: appConfig.activeListId,
+                    })
                 }
             } else {
+                // send post to api to add new item
+                client.post(`lists/${appConfig.activeListId}/items`, {
+                    item_id: id,
+                    list_id: appConfig.activeListId,
+                })
+
+                // Push to new items array
                 newItems.push({
                     category: category,
                     items: [currentItem],
@@ -85,7 +102,7 @@ function Item({ data, category }: any) {
             </button>
             <button
                 className="pt-4 pr-4"
-                onClick={handleClick}
+                onClick={addItemToShopList}
                 style={{
                     height: 'fit-content',
                     width: 'fit-content',

@@ -55,8 +55,6 @@ function App() {
                 loadingLogin: valid,
             }))
 
-            console.log(valid)
-
             if (!valid) history.push('/login')
 
             if (valid) {
