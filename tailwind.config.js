@@ -12,6 +12,7 @@ module.exports = {
             'primary-light': '#FFF0DE',
             secondary: '#56CCF2',
             danger: '#EB5757',
+            success: '#32CD33',
             white: '#fff',
             black: '#000000',
             gray: '#454545',
