@@ -12,21 +12,3 @@ export const appConfigState = atom({
         activeListId: -1,
     },
 })
-
-// Sidebar state to switch between sidebars
-export const sidebarState = atom({
-    key: 'sidebar',
-    default: SHOW_SHOPPING_LIST,
-})
-
-// All user's items
-export const userItemsState = atom({
-    key: 'items',
-    default: [],
-})
-
-// All user's categories
-export const userCategoriesState = atom({
-    key: 'categories',
-    default: [],
-})
