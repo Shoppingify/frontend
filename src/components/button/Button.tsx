@@ -28,7 +28,8 @@ function Button(props: ButtonProps) {
     function buildClasses() {
         let defaultClasses = btnModifiers[modifier]
         defaultClasses += ' ' + props.className
-        defaultClasses += ' text-white font-bold rounded-lg py-2 px-4'
+        defaultClasses +=
+            ' text-white font-bold rounded-lg py-2 px-4 hover:shadow-md transition-all duration-300'
         if (disabled) defaultClasses += ' opacity-50 cursor-not-allowed'
 
         return defaultClasses

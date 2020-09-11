@@ -58,7 +58,7 @@ function Sidebar() {
 
     return (
         <div
-            className={`w-sidebar relative overflow-y-auto ${
+            className={`w-sidebar relative flex-none overflow-y-auto ${
                 sidebarType === ADD_SHOPPING_LIST ||
                 sidebarType === SHOW_SHOPPING_LIST
                     ? 'bg-primary-light'
