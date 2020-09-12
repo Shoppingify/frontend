@@ -12,14 +12,12 @@ import {
     names,
 } from 'unique-names-generator'
 import { AnimatePresence, motion } from 'framer-motion'
+import { toast } from 'react-toastify'
 
 // state
 import { useRecoilState } from 'recoil'
 import { shopListDataState } from '../../../global-state/shopListState'
 import { appConfigState } from '../../../global-state/atoms'
-
-// Hooks
-import useMounted from '../../../hooks/useMount'
 
 // Components
 import ShoppingListItem from '../shopping-list__item/ShoppingListItem'
@@ -50,12 +48,14 @@ const ShoppingList: React.FC = React.memo(() => {
     const [shopListName, setShopListName] = useState<string>('')
     const [originalShopListName, setOriginalShopListName] = useState('')
 
-    const mounted = useMounted()
+    // Component mounted
+    const [mounted, setMounted] = useState(false)
 
     /**
      * Component mounted effect
      */
     useEffect(() => {
+        setMounted(true)
         async function initialData() {
             try {
                 const response = await client.get('lists?status=active')
@@ -102,7 +102,13 @@ const ShoppingList: React.FC = React.memo(() => {
      * Effect runs on editing local state change
      */
     useEffect(() => {
-        if (!mounted.current) return
+        if (!mounted) return
+
+        toast.warning(
+            `Shopping list is currently in ${
+                editing ? 'editing' : 'shopping'
+            } mode`
+        )
 
         if (editing) {
             setOriginalShopListName(shopListName)
@@ -110,9 +116,11 @@ const ShoppingList: React.FC = React.memo(() => {
 
         if (!editing) {
             if (!(shopListName === originalShopListName)) {
-                client.put(`lists/${appConfig.activeListId}`, {
-                    name: shopListName,
-                })
+                client
+                    .put(`lists/${appConfig.activeListId}`, {
+                        name: shopListName,
+                    })
+                    .then(() => toast.info('Active shopping list name changed'))
             }
         }
     }, [editing])
@@ -127,6 +135,12 @@ const ShoppingList: React.FC = React.memo(() => {
                 status,
             })
 
+            if (status === 'canceled') {
+                toast.warning(`Shopping list was ${status}`)
+            } else {
+                toast.info(`Shopping list was ${status}`)
+            }
+
             // After status is updated create a new list
             createNewList()
         } catch (error) {
@@ -138,7 +152,7 @@ const ShoppingList: React.FC = React.memo(() => {
     /**
      * Creates a new list and sets local state to that list
      */
-    const createNewList = useCallback(async () => {
+    const createNewList = async () => {
         try {
             // POST new list with a random name
             const responseNewList = await client.post('/lists', {
@@ -169,11 +183,14 @@ const ShoppingList: React.FC = React.memo(() => {
             setShopListName(createdList.name)
             // Set items to local shop list state
             setShopList(itemsData)
+
+            toast.success(`Created new active list: ${createdList.name}`)
         } catch (error) {
             // TODO handle notifications
+            toast.error('An error occured')
             console.log(error)
         }
-    }, [])
+    }
 
     // Functions that won't change during component lifecycle
     /**

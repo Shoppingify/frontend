@@ -16,6 +16,8 @@ import useMounted from '../../../hooks/useMount'
 
 // Components
 import ShoppingListItemQuantity from './ShoppingListItemQuantity'
+import { toast } from 'react-toastify'
+import { useCallback } from 'react'
 
 // Prop Types
 interface PropTypes {
@@ -52,19 +54,25 @@ const itemVariants = {
  */
 const ShoppingListItem: React.FC<PropTypes> = React.memo(
     ({ name, quantity, item_id, editing, done, catIndex, itemIndex }) => {
-        console.log('Component rendering')
         // Local state
-        const mounted = useMounted()
+        const [mounted, setMounted] = useState(false)
 
         // Global state - read only
         const appConfig = useRecoilValue(appConfigState)
         const setShopList = useSetRecoilState(shopListDataState)
 
         /**
+         * Effect runs on component mount
+         */
+        useEffect(() => {
+            setMounted(true)
+        }, [])
+
+        /**
          * Effect runs on quantity change
          */
         useEffect(() => {
-            if (!mounted.current) return
+            if (!mounted) return
 
             const handleZeroQuantity = async () => {
                 try {
@@ -113,14 +121,23 @@ const ShoppingListItem: React.FC<PropTypes> = React.memo(
          * Effect runs on done status change
          */
         useEffect(() => {
-            if (!mounted.current) return
+            if (!mounted) return
 
-            client.put(`/lists/${appConfig.activeListId}/items`, {
-                item_id,
-                list_id: appConfig.activeListId,
-                quantity,
-                done,
-            })
+            const updateDBList = async () => {
+                try {
+                    await client.put(`/lists/${appConfig.activeListId}/items`, {
+                        item_id,
+                        list_id: appConfig.activeListId,
+                        quantity,
+                        done,
+                    })
+                } catch (error) {
+                    toast.error('An error occured')
+                    console.log(error)
+                }
+            }
+
+            updateDBList()
         }, [done])
 
         /**
@@ -165,7 +182,7 @@ const ShoppingListItem: React.FC<PropTypes> = React.memo(
          * Handles the deletion of the item from the list
          * After DELETE method is finished, refetch list data and update app shoplist state
          */
-        const handleItemDelete = async () => {
+        const handleItemDelete = useCallback(async () => {
             try {
                 await client.delete(`/lists/${appConfig.activeListId}/items`, {
                     data: {
@@ -185,9 +202,10 @@ const ShoppingListItem: React.FC<PropTypes> = React.memo(
                 setShopList(itemsData)
             } catch (error) {
                 // TODO Handle notifications
+                toast.error('An error occured')
                 console.log(error)
             }
-        }
+        }, [])
 
         return (
             <motion.div

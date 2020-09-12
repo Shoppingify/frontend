@@ -2,7 +2,7 @@ import { hot } from 'react-hot-loader/root'
 import React, { useEffect } from 'react'
 
 // Libs
-import { BrowserRouter as Router, Switch, useHistory } from 'react-router-dom'
+import { Switch, useHistory } from 'react-router-dom'
 import { useRecoilState, atom } from 'recoil/dist'
 
 // Router components
@@ -14,6 +14,8 @@ import Sidebar from './components/sidebar/Sidebar'
 import LoggingLoader from './components/loader/LoggingLoader'
 import PublicRoute from './components/route/PublicRoute'
 import LoginPage from './pages/login/LoginPage'
+
+// Helpers
 import { validateToken } from './auth/validateToken'
 
 // Recoil atom

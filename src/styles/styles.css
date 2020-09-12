@@ -37,4 +37,8 @@
     background: #555;
 }
 
+.Toastify__toast {
+    @apply rounded-12 p-3;
+}
+
 @tailwind utilities;

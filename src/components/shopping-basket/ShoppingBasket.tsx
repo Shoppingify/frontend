@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useRecoilValue } from 'recoil'
 import { shopListDataState } from '../../global-state/shopListState'
-import useMounted from '../../hooks/useMount'
 import { ItemType } from '../../types/items/types'
 import { MdShoppingCart, MdCheck } from 'react-icons/md'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -11,13 +10,17 @@ const ShoppingBasket = () => {
 
     const [remainingItemCount, setRemainingItemCount] = useState(0)
 
-    const mounted = useMounted()
+    const [mounted, setMounted] = useState(false)
+
+    useEffect(() => {
+        setMounted(true)
+    }, [])
 
     /**
      * On global shopList get info how many items are remaining
      */
     useEffect(() => {
-        if (!mounted.current) return
+        if (!mounted) return
         let tempCount = 0
 
         shopList.forEach((category: any) => {
