@@ -10,6 +10,7 @@ import { currentItemState } from '../../global-state/currentItemState'
 import { sidebarState, SHOW_ITEM } from '../../global-state/sidebarState'
 import client from '../../api/client'
 import { appConfigState } from '../../global-state/atoms'
+import { toast } from 'react-toastify'
 
 // TODO how to handle long item names? Fix word breaking
 // TODO how to align plus symbol to the item name, multilines item name issue
@@ -28,7 +29,7 @@ import { appConfigState } from '../../global-state/atoms'
  * @param {string} image
  *  Image src of the item
  */
-function Item({ data, category }: any) {
+const Item = ({ data, category }: any) => {
     const setShopList = useSetRecoilState(shopListDataState)
     const setSidebarType = useSetRecoilState(sidebarState)
     const setCurrentItem = useSetRecoilState(currentItemState)
@@ -72,17 +73,37 @@ function Item({ data, category }: any) {
                 } else {
                     newItems[catIndex].items.push(currentItem)
                     // send post to api to add new item
-                    client.post(`lists/${appConfig.activeListId}/items`, {
-                        item_id: id,
-                        list_id: appConfig.activeListId,
-                    })
+                    // Using async causes the setShopList to break
+                    client
+                        .post(`lists/${appConfig.activeListId}/items`, {
+                            item_id: id,
+                            list_id: appConfig.activeListId,
+                        })
+                        .then((response) => {
+                            toast.success('Item added to the list')
+                        })
+                        .catch((error) => {
+                            toast.error(
+                                'Something went wrong! List only updated locally'
+                            )
+                        })
                 }
             } else {
                 // send post to api to add new item
-                client.post(`lists/${appConfig.activeListId}/items`, {
-                    item_id: id,
-                    list_id: appConfig.activeListId,
-                })
+                // Using async causes the setShopList to break
+                client
+                    .post(`lists/${appConfig.activeListId}/items`, {
+                        item_id: id,
+                        list_id: appConfig.activeListId,
+                    })
+                    .then((response) => {
+                        toast.success('Item added to the list')
+                    })
+                    .catch((error) => {
+                        toast.error(
+                            'Something went wrong! List only updated locally'
+                        )
+                    })
 
                 // Push to new items array
                 newItems.push({
