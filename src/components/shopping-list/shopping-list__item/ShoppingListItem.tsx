@@ -212,9 +212,13 @@ const ShoppingListItem: React.FC<PropTypes> = React.memo(
                 variants={itemVariants}
                 initial="hidden"
                 animate="show"
-                className="flex justify-between items-center mb-6 xl:flex-wrap group pl-2"
+                className="flex justify-between items-center mb-4 xl:flex-wrap group pl-2"
             >
-                <label className="flex items-center relative">
+                <label
+                    className={`flex items-center relative ${
+                        editing ? 'w-1/3' : ''
+                    }`}
+                >
                     {/** Checkbox */}
                     <AnimatePresence>
                         {!editing && (
@@ -226,13 +230,13 @@ const ShoppingListItem: React.FC<PropTypes> = React.memo(
                                 checked={done}
                                 onChange={handleCompleteStatus}
                                 name="complete"
-                                className="mr-2 absolute"
+                                className="mr-2 absolute font-semibold"
                             />
                         )}
                     </AnimatePresence>
                     {/** Item name */}
                     <h2
-                        className={`lg:w-full xl:w-auto ${
+                        className={`lg:w-full xl:w-auto font-semibold ${
                             done ? 'line-through' : undefined
                         }`}
                         style={{

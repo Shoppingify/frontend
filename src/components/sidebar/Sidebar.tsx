@@ -15,7 +15,7 @@ import {
 import ShoppingList from '../shopping-list/shopping-list__main/ShoppingList'
 import AddItemSidebar from '../item-sidebars/AddItemSidebar'
 import ShowItemSidebar from '../item-sidebars/ShowItemSidebar'
-import AddNewItem from '../add-item/AddNewItem'
+import AddNewItem from '../add-item/AddNewItemCTA'
 
 /**
  * Sidebar of the app

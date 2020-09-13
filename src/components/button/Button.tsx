@@ -14,6 +14,7 @@ const btnModifiers: btnModifiersTypes = {
     primary: 'bg-primary',
     secondary: 'bg-secondary ',
     danger: 'bg-danger',
+    white: 'bg-white',
 }
 
 /**

@@ -31,7 +31,7 @@ const ShoppingListTitle: React.FC<PropTypes> = React.memo(
 
         return (
             <div
-                className="flex justify-between mb-8 pr-2 sticky bg-primary-light pt-4"
+                className="flex justify-between mb-8 pr-2 sticky bg-primary-light pt-4 z-30"
                 style={{
                     top: '-3rem',
                 }}

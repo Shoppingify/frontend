@@ -241,7 +241,7 @@ const ShoppingList: React.FC = React.memo(() => {
                 shopListName={shopListName}
             />
             {shopList.map((category: any, index: number) => (
-                <div key={index} className="mb-16">
+                <div key={index} className="mb-12">
                     <Heading level={3} className="text-gray-light mb-6">
                         {category.category}
                     </Heading>

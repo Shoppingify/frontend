@@ -55,7 +55,7 @@ const ShoppingListItemQuantity: React.FC<PropTypes> = React.memo(
                     <MdRemove color="#F9A109" size={24} />
                 </motion.button>
                 {/** H3 that displays quantitx */}
-                <h3 className="rounded-24 border-primary border-2 text-primary font-bold text-sm px-4 py-2 my-1">
+                <h3 className="rounded-24 border-primary border-2 text-primary font-bold text-sm px-6 py-1 my-1">
                     <span>{quantity}</span>
                     {quantity > 1 ? ' pcs' : ' pc'}
                 </h3>

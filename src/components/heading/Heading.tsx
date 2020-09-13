@@ -8,7 +8,7 @@ interface PropTypes extends React.HTMLProps<HTMLHeadingElement> {
 const headingStyles: { [key: number]: string } = {
     1: 'text-4xl',
     2: 'text-2xl',
-    3: 'text-sm',
+    3: 'text-base',
 }
 
 const Heading: React.FC<PropTypes> = React.memo(({ level, ...rest }) => {
