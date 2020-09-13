@@ -29,6 +29,7 @@
         "react-toastify": "^6.0.8",
         "recoil": "0.0.10",
         "tailwindcss": "^1.7.3",
+        "tippy.js": "^6.2.6",
         "typeface-quicksand": "^1.1.4",
         "unique-names-generator": "^4.3.1",
         "uuid": "^8.3.0",
