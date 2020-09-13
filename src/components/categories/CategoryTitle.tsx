@@ -9,8 +9,7 @@ interface CategoryTitleProps {
     categoryUpdated: (cat: any) => void
 }
 
-const iconStyle =
-    'text-2xl cursor-pointer hover:text-primary transition-colors duration-300'
+const iconStyle = 'text-2xl cursor-pointer'
 
 const CategoryTitle = ({
     category,
@@ -65,7 +64,7 @@ const CategoryTitle = ({
                         onChange={(e) => setName(e.target.value)}
                     />
                     <MdSave
-                        className={`${iconStyle} mr-4`}
+                        className={`${iconStyle} mr-4 hover:text-primary transition-colors duration-300`}
                         onClick={saveCategory}
                     />
                     <Button modifier="" className="text-black" onClick={cancel}>

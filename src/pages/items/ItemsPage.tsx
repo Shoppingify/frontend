@@ -52,9 +52,16 @@ function ItemsPage() {
     }, [])
 
     const categoryUpdated = (cat: any) => {
-        console.log('updated', cat)
-
         const index = lists.findIndex((list) => list.category_id === cat.id)
+
+        setLists((oldLists) => {
+            const newLists = [...oldLists]
+            console.log('NewLists', newLists)
+            newLists[index] = { ...newLists[index], category: cat.name }
+            console.log('NewLists', newLists)
+
+            return newLists
+        })
     }
 
     return (
