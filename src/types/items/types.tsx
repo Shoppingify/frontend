@@ -13,6 +13,7 @@ export interface ItemType {
 }
 
 export interface ListOfItems {
+    category_id: number
     category: string
     items: ItemType[] | []
 }

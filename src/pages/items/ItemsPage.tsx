@@ -1,10 +1,12 @@
 import { motion } from 'framer-motion'
 import React, { useEffect } from 'react'
+import { MdModeEdit } from 'react-icons/md'
 // Libs
 import { useRecoilState } from 'recoil/dist'
 import { v4 as uuidv4 } from 'uuid'
 import client from '../../api/client'
 import Item from '../../components/cards/Item'
+import CategoryTitle from '../../components/categories/CategoryTitle'
 import { itemsState } from '../../global-state/itemsState'
 import { ItemType } from '../../types/items/types'
 
@@ -24,6 +26,7 @@ const itemVariants = {
 }
 
 interface List {
+    category_id: number
     category: string
     items: Array<any>
 }
@@ -48,6 +51,19 @@ function ItemsPage() {
         getItems()
     }, [])
 
+    const categoryUpdated = (cat: any) => {
+        const index = lists.findIndex((list) => list.category_id === cat.id)
+
+        setLists((oldLists) => {
+            const newLists = [...oldLists]
+            console.log('NewLists', newLists)
+            newLists[index] = { ...newLists[index], category: cat.name }
+            console.log('NewLists', newLists)
+
+            return newLists
+        })
+    }
+
     return (
         <div className="flex flex-col h-full bg-gray-extra-light">
             <h1 className="text-4xl mb-5 px-20">Items page</h1>
@@ -61,11 +77,17 @@ function ItemsPage() {
                     .filter((list) => list.items.length > 0)
                     .map((list: List) => (
                         <li key={uuidv4()} className="mb-5">
-                            <h3 className="text-2xl font-bold">
-                                {list.category}
-                            </h3>
+                            {/* Category name component */}
+                            <CategoryTitle
+                                category={list.category}
+                                category_id={list.category_id}
+                                categoryUpdated={categoryUpdated}
+                            />
                             {list.items.length > 0 && (
-                                <ul className="flex flex-wrap w-full">
+                                <ul
+                                    style={{ marginLeft: '-12px' }}
+                                    className="flex flex-wrap w-full"
+                                >
                                     {list.items.map((item: ItemType) => (
                                         <motion.li
                                             variants={itemVariants}

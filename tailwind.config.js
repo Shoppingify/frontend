@@ -5,6 +5,7 @@ module.exports = {
     },
     variants: {
         margin: ['responsive', 'hover', 'focus'],
+        opacity: ['responsive', 'hover', 'focus', 'group-hover'],
     },
     theme: {
         colors: {
