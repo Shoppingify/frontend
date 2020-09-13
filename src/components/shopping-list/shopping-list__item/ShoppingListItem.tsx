@@ -9,7 +9,7 @@ import client from '../../../api/client'
 // Global state
 import { useSetRecoilState, useRecoilValue } from 'recoil'
 import { shopListDataState } from '../../../global-state/shopListState'
-import { appConfigState } from '../../../global-state/atoms'
+import { appConfigState } from '../../../global-state/miscState'
 
 // Hooks
 import useMounted from '../../../hooks/useMount'

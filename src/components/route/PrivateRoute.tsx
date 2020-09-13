@@ -1,11 +1,11 @@
-import React from 'react';
+import React from 'react'
 
 // Libs
-import { Route, Redirect } from "react-router-dom";
+import { Route, Redirect } from 'react-router-dom'
 
 // State
-import { useRecoilValue } from "recoil/dist";
-import { userState } from "../../App";
+import { useRecoilValue } from 'recoil/dist'
+import { userState } from '../../global-state/miscState'
 
 /**
  * Private route component, check if user is valid else redirect
@@ -17,17 +17,20 @@ import { userState } from "../../App";
  */
 // TODO fix typescript, remove ts-ignore
 // @ts-ignore
-function PrivateRoute({ component: Component, ...rest}) {
-  const user = useRecoilValue(userState);
-  return (
-    <Route {...rest} render={props => (
-      user.valid ? (
-        <Component {...props} />
-      ) : (
-        <Redirect to={{ pathname: '/login' }} />
-      )
-    )} />
-  );
+function PrivateRoute({ component: Component, ...rest }) {
+    const user = useRecoilValue(userState)
+    return (
+        <Route
+            {...rest}
+            render={(props) =>
+                user.valid ? (
+                    <Component {...props} />
+                ) : (
+                    <Redirect to={{ pathname: '/login' }} />
+                )
+            }
+        />
+    )
 }
 
-export default PrivateRoute;
+export default PrivateRoute

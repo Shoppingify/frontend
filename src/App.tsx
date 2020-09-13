@@ -18,21 +18,14 @@ import LoginPage from './pages/login/LoginPage'
 // Helpers
 import { validateToken } from './auth/validateToken'
 
-// Recoil atom
-export const userState = atom({
-    key: 'userState',
-    default: {
-        token: '',
-        valid: false,
-        loadingLogin: false,
-    },
-})
+// State
+import { userState } from './global-state/miscState'
+import { userStateInterface } from './types/state/userStateTypes'
 
-// TODO Refactor
 /**
  * Main app component
  */
-function App() {
+const App: React.FC = () => {
     // Recoil user state
     const [user, setUser] = useRecoilState(userState)
 
@@ -44,13 +37,12 @@ function App() {
      */
     useEffect(() => {
         // TODO check token exp, if expired redirect to login
-        const token = localStorage.getItem('token')
+        const token: string = localStorage.getItem('token') || ''
 
         async function checkToken() {
-            const valid = await validateToken(token)
+            const valid: boolean = await validateToken(token)
 
-            // @ts-ignore
-            setUser((current: object) => ({
+            setUser((current: userStateInterface) => ({
                 ...current,
                 token,
                 valid,
@@ -63,7 +55,7 @@ function App() {
                 // Fake login timeout
                 setTimeout(() => {
                     // @ts-ignore
-                    setUser((current: object) => ({
+                    setUser((current: userStateInterface) => ({
                         ...current,
                         loadingLogin: false,
                     }))
@@ -79,11 +71,11 @@ function App() {
     if (user.valid) {
         return (
             <div className="flex justify-between h-screen">
-                {user.valid && <Navbar />}
+                <Navbar />
                 <div className="flex-grow bg-gray-extra-light">
                     <RoutesController />
                 </div>
-                {user.valid && <Sidebar />}
+                <Sidebar />
             </div>
         )
     }

@@ -3,12 +3,15 @@ import React from 'react'
 // Libs
 import { Field, Form, Formik } from 'formik'
 import { useHistory } from 'react-router-dom'
+import * as Yup from 'yup'
 
 // Components
 import Button from '../../button/Button'
-import * as Yup from 'yup'
+
+// Global state
 import { useRecoilState } from 'recoil/dist'
-import { userState } from '../../../App'
+import { userState } from '../../../global-state/miscState'
+import { userStateInterface } from '../../../types/state/userStateTypes'
 
 // Validation schema
 const LoginSchema = Yup.object().shape({
@@ -50,7 +53,7 @@ function LoginForm() {
 
         if (status === 'success') {
             localStorage.setItem('token', token)
-            setUser((current) => ({
+            setUser((current: userStateInterface) => ({
                 ...current,
                 token,
                 valid: true,

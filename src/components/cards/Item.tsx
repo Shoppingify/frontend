@@ -9,7 +9,7 @@ import { ItemType } from '../../types/items/types'
 import { currentItemState } from '../../global-state/currentItemState'
 import { sidebarState, SHOW_ITEM } from '../../global-state/sidebarState'
 import client from '../../api/client'
-import { appConfigState } from '../../global-state/atoms'
+import { appConfigState } from '../../global-state/miscState'
 import { toast } from 'react-toastify'
 
 // TODO how to handle long item names? Fix word breaking

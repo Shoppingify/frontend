@@ -17,7 +17,7 @@ import { toast } from 'react-toastify'
 // state
 import { useRecoilState } from 'recoil'
 import { shopListDataState } from '../../../global-state/shopListState'
-import { appConfigState } from '../../../global-state/atoms'
+import { appConfigState } from '../../../global-state/miscState'
 
 // Components
 import ShoppingListItem from '../shopping-list__item/ShoppingListItem'

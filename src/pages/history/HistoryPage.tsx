@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { format } from 'date-fns'
 
-import { useRecoilValue } from 'recoil'
-import { userState } from '../../App'
 import List from '../../components/cards/List'
 import client from '../../api/client'
 
