@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { MdModeEdit } from 'react-icons/md'
 // Libs
 import { useRecoilState } from 'recoil/dist'
@@ -39,12 +39,14 @@ interface List {
 function ItemsPage() {
     // Local state
     const [lists, setLists] = useRecoilState(itemsState)
+    const [filteredLists, setFilteredLists] = useState([])
 
     useEffect(() => {
         async function getItems() {
             try {
                 const res = await client.get('items')
                 setLists(res.data.data)
+                setFilteredLists(res.data.data)
             } catch (e) {
                 console.log('Error', e)
             }
@@ -52,6 +54,10 @@ function ItemsPage() {
         getItems()
     }, [])
 
+    /**
+     * Callback to update the list when a category is updated
+     * @param cat
+     */
     const categoryUpdated = (cat: any) => {
         const index = lists.findIndex((list) => list.category_id === cat.id)
 
@@ -65,51 +71,70 @@ function ItemsPage() {
         })
     }
 
+    /**
+     * Search the items in the lists
+     * @param query {string}
+     */
+    const searchItems = (query: string) => {
+        let filtered: any = []
+        lists.forEach((list) => {
+            const items = list.items.filter((item) =>
+                item.name.toLowerCase().includes(query.toLowerCase())
+            )
+            if (items.length > 0) {
+                filtered.push({
+                    ...list,
+                    items,
+                })
+            }
+        })
+
+        setFilteredLists(() => filtered)
+    }
+
     return (
-        <div className="flex flex-col h-full bg-gray-extra-light">
-            <div className="flex mb-5 px-20 py-4">
-                <h1 className="hidden xl:block text-2xl font-bold mr-2">
+        <div className="container mx-auto flex flex-col h-full">
+            <div className="flex flex-col xl:flex-row mb-5 px-6 lg:px-20 py-4">
+                <h1 className="hidden md:block text-2xl font-bold mr-2">
                     <span className="text-primary">Shoppingify</span> allows you
                     take your shopping list wherever you go
                 </h1>
-                <SearchInput />
+                <SearchInput search={searchItems} />
             </div>
             <motion.ul
                 variants={containerVariants}
                 initial="hidden"
                 animate="show"
-                className="overflow-y-auto px-20"
+                className="overflow-y-auto px-6 lg:px-20"
             >
-                {lists
-                    .filter((list) => list.items.length > 0)
-                    .map((list: List) => (
-                        <li key={uuidv4()} className="mb-5">
-                            {/* Category name component */}
-                            <CategoryTitle
-                                category={list.category}
-                                category_id={list.category_id}
-                                categoryUpdated={categoryUpdated}
-                            />
-                            {list.items.length > 0 && (
-                                <ul
-                                    style={{ marginLeft: '-12px' }}
-                                    className="flex flex-wrap w-full"
-                                >
-                                    {list.items.map((item: ItemType) => (
-                                        <motion.li
-                                            variants={itemVariants}
-                                            key={uuidv4()}
-                                        >
-                                            <Item
-                                                data={item}
-                                                category={list.category}
-                                            />
-                                        </motion.li>
-                                    ))}
-                                </ul>
-                            )}
-                        </li>
-                    ))}
+                {filteredLists.map((list: List) => (
+                    <li key={uuidv4()} className="mb-5">
+                        {/* Category name component */}
+                        <CategoryTitle
+                            category={list.category}
+                            category_id={list.category_id}
+                            categoryUpdated={categoryUpdated}
+                        />
+                        {list.items.length > 0 && (
+                            <ul
+                                style={{ marginLeft: '-12px' }}
+                                className="flex flex-wrap w-full"
+                            >
+                                {list.items.map((item: ItemType) => (
+                                    <motion.li
+                                        variants={itemVariants}
+                                        key={uuidv4()}
+                                    >
+                                        <Item
+                                            data={item}
+                                            category={list.category}
+                                        />
+                                    </motion.li>
+                                ))}
+                            </ul>
+                        )}
+                    </li>
+                ))}
             </motion.ul>
         </div>
     )
