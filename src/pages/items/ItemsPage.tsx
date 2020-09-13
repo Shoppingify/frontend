@@ -84,7 +84,10 @@ function ItemsPage() {
                                 categoryUpdated={categoryUpdated}
                             />
                             {list.items.length > 0 && (
-                                <ul className="flex flex-wrap w-full">
+                                <ul
+                                    style={{ marginLeft: '-12px' }}
+                                    className="flex flex-wrap w-full"
+                                >
                                     {list.items.map((item: ItemType) => (
                                         <motion.li
                                             variants={itemVariants}

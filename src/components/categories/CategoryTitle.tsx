@@ -18,19 +18,27 @@ const CategoryTitle = ({
 }: CategoryTitleProps) => {
     const [editMode, setEditMode] = useState(false)
     const [name, setName] = useState(category)
+    const [errors, setErrors] = useState<string | null>(null)
 
     const toggleEditMode = () => {
         setEditMode((editMode) => (editMode = !editMode))
     }
 
     const saveCategory = async () => {
-        console.log('name', name)
+        setErrors(null)
         try {
             const res = await client.put(`categories/${category_id}`, { name })
             setEditMode(false)
             categoryUpdated(res.data.data)
         } catch (e) {
             console.log('Error while updating the category', e)
+            if (e.response && e.response.data) {
+                setErrors(e.response.data.message)
+            } else {
+                if (e.message) {
+                    setErrors(e.message)
+                }
+            }
         }
     }
 
@@ -55,21 +63,36 @@ const CategoryTitle = ({
                 </div>
             )}
             {editMode && (
-                <div className="flex items-center mb-4">
-                    <input
-                        className="p-2 mr-4 rounded border border-gray-input"
-                        type="text"
-                        name="category"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                    />
-                    <MdSave
-                        className={`${iconStyle} mr-4 hover:text-primary transition-colors duration-300`}
-                        onClick={saveCategory}
-                    />
-                    <Button modifier="" className="text-black" onClick={cancel}>
-                        Cancel
-                    </Button>
+                <div className="mb-4">
+                    <div className="flex items-center">
+                        <input
+                            className="p-2 mr-4 rounded border border-gray-input"
+                            type="text"
+                            name="category"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            onKeyPress={(e) => {
+                                if (e.key === 'Enter') {
+                                    saveCategory()
+                                }
+                            }}
+                        />
+
+                        <MdSave
+                            className={`${iconStyle} mr-4 hover:text-primary transition-colors duration-300`}
+                            onClick={saveCategory}
+                        />
+                        <Button
+                            modifier=""
+                            className="text-black"
+                            onClick={cancel}
+                        >
+                            Cancel
+                        </Button>
+                    </div>
+                    {errors && (
+                        <span className="text-danger text-sm">{errors}</span>
+                    )}
                 </div>
             )}
         </>
