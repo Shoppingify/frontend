@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect } from 'react'
 
 // Libs
 import { NavLink } from 'react-router-dom'
@@ -9,7 +9,7 @@ import tippy from 'tippy.js'
 import 'tippy.js/dist/tippy.css' // optional for styling
 
 // Assets
-import logo from '../../assets/logo.svg'
+import LogoSVG from '../../assets/logo.svg'
 
 // Components
 import ShoppingBasket from '../shopping-basket/ShoppingBasket'
@@ -44,7 +44,7 @@ const Navbar = () => {
     ]
     return (
         <nav className="w-24 flex-none flex flex-col items-center mt-10">
-            <img src={logo} alt="logo" />
+            <LogoSVG />
             <ul className="flex flex-col w-full h-full justify-center items-center">
                 {links.map((link, index: number) => (
                     <li className="w-full" key={index}>

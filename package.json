@@ -13,6 +13,7 @@
         "start": "webpack-dev-server --hot --mode development"
     },
     "dependencies": {
+        "@svgr/webpack": "^5.4.0",
         "@types/react-router-dom": "^5.1.5",
         "@types/uuid": "^8.3.0",
         "@types/yup": "^0.29.6",

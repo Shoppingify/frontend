@@ -21,6 +21,7 @@ module.exports = {
             'gray-medium-light': '#F2F2F2;',
             'gray-extra-light': '#FAFAFE',
             'gray-input': '#BDBDBD',
+            purple: '#80485B',
         },
         fontFamily: {
             body: ['Quicksand', 'sans-serif'],
