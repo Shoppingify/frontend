@@ -80,7 +80,7 @@ function App() {
         return (
             <div className="flex justify-between h-screen">
                 {user.valid && <Navbar />}
-                <div className="flex-grow">
+                <div className="flex-grow bg-gray-extra-light">
                     <RoutesController />
                 </div>
                 {user.valid && <Sidebar />}
