@@ -82,7 +82,7 @@ const ItemForm: React.FC = () => {
         <Formik
             initialValues={getInitialValues()}
             validationSchema={ItemSchema}
-            onSubmit={!currentItem ? addItem : updateItem}
+            onSubmit={!currentItem?.id ? addItem : updateItem}
         >
             {({ isSubmitting }) => (
                 <Form className="flex flex-col h-full justify-between">
@@ -124,7 +124,7 @@ const ItemForm: React.FC = () => {
                             modifier="primary"
                             disabled={isSubmitting}
                         >
-                            {`${currentItem ? 'Edit' : 'Save'}`}
+                            {`${currentItem?.id ? 'Edit' : 'Save'}`}
                         </Button>
                     </div>
                 </Form>

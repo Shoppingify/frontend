@@ -1,13 +1,17 @@
 import { motion } from 'framer-motion'
 import React, { useEffect, useState } from 'react'
 // Libs
-import { useRecoilState } from 'recoil/dist'
+import { useRecoilState, useSetRecoilState } from 'recoil/dist'
 import { v4 as uuidv4 } from 'uuid'
 import client from '../../api/client'
+import Button from '../../components/button/Button'
 import Item from '../../components/cards/Item'
 import CategoryTitle from '../../components/categories/CategoryTitle'
 import SearchInput from '../../components/form-elements/SearchInput'
+import AddItemSidebar from '../../components/item-sidebars/AddItemSidebar'
+import { currentItemState } from '../../global-state/currentItemState'
 import { itemsState } from '../../global-state/itemsState'
+import { ADD_NEW_ITEM, sidebarState } from '../../global-state/sidebarState'
 import { ItemType } from '../../types/items/types'
 
 const containerVariants = {
@@ -25,7 +29,7 @@ const itemVariants = {
     show: { opacity: 1 },
 }
 
-interface List {
+interface ItemsWithCategories {
     category_id: number
     category: string
     items: Array<any>
@@ -40,7 +44,9 @@ function ItemsPage() {
     const [itemsWithCategories, setItemsWithCategories] = useRecoilState(
         itemsState
     )
-    const [filteredLists, setFilteredLists] = useState([])
+    const [filteredItems, setFilteredItems] = useState([])
+    const setCurrentItem = useSetRecoilState(currentItemState)
+    const setSidebarType = useSetRecoilState(sidebarState)
 
     useEffect(() => {
         async function getItems() {
@@ -59,7 +65,7 @@ function ItemsPage() {
             const sorted: any = [...itemsWithCategories].sort((a, b) => {
                 return b.items.length - a.items.length
             })
-            setFilteredLists(sorted)
+            setFilteredItems(sorted)
         }
     }, [itemsWithCategories])
 
@@ -90,7 +96,7 @@ function ItemsPage() {
         let filtered: any = []
         itemsWithCategories.forEach((list) => {
             const items = list.items.filter((item) =>
-                item.name.toLowerCase().includes(query.toLowerCase())
+                item?.name?.toLowerCase().includes(query.toLowerCase())
             )
             if (items.length > 0) {
                 filtered.push({
@@ -100,7 +106,17 @@ function ItemsPage() {
             }
         })
 
-        setFilteredLists(() => filtered)
+        setFilteredItems(() => filtered)
+    }
+
+    const addAnItem = (category: string) => {
+        setCurrentItem({
+            name: '',
+            note: '',
+            image: '',
+            categoryName: category,
+        })
+        setSidebarType(ADD_NEW_ITEM)
     }
 
     return (
@@ -118,32 +134,43 @@ function ItemsPage() {
                 animate="show"
                 className="overflow-y-auto px-6 lg:px-20"
             >
-                {filteredLists.map((list: List) => (
+                {filteredItems.map((listOfItems: ItemsWithCategories) => (
                     <li key={uuidv4()} className="mb-5">
                         {/* Category name component */}
                         <CategoryTitle
-                            category={list.category}
-                            category_id={list.category_id}
+                            category={listOfItems.category}
+                            category_id={listOfItems.category_id}
                             categoryUpdated={categoryUpdated}
                         />
-                        {list.items.length > 0 && (
-                            <ul
-                                style={{ marginLeft: '-12px' }}
-                                className="flex flex-wrap w-full"
-                            >
-                                {list.items.map((item: ItemType) => (
+                        <ul
+                            style={{ marginLeft: '-12px' }}
+                            className="flex flex-wrap w-full"
+                        >
+                            {listOfItems.items.length > 0 &&
+                                listOfItems.items.map((item: ItemType) => (
                                     <motion.li
                                         variants={itemVariants}
                                         key={uuidv4()}
                                     >
                                         <Item
                                             data={item}
-                                            category={list.category}
+                                            category={listOfItems.category}
                                         />
                                     </motion.li>
                                 ))}
-                            </ul>
-                        )}
+
+                            {listOfItems.items.length === 0 && (
+                                <Button
+                                    modifier=""
+                                    onClick={() =>
+                                        addAnItem(listOfItems.category)
+                                    }
+                                    className="text-gray"
+                                >
+                                    Add an item
+                                </Button>
+                            )}
+                        </ul>
                     </li>
                 ))}
             </motion.ul>
