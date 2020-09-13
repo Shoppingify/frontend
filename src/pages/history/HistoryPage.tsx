@@ -20,7 +20,9 @@ const HistoryPage = () => {
 
             const { data } = response.data
             // Group data by date
-            const sorted = groupByDate(data)
+            const sorted = groupByDate(
+                data.filter((item: any) => item.status !== 'active')
+            )
 
             setLists(() => sorted)
         } catch (e) {
