@@ -25,12 +25,26 @@ import ShoppingListTitle from './ShoppingListTitle'
 import ShoppingListStatusModal from './ShoppingListStatusModal'
 import Heading from '../../heading/Heading'
 
+// Types
+import { appConfigInterface } from '../../../types/state/appConfigTypes'
+import { ItemType } from '../../../types/items/types'
+
 // Name generator
 const nameConfig: Config = {
     dictionaries: [adjectives, colors, names],
     length: 3,
     separator: ' ',
     style: 'capital',
+}
+
+// Types
+type activeListData = {
+    created_at: string
+    id: number
+    name: string
+    status: 'active' | 'complete' | 'canceled'
+    updated_at: string
+    user_id: number
 }
 
 /**
@@ -42,24 +56,29 @@ const ShoppingList: React.FC = React.memo(() => {
     const [appConfig, setAppConfig] = useRecoilState(appConfigState)
 
     // Local state
-    const [editing, setEditing] = useState(false)
+    const [editing, setEditing] = useState<boolean>(false)
 
     // For shopping list title edit
     const [shopListName, setShopListName] = useState<string>('')
-    const [originalShopListName, setOriginalShopListName] = useState('')
+    const [originalShopListName, setOriginalShopListName] = useState<string>('')
 
     // Component mounted
-    const [mounted, setMounted] = useState(false)
+    const [mounted, setMounted] = useState<boolean>(false)
 
     /**
      * Component mounted effect
      */
     useEffect(() => {
         setMounted(true)
+        /**
+         * Fetches initial list data
+         */
         async function initialData() {
             try {
                 const response = await client.get('lists?status=active')
-                const { data: listData } = await response.data
+                const {
+                    data: listData,
+                }: { data: Array<activeListData> } = await response.data
 
                 if (listData.length === 0) {
                     // No Active list
@@ -71,7 +90,7 @@ const ShoppingList: React.FC = React.memo(() => {
                     const activeListId = activeList.id
 
                     // Set global active list id
-                    setAppConfig((current: any) => ({
+                    setAppConfig((current: appConfigInterface) => ({
                         ...current,
                         activeListId,
                     }))
@@ -85,6 +104,8 @@ const ShoppingList: React.FC = React.memo(() => {
 
                     const {
                         data: { items: itemsData },
+                    }: {
+                        data: { items: ItemType[] }
                     } = await responseItems.data
 
                     setShopList(itemsData)
@@ -169,13 +190,15 @@ const ShoppingList: React.FC = React.memo(() => {
             // Store items
             const {
                 data: { items: itemsData },
+            }: {
+                data: { items: ItemType[] }
             } = await responseItems.data
 
             /**
              * Setting local state
              */
             // Set global active list id
-            setAppConfig((current: any) => ({
+            setAppConfig((current: appConfigInterface) => ({
                 ...current,
                 activeListId: createdList.id,
             }))

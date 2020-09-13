@@ -1,7 +1,10 @@
 import { atom } from 'recoil'
+import { ItemType } from '../types/items/types'
 
-// Shopping list state
-export const shopListDataState = atom({
+const shopListStateConst: { key: string; default: ItemType[] } = {
     key: 'shopList',
     default: [],
-})
+}
+
+// Shopping list state
+export const shopListDataState = atom(shopListStateConst)

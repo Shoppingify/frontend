@@ -4,6 +4,7 @@ import React, { useRef, useEffect, useState } from 'react'
 import { MdCreate, MdClose } from 'react-icons/md'
 import Heading from '../../heading/Heading'
 
+// Types
 type PropTypes = {
     editing: boolean
     shopListName: string

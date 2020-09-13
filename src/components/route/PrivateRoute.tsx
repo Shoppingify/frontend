@@ -1,11 +1,16 @@
 import React from 'react'
 
 // Libs
-import { Route, Redirect } from 'react-router-dom'
+import { Route, Redirect, RouteProps } from 'react-router-dom'
 
 // State
 import { useRecoilValue } from 'recoil/dist'
 import { userState } from '../../global-state/miscState'
+
+// Ok to use any? Investigate further if for some reason this causes issues
+interface PropTypes extends RouteProps {
+    component: React.ComponentType<any>
+}
 
 /**
  * Private route component, check if user is valid else redirect
@@ -15,9 +20,10 @@ import { userState } from '../../global-state/miscState'
  * @param rest
  *  Props passed in
  */
-// TODO fix typescript, remove ts-ignore
-// @ts-ignore
-function PrivateRoute({ component: Component, ...rest }) {
+const PrivateRoute: React.FC<PropTypes> = ({
+    component: Component,
+    ...rest
+}) => {
     const user = useRecoilValue(userState)
     return (
         <Route
