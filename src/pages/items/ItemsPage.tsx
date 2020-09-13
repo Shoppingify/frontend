@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid'
 import client from '../../api/client'
 import Item from '../../components/cards/Item'
 import CategoryTitle from '../../components/categories/CategoryTitle'
+import SearchInput from '../../components/form-elements/SearchInput'
 import { itemsState } from '../../global-state/itemsState'
 import { ItemType } from '../../types/items/types'
 
@@ -66,7 +67,13 @@ function ItemsPage() {
 
     return (
         <div className="flex flex-col h-full bg-gray-extra-light">
-            <h1 className="text-4xl mb-5 px-20">Items page</h1>
+            <div className="flex mb-5 px-20 py-4">
+                <h1 className="hidden xl:block text-2xl font-bold mr-2">
+                    <span className="text-primary">Shoppingify</span> allows you
+                    take your shopping list wherever you go
+                </h1>
+                <SearchInput />
+            </div>
             <motion.ul
                 variants={containerVariants}
                 initial="hidden"
