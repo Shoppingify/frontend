@@ -46,13 +46,19 @@ function ItemsPage() {
             try {
                 const res = await client.get('items')
                 setLists(res.data.data)
-                setFilteredLists(res.data.data)
             } catch (e) {
                 console.log('Error', e)
             }
         }
         getItems()
     }, [])
+
+    useEffect(() => {
+        if (lists.length > 0) {
+            const filtered: any = [...lists]
+            setFilteredLists(filtered)
+        }
+    }, [lists])
 
     /**
      * Callback to update the list when a category is updated
