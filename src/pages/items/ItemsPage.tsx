@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion'
 import React, { useEffect, useState } from 'react'
-import { MdModeEdit } from 'react-icons/md'
 // Libs
 import { useRecoilState } from 'recoil/dist'
 import { v4 as uuidv4 } from 'uuid'
@@ -38,15 +37,16 @@ interface List {
  */
 function ItemsPage() {
     // Local state
-    const [lists, setLists] = useRecoilState(itemsState)
+    const [itemsWithCategories, setItemsWithCategories] = useRecoilState(
+        itemsState
+    )
     const [filteredLists, setFilteredLists] = useState([])
 
     useEffect(() => {
         async function getItems() {
             try {
                 const res = await client.get('items')
-                setLists(res.data.data)
-                setFilteredLists(res.data.data)
+                setItemsWithCategories(res.data.data)
             } catch (e) {
                 console.log('Error', e)
             }
@@ -54,14 +54,25 @@ function ItemsPage() {
         getItems()
     }, [])
 
+    useEffect(() => {
+        if (itemsWithCategories.length > 0) {
+            const sorted: any = [...itemsWithCategories].sort((a, b) => {
+                return b.items.length - a.items.length
+            })
+            setFilteredLists(sorted)
+        }
+    }, [itemsWithCategories])
+
     /**
      * Callback to update the list when a category is updated
      * @param cat
      */
     const categoryUpdated = (cat: any) => {
-        const index = lists.findIndex((list) => list.category_id === cat.id)
+        const index = itemsWithCategories.findIndex(
+            (list) => list.category_id === cat.id
+        )
 
-        setLists((oldLists) => {
+        setItemsWithCategories((oldLists) => {
             const newLists = [...oldLists]
             console.log('NewLists', newLists)
             newLists[index] = { ...newLists[index], category: cat.name }
@@ -77,7 +88,7 @@ function ItemsPage() {
      */
     const searchItems = (query: string) => {
         let filtered: any = []
-        lists.forEach((list) => {
+        itemsWithCategories.forEach((list) => {
             const items = list.items.filter((item) =>
                 item.name.toLowerCase().includes(query.toLowerCase())
             )
