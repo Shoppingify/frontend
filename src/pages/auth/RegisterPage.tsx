@@ -1,14 +1,14 @@
 import React from 'react'
-import LoginForm from '../../components/form/login/LoginForm'
 // Assets
 import LogoSVG from '../../assets/logo.svg'
 import { Link } from 'react-router-dom'
 import SocialIcons from '../../components/button/SocialIcons'
+import RegisterForm from '../../components/form/auth/RegisterForm'
 /**
  * Simple login page component
  */
 
-function LoginPage() {
+const Register = () => {
     return (
         <div className="container mx-auto">
             <div className="flex md:items-center justify-center min-h-screen w-full">
@@ -27,17 +27,17 @@ function LoginPage() {
                         Master web development by making real-life projects.
                         There are multiple paths for you to choose
                     </p>
-                    <LoginForm />
+                    <RegisterForm />
 
                     <SocialIcons />
 
                     <p className="mt-4 text-center">
-                        Not registered yet?{' '}
+                        Already registered?{' '}
                         <Link
                             className="text-secondary hover:text-gray"
-                            to="/register"
+                            to="/login"
                         >
-                            Register
+                            Login
                         </Link>
                     </p>
                 </div>
@@ -46,4 +46,4 @@ function LoginPage() {
     )
 }
 
-export default LoginPage
+export default Register

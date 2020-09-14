@@ -28,16 +28,12 @@ export const appConfigState = atom(appConfigStateData)
 // State for user check if valid
 type userStateType = {
     key: string
-    default: userStateInterface
+    default: userStateInterface | null
 }
 
 const userStateConst: userStateType = {
     key: 'userState',
-    default: {
-        token: '',
-        valid: false,
-        loadingLogin: false,
-    },
+    default: null,
 }
 
 export const userState = atom(userStateConst)

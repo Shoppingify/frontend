@@ -1,5 +1,5 @@
 import { hot } from 'react-hot-loader/root'
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 // Libs
 import { Switch, useHistory } from 'react-router-dom'
@@ -13,7 +13,8 @@ import Navbar from './components/navbar/Navbar'
 import Sidebar from './components/sidebar/Sidebar'
 import LoggingLoader from './components/loader/LoggingLoader'
 import PublicRoute from './components/route/PublicRoute'
-import LoginPage from './pages/login/LoginPage'
+import LoginPage from './pages/auth/LoginPage'
+import RegisterPage from './pages/auth/RegisterPage'
 
 // Helpers
 import { validateToken } from './auth/validateToken'
@@ -21,6 +22,7 @@ import { validateToken } from './auth/validateToken'
 // State
 import { userState } from './global-state/miscState'
 import { userStateInterface } from './types/state/userStateTypes'
+import client from './api/client'
 
 /**
  * Main app component
@@ -28,47 +30,44 @@ import { userStateInterface } from './types/state/userStateTypes'
 const App: React.FC = () => {
     // Recoil user state
     const [user, setUser] = useRecoilState(userState)
+    const [init, setInit] = useState(true)
 
     // Router
     const history = useHistory()
 
-    /**
-     * On mount effect
-     */
     useEffect(() => {
-        // TODO check token exp, if expired redirect to login
-        const token: string = localStorage.getItem('token') || ''
+        console.log('User', user)
+    }, [user])
 
-        async function checkToken() {
-            const valid: boolean = await validateToken(token)
-
-            setUser((current: userStateInterface) => ({
-                ...current,
-                token,
-                valid,
-                loadingLogin: valid,
-            }))
-
-            if (!valid) history.push('/login')
-
-            if (valid) {
-                // Fake login timeout
-                setTimeout(() => {
-                    // @ts-ignore
-                    setUser((current: userStateInterface) => ({
-                        ...current,
-                        loadingLogin: false,
-                    }))
-                }, 100)
-            }
+    const getConnectedUser = useCallback(async () => {
+        try {
+            const res = await client.get('me')
+            const { id } = res.data.data
+            console.log('res', res.data)
+            setUser(id)
+            setInit(false)
+            // history.
+        } catch (e) {
+            console.log('Error fetching the connected user', e)
+            setInit(false)
+            history.push('/login')
         }
-
-        checkToken()
     }, [])
 
-    if (user.loadingLogin) return <LoggingLoader />
+    useEffect(() => {
+        //Check if we have a token
+        if (localStorage.getItem('token')) {
+            // Fetch the user
+            getConnectedUser()
+        } else {
+            setInit(false)
+            history.push('/login')
+        }
+    }, [])
 
-    if (user.valid) {
+    if (init) return <LoggingLoader />
+
+    if (user) {
         return (
             <div className="flex justify-between h-screen">
                 <Navbar />
@@ -83,6 +82,7 @@ const App: React.FC = () => {
     return (
         <Switch>
             <PublicRoute component={LoginPage} path="/login" />
+            <PublicRoute component={RegisterPage} path="/register" />
         </Switch>
     )
 }

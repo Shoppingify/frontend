@@ -6,16 +6,16 @@ import { useHistory } from 'react-router-dom'
 import * as Yup from 'yup'
 
 // Components
-import Button from '../../button/Button'
+import LoadingButton from '../../button/LoadingButton'
+import AuthInput from '../../form-elements/AuthInput'
+import { MdEmail, MdLock } from 'react-icons/md'
 
 // Global state
 import { useRecoilState } from 'recoil/dist'
 import { userState } from '../../../global-state/miscState'
 import { userStateInterface } from '../../../types/state/userStateTypes'
-import AuthInput from '../../form-elements/AuthInput'
-import { MdEmail, MdLock } from 'react-icons/md'
+
 import client from '../../../api/client'
-import LoadingButton from '../../button/LoadingButton'
 
 // Validation schema
 const LoginSchema = Yup.object().shape({
@@ -28,7 +28,7 @@ const LoginSchema = Yup.object().shape({
  * Login form component
  * @constructor
  */
-function LoginForm() {
+const LoginForm = () => {
     const history = useHistory()
     const [user, setUser] = useRecoilState(userState)
     const [serverErrors, setServerErrors] = useState(null)
@@ -48,13 +48,9 @@ function LoginForm() {
             })
 
             console.log('user data', res.data)
-            const { token } = res.data.data
+            const { token, user } = res.data.data
             localStorage.setItem('token', token)
-            setUser((current: userStateInterface) => ({
-                ...current,
-                token,
-                valid: true,
-            }))
+            setUser(() => user.id)
             history.push('/items')
         } catch (e) {
             console.log('error while login', e)

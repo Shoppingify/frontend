@@ -25,11 +25,12 @@ const PrivateRoute: React.FC<PropTypes> = ({
     ...rest
 }) => {
     const user = useRecoilValue(userState)
+    console.log('User in private route', user)
     return (
         <Route
             {...rest}
             render={(props) =>
-                user.valid ? (
+                user ? (
                     <Component {...props} />
                 ) : (
                     <Redirect to={{ pathname: '/login' }} />
