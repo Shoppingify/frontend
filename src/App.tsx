@@ -2,7 +2,13 @@ import { hot } from 'react-hot-loader/root'
 import React, { useCallback, useEffect, useState } from 'react'
 
 // Libs
-import { Switch, useHistory, useLocation, useParams } from 'react-router-dom'
+import {
+    Switch,
+    useHistory,
+    useLocation,
+    useParams,
+    Redirect,
+} from 'react-router-dom'
 import { useRecoilState, atom } from 'recoil/dist'
 
 // Router components
@@ -13,7 +19,8 @@ import Navbar from './components/navbar/Navbar'
 import Sidebar from './components/sidebar/Sidebar'
 import LoggingLoader from './components/loader/LoggingLoader'
 import PublicRoute from './components/route/PublicRoute'
-import AuthPage from './pages/auth/AuthPage'
+import LoginPage from './pages/auth/LoginPage'
+import RegisterPage from './pages/auth/RegisterPage'
 
 // Helpers
 import { validateToken } from './auth/validateToken'
@@ -22,6 +29,7 @@ import { validateToken } from './auth/validateToken'
 import { userState } from './global-state/miscState'
 import { userStateInterface } from './types/state/userStateTypes'
 import client from './api/client'
+import AuthPage from './pages/auth/AuthPage'
 
 /**
  * Main app component
@@ -79,6 +87,7 @@ const App: React.FC = () => {
             }
         } else {
             setInit(false)
+            history.push('/login')
         }
     }, [])
 
