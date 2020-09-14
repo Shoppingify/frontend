@@ -11,6 +11,7 @@ import SearchInput from '../../components/form-elements/SearchInput'
 import AddItemSidebar from '../../components/item-sidebars/AddItemSidebar'
 import { currentItemState } from '../../global-state/currentItemState'
 import { itemsState } from '../../global-state/itemsState'
+import { shopListDataState } from '../../global-state/shopListState'
 import { ADD_NEW_ITEM, sidebarState } from '../../global-state/sidebarState'
 import { ItemType } from '../../types/items/types'
 
@@ -44,8 +45,9 @@ function ItemsPage() {
     const [itemsWithCategories, setItemsWithCategories] = useRecoilState(
         itemsState
     )
+    const setShopList = useSetRecoilState(shopListDataState)
     const [filteredItems, setFilteredItems] = useState([])
-    const setCurrentItem = useSetRecoilState(currentItemState)
+    const [currentItem, setCurrentItem] = useRecoilState(currentItemState)
     const setSidebarType = useSetRecoilState(sidebarState)
 
     useEffect(() => {
@@ -78,14 +80,42 @@ function ItemsPage() {
             (list) => list.category_id === cat.id
         )
 
+        // Update the categoryName on the list and for each items
         setItemsWithCategories((oldLists) => {
             const newLists = [...oldLists]
-            console.log('NewLists', newLists)
-            newLists[index] = { ...newLists[index], category: cat.name }
-            console.log('NewLists', newLists)
-
+            let newItems: ItemType[] = []
+            newLists[index].items.forEach((item: ItemType) => {
+                newItems.push({ ...item, categoryName: cat.name })
+            })
+            newLists[index] = {
+                ...newLists[index],
+                items: newItems,
+                category: cat.name,
+            }
+            console.log('newLists', newLists)
             return newLists
         })
+
+        // Update the categoryName in the shopList
+        setShopList((oldList: any) => {
+            const newList = [...oldList]
+            const index = newList.findIndex((el) => {
+                console.log('el', el)
+                return el.category_id === cat.id
+            })
+            if (index > -1) {
+                newList[index] = { ...newList[index], category: cat.name }
+            }
+
+            return newList
+        })
+
+        // Update the categoryName on the currentItem
+        if (currentItem) {
+            setCurrentItem((old) => {
+                return { ...old, categoryName: cat.name }
+            })
+        }
     }
 
     /**
@@ -178,4 +208,4 @@ function ItemsPage() {
     )
 }
 
-export default ItemsPage
+export default React.memo(ItemsPage)
