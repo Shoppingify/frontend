@@ -23,7 +23,7 @@ const SocialIcons = () => {
             <div onClick={showAlert}>
                 <AiFillTwitterCircle className="text-4xl text-gray hover:text-primary transition-colors duration-300 cursor-pointer mx-2" />
             </div>
-            <a href="">
+            <a href="https://github.com/login/oauth/authorize?client_id=85a1ad6f92c29953f88a">
                 <AiFillGithub className="text-4xl text-gray hover:text-primary transition-colors duration-300 cursor-pointer mx-2" />
             </a>
         </div>

@@ -2,7 +2,7 @@ import { hot } from 'react-hot-loader/root'
 import React, { useCallback, useEffect, useState } from 'react'
 
 // Libs
-import { Switch, useHistory } from 'react-router-dom'
+import { Switch, useHistory, Redirect } from 'react-router-dom'
 import { useRecoilState, atom } from 'recoil/dist'
 
 // Router components
@@ -13,8 +13,7 @@ import Navbar from './components/navbar/Navbar'
 import Sidebar from './components/sidebar/Sidebar'
 import LoggingLoader from './components/loader/LoggingLoader'
 import PublicRoute from './components/route/PublicRoute'
-import LoginPage from './pages/auth/LoginPage'
-import RegisterPage from './pages/auth/RegisterPage'
+import AuthPage from './pages/auth/AuthPage'
 
 // Helpers
 import { validateToken } from './auth/validateToken'
@@ -61,7 +60,6 @@ const App: React.FC = () => {
             getConnectedUser()
         } else {
             setInit(false)
-            history.push('/login')
         }
     }, [])
 
@@ -81,8 +79,9 @@ const App: React.FC = () => {
 
     return (
         <Switch>
-            <PublicRoute component={LoginPage} path="/login" />
-            <PublicRoute component={RegisterPage} path="/register" />
+            <PublicRoute component={AuthPage} path="/login" />
+            <PublicRoute component={AuthPage} path="/register" />
+            <Redirect to="/login" />
         </Switch>
     )
 }
