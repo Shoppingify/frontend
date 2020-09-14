@@ -15,9 +15,11 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { toast } from 'react-toastify'
 
 // state
-import { useRecoilState } from 'recoil'
-import { shopListDataState } from '../../../global-state/shopListState'
-import { appConfigState } from '../../../global-state/miscState'
+import { useRecoilState, useSetRecoilState } from 'recoil'
+import {
+    shopListState,
+    shopListInfoState,
+} from '../../../global-state/shopListState'
 
 // Components
 import ShoppingListItem from '../shopping-list__item/ShoppingListItem'
@@ -26,8 +28,10 @@ import ShoppingListStatusModal from './ShoppingListStatusModal'
 import Heading from '../../heading/Heading'
 
 // Types
-import { appConfigInterface } from '../../../types/state/appConfigTypes'
 import { ItemType } from '../../../types/items/types'
+import { shopListInfoStateInterface } from '../../../types/state/shoppingListTypes'
+import { historyListsRefreshState } from '../../../global-state/miscState'
+import { currentItemState } from '../../../global-state/currentItemState'
 
 // Name generator
 const nameConfig: Config = {
@@ -52,8 +56,11 @@ type activeListData = {
  */
 const ShoppingList: React.FC = React.memo(() => {
     // Global state
-    const [shopList, setShopList] = useRecoilState(shopListDataState)
-    const [appConfig, setAppConfig] = useRecoilState(appConfigState)
+    const [shopList, setShopList] = useRecoilState(shopListState)
+    const [shopListInfo, setShopListInfoState] = useRecoilState(
+        shopListInfoState
+    )
+    const setHistoryListsRefresh = useSetRecoilState(historyListsRefreshState)
 
     // Local state
     const [editing, setEditing] = useState<boolean>(false)
@@ -89,11 +96,16 @@ const ShoppingList: React.FC = React.memo(() => {
                     const activeList = listData[0]
                     const activeListId = activeList.id
 
+                    console.log(activeList)
+
                     // Set global active list id
-                    setAppConfig((current: appConfigInterface) => ({
-                        ...current,
-                        activeListId,
-                    }))
+                    setShopListInfoState(
+                        (current: shopListInfoStateInterface) => ({
+                            ...current,
+                            activeListId,
+                            status: activeList.status,
+                        })
+                    )
                     // Set local state for shopping list name
                     setShopListName(activeList.name)
 
@@ -138,7 +150,7 @@ const ShoppingList: React.FC = React.memo(() => {
         if (!editing) {
             if (!(shopListName === originalShopListName)) {
                 client
-                    .put(`lists/${appConfig.activeListId}`, {
+                    .put(`lists/${shopListInfo.activeListId}`, {
                         name: shopListName,
                     })
                     .then(() => toast.info('Active shopping list name changed'))
@@ -152,7 +164,7 @@ const ShoppingList: React.FC = React.memo(() => {
     const handleListStatus = async (status: string) => {
         try {
             // Change the status of the currently active list
-            await client.put(`/lists/${appConfig.activeListId}`, {
+            await client.put(`/lists/${shopListInfo.activeListId}`, {
                 status,
             })
 
@@ -198,10 +210,13 @@ const ShoppingList: React.FC = React.memo(() => {
              * Setting local state
              */
             // Set global active list id
-            setAppConfig((current: appConfigInterface) => ({
+            setShopListInfoState((current: shopListInfoStateInterface) => ({
                 ...current,
                 activeListId: createdList.id,
+                status: createdList.status,
             }))
+            // Refresh history list
+            setHistoryListsRefresh((current) => ({ ...current, refresh: true }))
             // Set local state for shopping list name
             setShopListName(createdList.name)
             // Set items to local shop list state

@@ -3,6 +3,9 @@ import { format } from 'date-fns'
 
 import List from '../../components/cards/List'
 import client from '../../api/client'
+import { useRecoilValue, useRecoilState } from 'recoil'
+import { shopListInfoState } from '../../global-state/shopListState'
+import { historyListsRefreshState } from '../../global-state/miscState'
 
 /**
  * Simple history page component
@@ -10,6 +13,12 @@ import client from '../../api/client'
 const HistoryPage = () => {
     const [lists, setLists] = useState([])
     const [loading, setLoading] = useState(true)
+    const [mounted, setMounted] = useState(false)
+
+    // global state of shopping lists
+    const [historyListsRefresh, setHistoryListsRefresh] = useRecoilState(
+        historyListsRefreshState
+    )
 
     /**
      * Fetch the user's lists
@@ -61,8 +70,21 @@ const HistoryPage = () => {
     }
 
     useEffect(() => {
+        setMounted(true)
         fetchLists()
     }, [])
+
+    useEffect(() => {
+        if (!mounted) return
+
+        if (historyListsRefresh.refresh) {
+            fetchLists()
+            setHistoryListsRefresh((current) => ({
+                ...current,
+                refresh: false,
+            }))
+        }
+    }, [historyListsRefresh])
 
     return (
         <div className="flex flex-col px-10 bg-gray-extra-light h-full">

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { useRecoilValue } from 'recoil'
-import { shopListDataState } from '../../global-state/shopListState'
+import { shopListState } from '../../global-state/shopListState'
 import { ItemType } from '../../types/items/types'
 import { MdShoppingCart, MdCheck } from 'react-icons/md'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const ShoppingBasket = () => {
-    const shopList = useRecoilValue(shopListDataState)
+    const shopList = useRecoilValue(shopListState)
 
     const [remainingItemCount, setRemainingItemCount] = useState(0)
 
