@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 
 import { MdAdd } from 'react-icons/md'
 
@@ -34,10 +34,11 @@ const Item = ({ data, category }: any) => {
     const setSidebarType = useSetRecoilState(sidebarState)
     const setCurrentItem = useSetRecoilState(currentItemState)
 
-    const showItem = () => {
+    const showItem = useCallback(() => {
         setCurrentItem(data)
         setSidebarType(SHOW_ITEM)
-    }
+    }, [])
+
     const appConfig = useRecoilValue(appConfigState)
 
     function addItemToShopList() {
@@ -135,4 +136,4 @@ const Item = ({ data, category }: any) => {
     )
 }
 
-export default Item
+export default React.memo(Item)
