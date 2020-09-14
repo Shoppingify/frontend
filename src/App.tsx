@@ -2,7 +2,7 @@ import { hot } from 'react-hot-loader/root'
 import React, { useCallback, useEffect, useState } from 'react'
 
 // Libs
-import { Switch, useHistory } from 'react-router-dom'
+import { Switch, useHistory, useLocation, useParams } from 'react-router-dom'
 import { useRecoilState, atom } from 'recoil/dist'
 
 // Router components
@@ -34,6 +34,23 @@ const App: React.FC = () => {
 
     // Router
     const history = useHistory()
+    const location = useLocation()
+
+    useEffect(() => {
+        // console.log('history location', location)
+        console.log('location search', location.search)
+        if (location.search.length > 0) {
+            const access_token = new URLSearchParams(location.search).get(
+                'access_token'
+            )
+            if (access_token) {
+                // Connect the user
+                console.log('access_token', access_token)
+                localStorage.setItem('token', access_token)
+                getConnectedUser()
+            }
+        }
+    }, [location.search])
 
     useEffect(() => {
         console.log('User', user)
@@ -58,7 +75,9 @@ const App: React.FC = () => {
         //Check if we have a token
         if (localStorage.getItem('token')) {
             // Fetch the user
-            getConnectedUser()
+            if (location.search === '') {
+                getConnectedUser()
+            }
         } else {
             setInit(false)
             history.push('/login')
