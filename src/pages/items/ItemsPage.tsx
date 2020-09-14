@@ -11,7 +11,7 @@ import SearchInput from '../../components/form-elements/SearchInput'
 import AddItemSidebar from '../../components/item-sidebars/AddItemSidebar'
 import { currentItemState } from '../../global-state/currentItemState'
 import { itemsState } from '../../global-state/itemsState'
-import { shopListDataState } from '../../global-state/shopListState'
+import { shopListState } from '../../global-state/shopListState'
 import { ADD_NEW_ITEM, sidebarState } from '../../global-state/sidebarState'
 import { ItemType } from '../../types/items/types'
 
@@ -45,7 +45,7 @@ function ItemsPage() {
     const [itemsWithCategories, setItemsWithCategories] = useRecoilState(
         itemsState
     )
-    const setShopList = useSetRecoilState(shopListDataState)
+    const setShopList = useSetRecoilState(shopListState)
     const [filteredItems, setFilteredItems] = useState([])
     const [currentItem, setCurrentItem] = useRecoilState(currentItemState)
     const setSidebarType = useSetRecoilState(sidebarState)
