@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 // Libs
 import { Field, Form, Formik } from 'formik'
@@ -12,11 +12,15 @@ import Button from '../../button/Button'
 import { useRecoilState } from 'recoil/dist'
 import { userState } from '../../../global-state/miscState'
 import { userStateInterface } from '../../../types/state/userStateTypes'
+import AuthInput from '../../form-elements/AuthInput'
+import { MdEmail, MdLock } from 'react-icons/md'
+import client from '../../../api/client'
+import LoadingButton from '../../button/LoadingButton'
 
 // Validation schema
 const LoginSchema = Yup.object().shape({
     email: Yup.string().email().required('Required'),
-    password: Yup.string().required('Required'),
+    password: Yup.string().min(6).required('Required'),
 })
 
 // TODO cleanup into own components
@@ -27,6 +31,7 @@ const LoginSchema = Yup.object().shape({
 function LoginForm() {
     const history = useHistory()
     const [user, setUser] = useRecoilState(userState)
+    const [serverErrors, setServerErrors] = useState(null)
 
     /**
      * Handles login from passed data
@@ -34,24 +39,16 @@ function LoginForm() {
      * @param {string} email
      * @param {string} password
      */
-    async function handleLogin({ email, password }: any) {
-        const response = await fetch('http://localhost:3000/api/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
+    const handleLogin = async ({ email, password }: any) => {
+        setServerErrors(null)
+        try {
+            const res = await client.post('login', {
                 email,
                 password,
-            }),
-        })
+            })
 
-        const {
-            status,
-            data: { token },
-        } = await response.json()
-
-        if (status === 'success') {
+            console.log('user data', res.data)
+            const { token } = res.data.data
             localStorage.setItem('token', token)
             setUser((current: userStateInterface) => ({
                 ...current,
@@ -59,6 +56,13 @@ function LoginForm() {
                 valid: true,
             }))
             history.push('/items')
+        } catch (e) {
+            console.log('error while login', e)
+            if (e.response && e.response.data) {
+                setServerErrors(e.response.data.message)
+            } else {
+                setServerErrors(e.message)
+            }
         }
     }
 
@@ -87,33 +91,29 @@ function LoginForm() {
         >
             {({ isSubmitting, errors, touched }) => (
                 <Form>
-                    <div className="mb-5">
-                        <Field
-                            name="email"
-                            type="input"
-                            placeholder="Enter your email..."
-                        />
-                        {errors.email && touched.email ? (
-                            <div>{errors.email}</div>
-                        ) : null}
-                    </div>
-                    <div className="mb-5">
-                        <Field
-                            name="password"
-                            type="password"
-                            placeholder="Enter your password..."
-                        />
-                        {errors.password && touched.password ? (
-                            <div>{errors.password}</div>
-                        ) : null}
-                    </div>
-                    <Button
+                    {serverErrors && (
+                        <div className="bg-danger text-white rounded mb-4 p-2">
+                            {serverErrors}
+                        </div>
+                    )}
+                    <AuthInput
+                        icon={<MdEmail />}
+                        name="email"
+                        type="text"
+                        placeholder="Enter your email"
+                    />
+                    <AuthInput
+                        icon={<MdLock />}
+                        name="password"
+                        type="password"
+                        placeholder="Enter your password..."
+                    />
+                    <LoadingButton
+                        loading={isSubmitting}
                         type="submit"
-                        modifier="primary"
-                        disabled={isSubmitting}
-                    >
-                        login
-                    </Button>
+                        text="Login"
+                        className="mt-6"
+                    />
                 </Form>
             )}
         </Formik>
