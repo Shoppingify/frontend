@@ -1,5 +1,5 @@
 import { Form, Formik } from 'formik'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useRecoilState, useSetRecoilState } from 'recoil'
 import * as Yup from 'yup'
 import client from '../../../api/client'
@@ -78,11 +78,16 @@ const ItemForm: React.FC = () => {
         }
     }
 
+    useEffect(() => {
+        getInitialValues()
+    }, [currentItem])
+
     return (
         <Formik
             initialValues={getInitialValues()}
             validationSchema={ItemSchema}
             onSubmit={!currentItem?.id ? addItem : updateItem}
+            enableReinitialize={true}
         >
             {({ isSubmitting }) => (
                 <Form className="flex flex-col h-full justify-between">
