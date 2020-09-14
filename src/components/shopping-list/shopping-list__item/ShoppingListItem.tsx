@@ -8,11 +8,10 @@ import client from '../../../api/client'
 
 // Global state
 import { useSetRecoilState, useRecoilValue } from 'recoil'
-import { shopListDataState } from '../../../global-state/shopListState'
-import { appConfigState } from '../../../global-state/miscState'
-
-// Hooks
-import useMounted from '../../../hooks/useMount'
+import {
+    shopListState,
+    shopListInfoState,
+} from '../../../global-state/shopListState'
 
 // Components
 import ShoppingListItemQuantity from './ShoppingListItemQuantity'
@@ -58,8 +57,8 @@ const ShoppingListItem: React.FC<PropTypes> = React.memo(
         const [mounted, setMounted] = useState(false)
 
         // Global state - read only
-        const appConfig = useRecoilValue(appConfigState)
-        const setShopList = useSetRecoilState(shopListDataState)
+        const shopListInfo = useRecoilValue(shopListInfoState)
+        const setShopList = useSetRecoilState(shopListState)
 
         /**
          * Effect runs on component mount
@@ -77,18 +76,18 @@ const ShoppingListItem: React.FC<PropTypes> = React.memo(
             const handleZeroQuantity = async () => {
                 try {
                     await client.delete(
-                        `/lists/${appConfig.activeListId}/items`,
+                        `/lists/${shopListInfo.activeListId}/items`,
                         {
                             data: {
                                 item_id,
-                                list_id: appConfig.activeListId,
+                                list_id: shopListInfo.activeListId,
                             },
                         }
                     )
 
                     // refetch list data
                     const responseItems = await client.get(
-                        `lists/${appConfig.activeListId}/items`
+                        `lists/${shopListInfo.activeListId}/items`
                     )
 
                     const {
@@ -109,9 +108,9 @@ const ShoppingListItem: React.FC<PropTypes> = React.memo(
             }
 
             // If quantity is higher than 0 update the shop list, no need for app state update since the app state shop list update triggers this effect
-            client.put(`/lists/${appConfig.activeListId}/items`, {
+            client.put(`/lists/${shopListInfo.activeListId}/items`, {
                 item_id,
-                list_id: appConfig.activeListId,
+                list_id: shopListInfo.activeListId,
                 quantity,
                 done,
             })
@@ -125,12 +124,15 @@ const ShoppingListItem: React.FC<PropTypes> = React.memo(
 
             const updateDBList = async () => {
                 try {
-                    await client.put(`/lists/${appConfig.activeListId}/items`, {
-                        item_id,
-                        list_id: appConfig.activeListId,
-                        quantity,
-                        done,
-                    })
+                    await client.put(
+                        `/lists/${shopListInfo.activeListId}/items`,
+                        {
+                            item_id,
+                            list_id: shopListInfo.activeListId,
+                            quantity,
+                            done,
+                        }
+                    )
                 } catch (error) {
                     toast.error('An error occured')
                     console.log(error)
@@ -184,15 +186,18 @@ const ShoppingListItem: React.FC<PropTypes> = React.memo(
          */
         const handleItemDelete = useCallback(async () => {
             try {
-                await client.delete(`/lists/${appConfig.activeListId}/items`, {
-                    data: {
-                        item_id,
-                        list_id: appConfig.activeListId,
-                    },
-                })
+                await client.delete(
+                    `/lists/${shopListInfo.activeListId}/items`,
+                    {
+                        data: {
+                            item_id,
+                            list_id: shopListInfo.activeListId,
+                        },
+                    }
+                )
 
                 const responseItems = await client.get(
-                    `lists/${appConfig.activeListId}/items`
+                    `lists/${shopListInfo.activeListId}/items`
                 )
 
                 const {
