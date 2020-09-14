@@ -1,8 +1,9 @@
 import { ErrorMessage, Field, useField } from 'formik'
-import React, { useEffect, useState } from 'react'
-import { useRecoilState } from 'recoil'
+import React, { useCallback, useEffect, useState } from 'react'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import client from '../../api/client'
 import { categoriesState } from '../../global-state/categoriesState'
+import { currentItemState } from '../../global-state/currentItemState'
 
 interface Category {
     id: number
@@ -17,18 +18,39 @@ const CategorySelect = ({ label, ...props }: any) => {
     const [field, meta, helpers] = useField(props)
     const [filtered, setFiltered] = useState([])
     const [showAutocomplete, setShowAutocomplete] = useState(false)
+    const currentItem = useRecoilValue(currentItemState)
 
-    useEffect(() => {
-        /**
-         * Get all the categories from a user
-         */
-        const getCategories = async () => {
+    /**
+     * Get the user's categories
+     */
+    const getCategories = useCallback(async () => {
+        try {
             const res = await client.get('categories')
             setCategories(res.data.data)
+        } catch (e) {
+            console.log('Erros while fetching categories', categories)
         }
+    }, [currentItem])
 
-        getCategories()
-    }, [])
+    useEffect(() => {
+        if (categories.length > 0) {
+            // I check if I have the category has changed
+            const categoryIndex = categories.findIndex((cat: any) => {
+                return currentItem?.categoryName === cat.name
+            })
+            if (categoryIndex === -1) {
+                getCategories()
+            }
+        } else {
+            getCategories()
+        }
+        // Check if the category has changed
+    }, [currentItem])
+
+    useEffect(() => {
+        helpers.setValue(currentItem?.categoryName, true)
+        helpers.setTouched(true, true)
+    }, [currentItem])
 
     /**
      * Filter the categories while the user is typing
