@@ -50,9 +50,7 @@ function Sidebar() {
     }
 
     useEffect(() => {
-        if (sidebarHistory[0] !== sidebarType) {
-            setSidebarHistory((history) => [...history, sidebarType])
-        }
+        setSidebarHistory((history) => [...history, sidebarType])
         console.log('sidebarHistory', sidebarHistory)
     }, [sidebarType])
 

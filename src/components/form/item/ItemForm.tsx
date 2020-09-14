@@ -1,6 +1,6 @@
 import { Form, Formik } from 'formik'
 import React from 'react'
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import * as Yup from 'yup'
 import client from '../../../api/client'
 import { itemsState } from '../../../global-state/itemsState'
@@ -8,6 +8,7 @@ import { currentItemState } from '../../../global-state/currentItemState'
 import {
     ADD_SHOPPING_LIST,
     SHOW_ITEM,
+    SHOW_SHOPPING_LIST,
     sidebarState,
 } from '../../../global-state/sidebarState'
 import Button from '../../button/Button'
@@ -66,7 +67,7 @@ const ItemForm: React.FC = () => {
     // Cancel the addition of a new item
     const cancel = () => {
         setCurrentItem(null)
-        setSidebarType(ADD_SHOPPING_LIST)
+        setSidebarType(SHOW_SHOPPING_LIST)
     }
 
     const getInitialValues = () => {
