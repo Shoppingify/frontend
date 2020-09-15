@@ -16,17 +16,16 @@ import HistoryShowPage from '../pages/history/HistoryShowPage'
 /**
  * Private routes controller
  */
-function RoutesController() {
+const PrivateRoutesController = () => {
     return (
         <Switch>
-            <PrivateRoute component={ItemsPage} exact path="/items" />
+            <PrivateRoute component={ItemsPage} path="/items" />
             <PrivateRoute component={HistoryShowPage} path="/history/:listId" />
             <PrivateRoute component={HistoryPage} path="/history" />
-
             <PrivateRoute component={StatisticsPage} path="/statistics" />
             <Route render={() => <Redirect to="/items" />} />
         </Switch>
     )
 }
 
-export default RoutesController
+export default PrivateRoutesController

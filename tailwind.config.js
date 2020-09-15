@@ -6,6 +6,8 @@ module.exports = {
     variants: {
         margin: ['responsive', 'hover', 'focus'],
         opacity: ['responsive', 'hover', 'focus', 'group-hover'],
+        translate: ['responsive', 'hover', 'focus', 'group-hover'],
+        pointerEvents: ['responsive', 'hover', 'focus', 'group-hover'],
     },
     theme: {
         colors: {

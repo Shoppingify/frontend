@@ -6,7 +6,6 @@ import App from './App'
 // Styles
 import 'react-toastify/dist/ReactToastify.min.css'
 import './styles/styles.css'
-import './styles/styles.scss'
 
 // Fonts
 require('typeface-quicksand')
