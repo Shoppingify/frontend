@@ -29,23 +29,13 @@ function Sidebar() {
     const selectSidebar = () => {
         switch (sidebarType) {
             case ADD_SHOPPING_LIST:
-                return (
-                    <>
-                        <AddNewItem />
-                        <ShoppingList />
-                    </>
-                )
+                return <ShoppingList />
             case ADD_NEW_ITEM:
                 return <AddItemSidebar />
             case SHOW_ITEM:
                 return <ShowItemSidebar />
             default:
-                return (
-                    <>
-                        <AddNewItem />
-                        <ShoppingList />
-                    </>
-                )
+                return <ShoppingList />
         }
     }
 
@@ -61,7 +51,7 @@ function Sidebar() {
                 sidebarType === SHOW_SHOPPING_LIST
                     ? 'bg-primary-light'
                     : 'bg-white'
-            } p-12`}
+            }`}
         >
             {/* <ShoppingList /> */}
             {selectSidebar()}

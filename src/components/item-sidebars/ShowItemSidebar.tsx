@@ -81,7 +81,7 @@ const ShowItemSidebar = () => {
     }
 
     return (
-        <div className="flex flex-col h-full justify-between">
+        <div className="flex flex-col h-full justify-between p-8">
             <div>
                 <div className="flex w-full justify-between items-center mb-6">
                     <a
