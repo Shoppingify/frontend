@@ -6,11 +6,13 @@
         "noImplicitReturns": true,
         "noImplicitAny": true,
         "module": "es6",
+        "esModuleInterop": true,
         "moduleResolution": "node",
         "target": "es5",
         "allowJs": true,
         "jsx": "react",
-        "allowSyntheticDefaultImports": true
+        "allowSyntheticDefaultImports": true,
+        "lib": ["dom", "es6"]
     },
     "include": ["./src/**/*", "src/custom.d.ts"]
 }
