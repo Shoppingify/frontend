@@ -166,11 +166,9 @@ const HistoryShowPage = () => {
                         (listOfItems: ItemsWithCategories) => (
                             <li key={uuidv4()} className="mb-5">
                                 {/* Category name component */}
-                                <CategoryTitle
-                                    category={listOfItems.category}
-                                    category_id={listOfItems.category_id}
-                                    categoryUpdated={() => {}}
-                                />
+                                <h3 className="text-lg font-bold mr-4">
+                                    {listOfItems.category}
+                                </h3>
                                 <ul
                                     style={{ marginLeft: '-12px' }}
                                     className="flex flex-wrap w-full"
