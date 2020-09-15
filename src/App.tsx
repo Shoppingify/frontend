@@ -1,26 +1,25 @@
 import { hot } from 'react-hot-loader/root'
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 // Libs
-import { Switch, useHistory } from 'react-router-dom'
-import { useRecoilState, atom } from 'recoil/dist'
+import { Switch, useHistory, useLocation, Redirect } from 'react-router-dom'
+import { useRecoilState } from 'recoil/dist'
 
 // Router components
-import RoutesController from './routes/RoutesController'
+import PrivateRoutesController from './routes/PrivateRoutesController'
 
 // Components
 import Navbar from './components/navbar/Navbar'
 import Sidebar from './components/sidebar/Sidebar'
 import LoggingLoader from './components/loader/LoggingLoader'
 import PublicRoute from './components/route/PublicRoute'
-import LoginPage from './pages/login/LoginPage'
-
-// Helpers
-import { validateToken } from './auth/validateToken'
+import AuthPage from './pages/auth/AuthPage'
 
 // State
 import { userState } from './global-state/miscState'
-import { userStateInterface } from './types/state/userStateTypes'
+
+// Api
+import client from './api/client'
 
 /**
  * Main app component
@@ -28,52 +27,68 @@ import { userStateInterface } from './types/state/userStateTypes'
 const App: React.FC = () => {
     // Recoil user state
     const [user, setUser] = useRecoilState(userState)
+    const [init, setInit] = useState(true)
 
     // Router
     const history = useHistory()
+    const location = useLocation()
 
-    /**
-     * On mount effect
-     */
     useEffect(() => {
-        // TODO check token exp, if expired redirect to login
-        const token: string = localStorage.getItem('token') || ''
-
-        async function checkToken() {
-            const valid: boolean = await validateToken(token)
-
-            setUser((current: userStateInterface) => ({
-                ...current,
-                token,
-                valid,
-                loadingLogin: valid,
-            }))
-
-            if (!valid) history.push('/login')
-
-            if (valid) {
-                // Fake login timeout
-                setTimeout(() => {
-                    // @ts-ignore
-                    setUser((current: userStateInterface) => ({
-                        ...current,
-                        loadingLogin: false,
-                    }))
-                }, 100)
+        // console.log('history location', location)
+        console.log('location search', location.search)
+        if (location.search.length > 0) {
+            const access_token = new URLSearchParams(location.search).get(
+                'access_token'
+            )
+            if (access_token) {
+                // Connect the user
+                console.log('access_token', access_token)
+                localStorage.setItem('token', access_token)
+                getConnectedUser()
             }
         }
+    }, [location.search])
 
-        checkToken()
+    useEffect(() => {
+        console.log('User', user)
+    }, [user])
+
+    const getConnectedUser = useCallback(async () => {
+        try {
+            const res = await client.get('me')
+            const { id } = res.data.data
+            console.log('res', res.data)
+            setUser(id)
+            setInit(false)
+            // history.
+        } catch (e) {
+            console.log('Error fetching the connected user', e)
+            setInit(false)
+            history.push('/login')
+        }
     }, [])
 
-    if (user.loadingLogin) return <LoggingLoader />
+    useEffect(() => {
+        //Check if we have a token
+        if (localStorage.getItem('token')) {
+            // Fetch the user
+            if (location.search === '') {
+                getConnectedUser()
+            }
+        } else {
+            setInit(false)
+            history.push('/login')
+        }
+    }, [])
 
-    if (user.valid) {
+    if (init) return <LoggingLoader />
+
+    if (user) {
         return (
             <div className="flex justify-between h-screen">
                 <Navbar />
                 <div className="flex-grow bg-gray-extra-light">
-                    <RoutesController />
+                    <PrivateRoutesController />
                 </div>
                 <Sidebar />
             </div>
@@ -82,7 +97,9 @@ const App: React.FC = () => {
 
     return (
         <Switch>
-            <PublicRoute component={LoginPage} path="/login" />
+            <PublicRoute component={AuthPage} path="/login" />
+            <PublicRoute component={AuthPage} path="/register" />
+            <Redirect to="/login" />
         </Switch>
     )
 }

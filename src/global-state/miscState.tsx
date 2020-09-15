@@ -12,16 +12,12 @@ export const SHOW_ITEM = 'show_item'
 // State for user check if valid
 type userStateType = {
     key: string
-    default: userStateInterface
+    default: userStateInterface | null
 }
 
 const userStateConst: userStateType = {
     key: 'userState',
-    default: {
-        token: '',
-        valid: false,
-        loadingLogin: false,
-    },
+    default: null,
 }
 
 const historyListsRefresh = {
