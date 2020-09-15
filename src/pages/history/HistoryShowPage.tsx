@@ -1,6 +1,8 @@
+import { format } from 'date-fns'
 import { motion } from 'framer-motion'
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { MdDateRange } from 'react-icons/md'
+import { useHistory, useParams } from 'react-router-dom'
 // Libs
 import { useRecoilState, useSetRecoilState } from 'recoil/dist'
 import { v4 as uuidv4 } from 'uuid'
@@ -14,6 +16,7 @@ import { currentItemState } from '../../global-state/currentItemState'
 import { itemsState } from '../../global-state/itemsState'
 import { shopListState } from '../../global-state/shopListState'
 import { ADD_NEW_ITEM, sidebarState } from '../../global-state/sidebarState'
+import { ListType } from '../../types/interfaces/db_interfaces'
 import { ItemType } from '../../types/items/types'
 
 const containerVariants = {
@@ -43,21 +46,34 @@ interface ItemsWithCategories {
  */
 const HistoryShowPage = () => {
     const { listId }: any = useParams()
+    const history = useHistory()
     // Local state
     const [itemsWithCategories, setItemsWithCategories] = useState([])
+    const [list, setList] = useState<ListType | null>(null)
     // const setSidebarType = useSetRecoilState(sidebarState)
 
     useEffect(() => {
+        async function getList() {
+            if (!listId) return
+            try {
+                const res = await client.get(`lists/${listId}`)
+                console.log('Get list res', res.data)
+                setList(res.data.data)
+            } catch (e) {
+                console.log('Error while fetching the list', e)
+            }
+        }
         async function getItems() {
             if (!listId) return
             try {
                 const res = await client.get(`lists/${listId}/items`)
                 console.log('res', res.data.data)
-                // setItemsWithCategories(res.data.data)
+                setItemsWithCategories(res.data.data.items)
             } catch (e) {
                 console.log('Error', e)
             }
         }
+        getList()
         getItems()
     }, [])
 
@@ -117,10 +133,27 @@ const HistoryShowPage = () => {
     //     }
     // }
 
+    if (!list) return <div>Loading...</div>
+
     return (
         <div className="container mx-auto flex flex-col h-full">
-            <div className="flex flex-col xl:flex-row mb-5 px-6 lg:px-20 py-4">
-                <h1 className="hidden md:block text-2xl font-bold mr-2">{}</h1>
+            <div className="flex flex-col mb-5 px-6 lg:px-20 py-4">
+                <a
+                    className="block text-primary cursor-pointer hover:text-gray
+                 transition-color duration-300 mb-4"
+                    onClick={() => history.push('/history')}
+                >
+                    &larr; Back
+                </a>
+                <h1 className="hidden md:block text-2xl font-bold mr-2">
+                    {list?.name}
+                </h1>
+                <div className="flex items-center">
+                    <MdDateRange className="text-gray-light mr-2 w-6 h-6" />
+                    <div className=" text-gray-light text-sm font-medium">
+                        {format(new Date(list.created_at), 'iii d.M.yyyy ')}
+                    </div>
+                </div>
             </div>
             <motion.ul
                 variants={containerVariants}
@@ -154,6 +187,7 @@ const HistoryShowPage = () => {
                                                         category={
                                                             listOfItems.category
                                                         }
+                                                        history={true}
                                                     />
                                                 </motion.li>
                                             )

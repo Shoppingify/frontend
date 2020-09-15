@@ -19,9 +19,10 @@ import HistoryShowPage from '../pages/history/HistoryShowPage'
 function RoutesController() {
     return (
         <Switch>
-            <PrivateRoute component={ItemsPage} path="/items" />
-            <PrivateRoute component={HistoryPage} path="/history" />
+            <PrivateRoute component={ItemsPage} exact path="/items" />
             <PrivateRoute component={HistoryShowPage} path="/history/:listId" />
+            <PrivateRoute component={HistoryPage} path="/history" />
+
             <PrivateRoute component={StatisticsPage} path="/statistics" />
             <Route render={() => <Redirect to="/items" />} />
         </Switch>

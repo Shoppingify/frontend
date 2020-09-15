@@ -1,8 +1,7 @@
 import React from 'react'
 import { format } from 'date-fns'
-import { RiCalendarTodoLine } from 'react-icons/ri'
-import { FaChevronRight } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
+import { MdChevronRight, MdDateRange } from 'react-icons/md'
 
 /**
  * Move the interfaces to their own folder
@@ -63,7 +62,7 @@ const List = ({ list: { id, name, status, created_at } }: ListProps) => {
                 <div className="flex items-center w-1/2 justify-around">
                     {/* Icon + Date */}
                     <div className="flex items-center">
-                        <RiCalendarTodoLine
+                        <MdDateRange
                             style={iconStyle}
                             className="text-gray-light mr-2"
                         />
@@ -79,7 +78,7 @@ const List = ({ list: { id, name, status, created_at } }: ListProps) => {
                     >
                         {status}
                     </div>
-                    <FaChevronRight className="text-primary" />
+                    <MdChevronRight className="text-primary" />
                 </div>
             </div>
         </Link>
