@@ -1,14 +1,53 @@
 import React from 'react'
+
+// Libs
+import { Link, useLocation } from 'react-router-dom'
+
 // Assets
 import LogoSVG from '../../assets/logo.svg'
-import { Link } from 'react-router-dom'
-import SocialIcons from '../../components/button/SocialIcons'
-import RegisterForm from '../../components/form/auth/RegisterForm'
-/**
- * Simple login page component
- */
 
-const Register = () => {
+// Components
+import SocialIcons from '../../components/button/SocialIcons'
+import LoginForm from '../../components/form/auth/LoginForm'
+import RegisterForm from '../../components/form/auth/RegisterForm'
+
+// Types
+interface authPageTexts {
+    [key: string]: {
+        cta: { text: string; link: { text: string; href: string } }
+    }
+}
+/**
+ * Auth page component
+ */
+const AuthPage: React.FC = () => {
+    const { pathname } = useLocation()
+    const authPath = pathname.replace(/\//g, '')
+
+    /**
+     * Variable that stores texts depending on the auth route
+     * */
+    const texts: authPageTexts = {
+        login: {
+            cta: {
+                text: 'Not registered yet? ',
+                link: {
+                    href: '/register',
+                    text: 'Register',
+                },
+            },
+        },
+        register: {
+            cta: {
+                text: 'Already have an account? ',
+                link: {
+                    text: 'Login',
+                    href: '/login',
+                },
+            },
+        },
+    }
+
     return (
         <div className="container mx-auto">
             <div className="flex md:items-center justify-center min-h-screen w-full">
@@ -27,17 +66,18 @@ const Register = () => {
                         Master web development by making real-life projects.
                         There are multiple paths for you to choose
                     </p>
-                    <RegisterForm />
+                    {authPath === 'login' && <LoginForm />}
+                    {authPath === 'register' && <RegisterForm />}
 
                     <SocialIcons />
 
                     <p className="mt-4 text-center">
-                        Already registered?{' '}
+                        {texts[authPath].cta.text}
                         <Link
                             className="text-secondary hover:text-gray"
-                            to="/login"
+                            to={texts[authPath].cta.link.href}
                         >
-                            Login
+                            {texts[authPath].cta.link.text}
                         </Link>
                     </p>
                 </div>
@@ -46,4 +86,4 @@ const Register = () => {
     )
 }
 
-export default Register
+export default AuthPage
