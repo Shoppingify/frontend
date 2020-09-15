@@ -32,6 +32,7 @@ import { ItemType } from '../../../types/items/types'
 import { shopListInfoStateInterface } from '../../../types/state/shoppingListTypes'
 import { historyListsRefreshState } from '../../../global-state/miscState'
 import { currentItemState } from '../../../global-state/currentItemState'
+import AddNewItem from '../../add-item/AddNewItemCTA'
 
 // Name generator
 const nameConfig: Config = {
@@ -248,51 +249,55 @@ const ShoppingList: React.FC = React.memo(() => {
     )
 
     return (
-        <div className="h-full">
-            <ShoppingListTitle
-                editing={editing}
-                setShopListName={handleSetShopListName}
-                setEditing={handleSetEditing}
-                shopListName={shopListName}
-            />
-            {shopList.map((category: any, index: number) => (
-                <div key={index} className="mb-12">
-                    <Heading level={3} className="text-gray-light mb-6">
-                        {category.category}
-                    </Heading>
-                    {category.items.map((item: any, indexItem: number) => {
-                        return (
-                            <ShoppingListItem
-                                key={`${item.name}__${indexItem}`}
-                                quantity={item.quantity}
-                                name={item.name}
-                                category={item.categoryName}
-                                item_id={item.id}
-                                editing={editing}
-                                done={item.done}
-                                catIndex={index}
-                                itemIndex={indexItem}
-                            />
-                        )
-                    })}
-                </div>
-            ))}
-            <div className="pb-40">
-                {/** This element makes the list overflow if bigger than sidebar */}
+        <div className="flex flex-col h-full overflow-hidden">
+            <div className="overflow-y-auto p-8 flex-auto">
+                <AddNewItem />
+                <ShoppingListTitle
+                    editing={editing}
+                    setShopListName={handleSetShopListName}
+                    setEditing={handleSetEditing}
+                    shopListName={shopListName}
+                />
+
+                {shopList.map((category: any, index: number) => (
+                    <div key={index} className="mb-12">
+                        <Heading level={3} className="text-gray-light mb-6">
+                            {category.category}
+                        </Heading>
+                        {category.items.map((item: any, indexItem: number) => {
+                            return (
+                                <ShoppingListItem
+                                    key={`${item.name}__${indexItem}`}
+                                    quantity={item.quantity}
+                                    name={item.name}
+                                    category={item.categoryName}
+                                    item_id={item.id}
+                                    editing={editing}
+                                    done={item.done}
+                                    catIndex={index}
+                                    itemIndex={indexItem}
+                                />
+                            )
+                        })}
+                    </div>
+                ))}
             </div>
-            <AnimatePresence>
-                {!editing && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                    >
-                        <ShoppingListStatusModal
-                            handleListStatus={handleListStatus}
-                        />
-                    </motion.div>
-                )}
-            </AnimatePresence>
+
+            <div className="flex-none">
+                <AnimatePresence>
+                    {!editing && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                        >
+                            <ShoppingListStatusModal
+                                handleListStatus={handleListStatus}
+                            />
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </div>
         </div>
     )
 })

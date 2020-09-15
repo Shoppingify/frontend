@@ -6,7 +6,7 @@ import { currentItemState } from '../../global-state/currentItemState'
 const AddItemSidebar: React.FC = () => {
     const currentItem = useRecoilValue(currentItemState)
     return (
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-full p-8">
             <h3 className="text-2xl mb-6 font-medium">
                 {currentItem ? 'Edit an ' : 'Add a new '}item
             </h3>
