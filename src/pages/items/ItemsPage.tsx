@@ -162,20 +162,17 @@ function ItemsPage() {
                 variants={containerVariants}
                 initial="hidden"
                 animate="show"
-                className="overflow-y-auto px-6 lg:px-20"
+                className="overflow-y-auto px-3 md:px-5 lg:px-10"
             >
                 {filteredItems.map((listOfItems: ItemsWithCategories) => (
-                    <li key={uuidv4()} className="mb-5">
+                    <li key={uuidv4()} className="mb-10">
                         {/* Category name component */}
                         <CategoryTitle
                             category={listOfItems.category}
                             category_id={listOfItems.category_id}
                             categoryUpdated={categoryUpdated}
                         />
-                        <ul
-                            style={{ marginLeft: '-12px' }}
-                            className="flex flex-wrap w-full"
-                        >
+                        <ul className="grid grid-cols-2 xl:grid-cols-3 gap-x-2 gap-y-6 w-full">
                             {listOfItems.items.length > 0 &&
                                 listOfItems.items.map((item: ItemType) => (
                                     <motion.li

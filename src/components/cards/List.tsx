@@ -56,13 +56,13 @@ const List = ({ list: { id, name, status, created_at } }: ListProps) => {
     }
     return (
         <Link to={`/history/${id}`}>
-            <div className="flex w-full p-4 shadow rounded-lg justify-between items-center mb-8 bg-white hover:bg-gray-extra-light transition-colors duration-300">
+            <div className="flex flex-col md:flex-row w-full p-4 shadow rounded-lg justify-between items-center mb-8 bg-white hover:bg-gray-extra-light transition-colors duration-300">
                 {/* List name */}
-                <div className="font-bold">{name}</div>
+                <div className="font-bold mb-2 md:mb-0">{name}</div>
 
-                <div className="flex items-center w-1/2 justify-around">
+                <div className="flex flex-col md:flex-row items-center md:w-1/2 justify-around">
                     {/* Icon + Date */}
-                    <div className="flex items-center">
+                    <div className="flex items-center mb-3 md:mb-0">
                         <MdDateRange
                             style={iconStyle}
                             className="text-gray-light mr-2"
@@ -72,14 +72,16 @@ const List = ({ list: { id, name, status, created_at } }: ListProps) => {
                         </div>
                     </div>
                     {/* Status */}
-                    <div
-                        className={`border mx-6 rounded-lg border-${statusColor(
-                            status!
-                        )} px-2 text-${statusColor(status!)}`}
-                    >
-                        {status}
+                    <div className="flex items-center justify-between">
+                        <div
+                            className={`border md:mx-2 lg:mx-4 rounded-lg border-${statusColor(
+                                status!
+                            )} px-2 text-${statusColor(status!)}`}
+                        >
+                            {status}
+                        </div>
+                        <MdChevronRight className="hidden md:block text-primary" />
                     </div>
-                    <MdChevronRight className="text-primary" />
                 </div>
             </div>
         </Link>
