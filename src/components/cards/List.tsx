@@ -42,6 +42,7 @@ const List = ({ list: { id, name, status, created_at } }: ListProps) => {
     }
 
     const statusColor = (status: string): string => {
+        console.log(status)
         switch (status) {
             case 'active':
                 return 'primary'

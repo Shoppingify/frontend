@@ -1,8 +1,8 @@
 import React from 'react'
 
 // Types TODO refactor into own folder/file
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    modifier: string
+interface PropTypes extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+    modifier?: string
 }
 
 interface btnModifiersTypes {
@@ -20,25 +20,31 @@ const btnModifiers: btnModifiersTypes = {
 /**
  * Renders a button element
  *
- * @param props
- *  Props for the button
  */
-function Button(props: ButtonProps) {
-    const { modifier, disabled } = props
+function Button(props: PropTypes) {
+    // Destructure props
+    const { modifier = '', disabled } = props
 
-    function buildClasses() {
-        let defaultClasses = btnModifiers[modifier]
-        defaultClasses += ' ' + props.className
+    // Methods
+    /**
+     * Builds button classes
+     */
+    const buildClasses = () => {
+        let defaultClasses = ''
+
+        // Check for undefined
+        if (btnModifiers[modifier]) defaultClasses = btnModifiers[modifier]
+        if (props.className) defaultClasses += ' ' + props.className
+        if (disabled) defaultClasses += ' opacity-50 cursor-not-allowed'
+
+        // Default classes for every button
         defaultClasses +=
             ' text-white font-bold rounded-lg py-2 px-4 hover:shadow-md transition-all duration-300'
-        if (disabled) defaultClasses += ' opacity-50 cursor-not-allowed'
 
         return defaultClasses
     }
 
     return (
-        // TODO fix
-        // @ts-ignore
         <button {...props} className={buildClasses()}>
             {props.children}
         </button>

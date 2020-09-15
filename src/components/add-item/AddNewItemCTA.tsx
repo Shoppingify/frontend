@@ -12,9 +12,11 @@ import Heading from '../heading/Heading'
 // Assets
 import SupermarketSVG from '../../assets/supermarket.svg'
 
-const AddNewItem = () => {
+const AddNewItem = React.memo(() => {
+    // Global state
     const setSidebarType = useSetRecoilState(sidebarState)
     const setCurrentItem = useSetRecoilState(currentItemState)
+
     return (
         <div className="bg-purple px-4 py-6 flex justify-center items-center rounded-24">
             <div className="w-1/3">
@@ -37,6 +39,6 @@ const AddNewItem = () => {
             </div>
         </div>
     )
-}
+})
 
 export default AddNewItem
