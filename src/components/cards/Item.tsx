@@ -1,15 +1,17 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 
 import { MdAdd } from 'react-icons/md'
 
 // Recoil
-import { shopListDataState } from '../../global-state/shopListState'
+import {
+    shopListState,
+    shopListInfoState,
+} from '../../global-state/shopListState'
 import { useSetRecoilState, useRecoilValue } from 'recoil'
 import { ItemType } from '../../types/items/types'
 import { currentItemState } from '../../global-state/currentItemState'
 import { sidebarState, SHOW_ITEM } from '../../global-state/sidebarState'
 import client from '../../api/client'
-import { appConfigState } from '../../global-state/miscState'
 import { toast } from 'react-toastify'
 
 // TODO how to handle long item names? Fix word breaking
@@ -30,15 +32,15 @@ import { toast } from 'react-toastify'
  *  Image src of the item
  */
 const Item = ({ data, category }: any) => {
-    const setShopList = useSetRecoilState(shopListDataState)
+    const setShopList = useSetRecoilState(shopListState)
     const setSidebarType = useSetRecoilState(sidebarState)
     const setCurrentItem = useSetRecoilState(currentItemState)
+    const shopListInfo = useRecoilValue(shopListInfoState)
 
-    const showItem = () => {
+    const showItem = useCallback(() => {
         setCurrentItem(data)
         setSidebarType(SHOW_ITEM)
-    }
-    const appConfig = useRecoilValue(appConfigState)
+    }, [])
 
     function addItemToShopList() {
         //@ts-ignore
@@ -75,9 +77,9 @@ const Item = ({ data, category }: any) => {
                     // send post to api to add new item
                     // Using async causes the setShopList to break
                     client
-                        .post(`lists/${appConfig.activeListId}/items`, {
+                        .post(`lists/${shopListInfo.activeListId}/items`, {
                             item_id: id,
-                            list_id: appConfig.activeListId,
+                            list_id: shopListInfo.activeListId,
                         })
                         .then((response) => {
                             toast.success('Item added to the list')
@@ -92,9 +94,9 @@ const Item = ({ data, category }: any) => {
                 // send post to api to add new item
                 // Using async causes the setShopList to break
                 client
-                    .post(`lists/${appConfig.activeListId}/items`, {
+                    .post(`lists/${shopListInfo.activeListId}/items`, {
                         item_id: id,
-                        list_id: appConfig.activeListId,
+                        list_id: shopListInfo.activeListId,
                     })
                     .then((response) => {
                         toast.success('Item added to the list')
@@ -135,4 +137,4 @@ const Item = ({ data, category }: any) => {
     )
 }
 
-export default Item
+export default React.memo(Item)
