@@ -2,34 +2,24 @@ import { hot } from 'react-hot-loader/root'
 import React, { useCallback, useEffect, useState } from 'react'
 
 // Libs
-import {
-    Switch,
-    useHistory,
-    useLocation,
-    useParams,
-    Redirect,
-} from 'react-router-dom'
-import { useRecoilState, atom } from 'recoil/dist'
+import { Switch, useHistory, useLocation, Redirect } from 'react-router-dom'
+import { useRecoilState } from 'recoil/dist'
 
 // Router components
-import RoutesController from './routes/RoutesController'
+import PrivateRoutesController from './routes/PrivateRoutesController'
 
 // Components
 import Navbar from './components/navbar/Navbar'
 import Sidebar from './components/sidebar/Sidebar'
 import LoggingLoader from './components/loader/LoggingLoader'
 import PublicRoute from './components/route/PublicRoute'
-import LoginPage from './pages/auth/LoginPage'
-import RegisterPage from './pages/auth/RegisterPage'
-
-// Helpers
-import { validateToken } from './auth/validateToken'
+import AuthPage from './pages/auth/AuthPage'
 
 // State
 import { userState } from './global-state/miscState'
-import { userStateInterface } from './types/state/userStateTypes'
+
+// Api
 import client from './api/client'
-import AuthPage from './pages/auth/AuthPage'
 
 /**
  * Main app component
@@ -98,7 +88,7 @@ const App: React.FC = () => {
             <div className="flex justify-between h-screen">
                 <Navbar />
                 <div className="flex-grow bg-gray-extra-light">
-                    <RoutesController />
+                    <PrivateRoutesController />
                 </div>
                 <Sidebar />
             </div>

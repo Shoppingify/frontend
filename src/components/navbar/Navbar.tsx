@@ -8,16 +8,17 @@ import tippy from 'tippy.js'
 // Styles
 import 'tippy.js/dist/tippy.css' // optional for styling
 
-// Assets
-import LogoSVG from '../../assets/logo.svg'
-
 // Components
 import ShoppingBasket from '../shopping-basket/ShoppingBasket'
+import UserMenu from './UserMenu'
 
 /**
  * Simple navbar component
  */
 const Navbar = () => {
+    /**
+     * Effect runs on component mount
+     */
     useEffect(() => {
         tippy('[data-tippy-content]', {
             placement: 'right',
@@ -42,9 +43,10 @@ const Navbar = () => {
             name: 'statistics',
         },
     ]
+
     return (
         <nav className="w-24 flex-none flex flex-col items-center mt-10">
-            <LogoSVG />
+            <UserMenu />
             <ul className="flex flex-col w-full h-full justify-center items-center">
                 {links.map((link, index: number) => (
                     <li className="w-full" key={index}>

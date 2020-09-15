@@ -11,15 +11,23 @@ import SocialIcons from '../../components/button/SocialIcons'
 import LoginForm from '../../components/form/auth/LoginForm'
 import RegisterForm from '../../components/form/auth/RegisterForm'
 
+// Types
+interface authPageTexts {
+    [key: string]: {
+        cta: { text: string; link: { text: string; href: string } }
+    }
+}
+/**
+ * Auth page component
+ */
 const AuthPage: React.FC = () => {
     const { pathname } = useLocation()
     const authPath = pathname.replace(/\//g, '')
 
-    const texts: {
-        [key: string]: {
-            cta: { text: string; link: { text: string; href: string } }
-        }
-    } = {
+    /**
+     * Variable that stores texts depending on the auth route
+     * */
+    const texts: authPageTexts = {
         login: {
             cta: {
                 text: 'Not registered yet? ',
