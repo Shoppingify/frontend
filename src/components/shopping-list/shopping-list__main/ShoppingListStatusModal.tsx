@@ -11,7 +11,7 @@ type PropTypes = {
 const ShoppingListStatusModal: React.FC<PropTypes> = React.memo(
     ({ handleListStatus }) => {
         return (
-            <div className="fixed bottom-0 h-40 w-sidebar right-0 bg-white flex justify-center items-center">
+            <div className="bg-white h-24 flex justify-center items-center">
                 <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}>
                     <Button
                         modifier="danger"

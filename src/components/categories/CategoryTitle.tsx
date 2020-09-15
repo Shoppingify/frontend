@@ -49,10 +49,10 @@ const CategoryTitle = ({
     return (
         <>
             {!editMode && (
-                <div className="group flex items-center ">
+                <div className="group flex items-center mb-4">
                     <h3
                         onClick={toggleEditMode}
-                        className="text-2xl font-bold mr-4 cursor-pointer"
+                        className="text-lg font-bold mr-4 cursor-pointer"
                     >
                         {category}
                     </h3>

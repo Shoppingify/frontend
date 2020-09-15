@@ -1,19 +1,23 @@
 import React from 'react'
 
-interface LoadingButtonProps {
+// Types
+interface PropTypes {
     text: string
     type?: string
     loading?: boolean
     className?: string
 }
 
+/**
+ * Loading button component
+ */
 const LoadingButton = ({
     text,
     type,
     loading,
     className,
     ...rest
-}: LoadingButtonProps) => {
+}: PropTypes) => {
     return (
         <button
             {...rest}

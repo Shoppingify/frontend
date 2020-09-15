@@ -1,6 +1,8 @@
 import React, { useCallback } from 'react'
 
+// Libs
 import { MdAdd } from 'react-icons/md'
+import { toast } from 'react-toastify'
 
 // Recoil
 import {
@@ -8,43 +10,48 @@ import {
     shopListInfoState,
 } from '../../global-state/shopListState'
 import { useSetRecoilState, useRecoilValue } from 'recoil'
-import { ItemType } from '../../types/items/types'
 import { currentItemState } from '../../global-state/currentItemState'
 import { sidebarState, SHOW_ITEM } from '../../global-state/sidebarState'
-import client from '../../api/client'
-import { toast } from 'react-toastify'
 
-// TODO how to handle long item names? Fix word breaking
-// TODO how to align plus symbol to the item name, multilines item name issue
-// TODO check if this card is reused somewhere else, if it is reconsider onClick function
+// Components
+import Button from '../button/Button'
+
+// Api client
+import client from '../../api/client'
+
+// Types
+import { ItemType } from '../../types/items/types'
+
+// Prop types
+type PropTypes = {
+    data: ItemType
+    category: string
+    history?: boolean
+}
+
 /**
- *
  * Component that displays a simple card for single item
  * When clicking the button it adds a new item to the sidebar state
- *
- * @param {string} name
- *  Name of the item
- * @param {string} note
- *  Note of the item
- * @param {string} id
- *  Id of the item
- * @param {string} image
- *  Image src of the item
  */
-const Item = ({ data, category }: any) => {
+const Item: React.FC<PropTypes> = ({ data, category, history }) => {
+    // Global state
     const setShopList = useSetRecoilState(shopListState)
     const setSidebarType = useSetRecoilState(sidebarState)
     const setCurrentItem = useSetRecoilState(currentItemState)
     const shopListInfo = useRecoilValue(shopListInfoState)
 
+    /**
+     * Loads the item in the sidebar
+     */
     const showItem = useCallback(() => {
         setCurrentItem(data)
         setSidebarType(SHOW_ITEM)
     }, [])
 
-    function addItemToShopList() {
-        //@ts-ignore
-        // TODO refactor, setting app state
+    /**
+     * Adds the item to the shopping list
+     */
+    const addItemToShopList = () => {
         setShopList((current: any) => {
             const currentItem: ItemType = {
                 ...data,
@@ -119,12 +126,19 @@ const Item = ({ data, category }: any) => {
     }
 
     return (
-        <div className="relative m-2 bg-white overflow-hidden shadow-md rounded-lg flex justify-between items-center">
-            <button className="p-3 m-1 w-full" onClick={showItem}>
-                <h4 className="font-medium text-left">{data.name}</h4>
+        <div className="relative m-2 bg-white overflow-hidden shadow-item rounded-lg flex justify-between items-center">
+            <button className="p-3 m-1 w-full pr-24" onClick={showItem}>
+                <h4 className="font-medium text-left">
+                    {data.name}{' '}
+                    {history ? (
+                        <span className="text-primary text-sm font-bold mx-1">
+                            {data.quantity && data.quantity > 1 ? 'pcs' : 'pc'}
+                        </span>
+                    ) : null}
+                </h4>
             </button>
-            <button
-                className="m-2 hover:text-primary transition-colors duration-300"
+            <Button
+                className="m-2 hover:text-primary transition-colors duration-300 text-black absolute right-0"
                 onClick={addItemToShopList}
                 style={{
                     height: 'fit-content',
@@ -132,7 +146,7 @@ const Item = ({ data, category }: any) => {
                 }}
             >
                 <MdAdd size={24} />
-            </button>
+            </Button>
         </div>
     )
 }
