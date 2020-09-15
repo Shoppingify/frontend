@@ -7,7 +7,7 @@ import { render, cleanup, fireEvent } from '@testing-library/react'
 
 it('Make sure btn component renders, modifier works correctly and onClick works', () => {
     const onClick = jest.fn()
-    const modifiers = ['primary', 'secondary', 'danger', 'white', 'invalid', '']
+    const modifiers = ['primary', 'secondary', 'danger', 'white']
 
     modifiers.forEach((modifier: string) => {
         const { getByTestId } = render(
@@ -16,9 +16,14 @@ it('Make sure btn component renders, modifier works correctly and onClick works'
 
         const element = getByTestId('button-component')
 
-        expect(element).toHaveClass('bg-primary')
+        expect(element).toHaveClass(`bg-${modifier}`)
         fireEvent.click(element)
         expect(onClick).toHaveBeenCalled()
         cleanup()
     })
+
+    // Handle invalid modifier
+    const { getByTestId } = render(
+        <Button modifier="invalid" onClick={onClick} />
+    )
 })
