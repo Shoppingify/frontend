@@ -39,7 +39,11 @@ function Button(props: ButtonProps) {
     return (
         // TODO fix
         // @ts-ignore
-        <button {...props} className={buildClasses()}>
+        <button
+            data-testid="button-component"
+            {...props}
+            className={buildClasses()}
+        >
             {props.children}
         </button>
     )
