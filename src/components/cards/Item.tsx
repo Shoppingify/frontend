@@ -31,7 +31,7 @@ import { toast } from 'react-toastify'
  * @param {string} image
  *  Image src of the item
  */
-const Item = ({ data, category }: any) => {
+const Item = ({ data, category, history }: any) => {
     const setShopList = useSetRecoilState(shopListState)
     const setSidebarType = useSetRecoilState(sidebarState)
     const setCurrentItem = useSetRecoilState(currentItemState)
@@ -119,10 +119,18 @@ const Item = ({ data, category }: any) => {
     }
 
     return (
-        <div className="relative m-2 bg-white overflow-hidden shadow-md rounded-lg flex justify-between items-center">
+        <div className="relative m-2 bg-white overflow-hidden shadow-item rounded-lg flex justify-between items-center">
             <button className="p-3 m-1 w-full" onClick={showItem}>
-                <h4 className="font-medium text-left">{data.name}</h4>
+                <h4 className="font-medium text-left">
+                    {data.name}{' '}
+                    {history ? (
+                        <span className="text-primary text-sm font-bold mx-1">
+                            {data.quantity} {data.quantity > 1 ? 'pcs' : 'pc'}
+                        </span>
+                    ) : null}
+                </h4>
             </button>
+
             <button
                 className="m-2 hover:text-primary transition-colors duration-300"
                 onClick={addItemToShopList}

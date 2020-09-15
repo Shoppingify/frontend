@@ -38,6 +38,9 @@ module.exports = {
                 '1/8': '12.5%',
                 '7/8': '87.5%',
             },
+            boxShadow: {
+                item: '0px 2px 12px rgba(0, 0, 0, 0.05);',
+            },
         },
     },
 }
