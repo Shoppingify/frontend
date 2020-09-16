@@ -1,6 +1,10 @@
 import React from 'react'
+
+// Global state
 import { useRecoilValue } from 'recoil'
 import { shopListState } from '../../../global-state/shopListState'
+
+// Components
 import Heading from '../../heading/Heading'
 import ShoppingListItem from '../shopping-list__item/ShoppingListItem'
 

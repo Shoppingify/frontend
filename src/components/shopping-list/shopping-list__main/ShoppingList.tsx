@@ -22,18 +22,15 @@ import {
 } from '../../../global-state/shopListState'
 
 // Components
-import ShoppingListItem from '../shopping-list__item/ShoppingListItem'
 import ShoppingListTitle from './ShoppingListTitle'
 import ShoppingListStatusModal from './ShoppingListStatusModal'
-import Heading from '../../heading/Heading'
+import AddNewItem from '../../add-item/AddNewItemCTA'
+import RenderShopList from './RenderShopList'
 
 // Types
 import { ItemType } from '../../../types/items/types'
 import { shopListInfoStateInterface } from '../../../types/state/shoppingListTypes'
 import { historyListsRefreshState } from '../../../global-state/miscState'
-import { currentItemState } from '../../../global-state/currentItemState'
-import AddNewItem from '../../add-item/AddNewItemCTA'
-import RenderShopList from './RenderShopList'
 
 // Name generator
 const nameConfig: Config = {
