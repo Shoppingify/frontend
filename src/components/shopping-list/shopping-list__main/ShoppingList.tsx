@@ -253,7 +253,7 @@ const ShoppingList: React.FC = React.memo(() => {
                     shopList.length > 0 ? 'p-8' : 'px-8 pt-8'
                 }`}
             >
-                <div className="flex flex-wrap flex-col h-full">
+                <div className="flex flex-col h-full">
                     <AddNewItem />
                     <ShoppingListTitle
                         editing={editing}
