@@ -137,12 +137,12 @@ const Item: React.FC<PropTypes> = ({ data, category, history }) => {
                     ) : null}
                 </h4>
             </button>
-            <div
-                className="hover:text-primary transition-colors duration-300 text-black px-0"
-                onClick={addItemToShopList}
-            >
-                <MdAdd className="text-gray-light" size={24} />
-            </div>
+            <button className="m-2" onClick={addItemToShopList}>
+                <MdAdd
+                    className="text-gray-light hover:text-primary transition-colors duration-300"
+                    size={24}
+                />
+            </button>
         </div>
     )
 }
