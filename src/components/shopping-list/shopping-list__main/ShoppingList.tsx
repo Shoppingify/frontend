@@ -248,11 +248,7 @@ const ShoppingList: React.FC = React.memo(() => {
 
     return (
         <div className="flex flex-col h-full overflow-hidden">
-            <div
-                className={`overflow-y-auto flex-auto ${
-                    shopList.length > 0 ? 'p-8' : 'px-8 pt-8'
-                }`}
-            >
+            <div className={`overflow-y-auto flex-auto p-8`}>
                 <div className="flex flex-col h-full">
                     <AddNewItem />
                     <ShoppingListTitle
@@ -267,7 +263,7 @@ const ShoppingList: React.FC = React.memo(() => {
 
             <div className="flex-none">
                 <AnimatePresence>
-                    {!editing && (
+                    {!editing && shopList.length > 0 && (
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
