@@ -45,13 +45,13 @@ const Navbar = () => {
     ]
 
     return (
-        <nav className="w-24 flex-none flex flex-col items-center mt-10">
+        <nav className="w-16 md:w-24 flex-none flex flex-col items-center my-2 lg:my-10">
             <UserMenu />
             <ul className="flex flex-col w-full h-full justify-center items-center">
                 {links.map((link, index: number) => (
                     <li className="w-full" key={index}>
                         <NavLink
-                            className="navbar__item"
+                            className="navbar__item lg:py-2"
                             data-tippy-content={link.name}
                             to={link.to}
                         >
