@@ -1,0 +1,13 @@
+{
+    "status": "success",
+    "data": [
+        {
+            "id": 379,
+            "name": "Communist Indigo Daniele",
+            "user_id": 103,
+            "status": "active",
+            "created_at": "2020-09-15T14:24:08.896Z",
+            "updated_at": "2020-09-15T14:24:08.896Z"
+        }
+    ]
+}

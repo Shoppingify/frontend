@@ -1,0 +1,23 @@
+name: Runs unit and integration tests
+on:
+    pull_request:
+        types: [opened, synchronize]
+
+jobs:
+    build:
+        name: Run unit and integration test
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: Install dependencies
+              uses: borales/actions-yarn@v2.0.0
+              with:
+                  cmd: install # will run `yarn install` command
+            - name: Build the production version of the app
+              uses: borales/actions-yarn@v2.0.0
+              with:
+                  cmd: build # will run `yarn build` command
+            - name: Run unit and integration tests
+              uses: borales/actions-yarn@v2.0.0
+              with:
+                  cmd: test # will run `yarn test` command

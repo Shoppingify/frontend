@@ -1,0 +1,7 @@
+{
+    "status": "success",
+    "data": {
+        "user": { "id": 103, "email": "Willa86@hotmail.com" },
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoxMDMsImVtYWlsIjoiV2lsbGE4NkBob3RtYWlsLmNvbSJ9LCJpYXQiOjE2MDAyNTI2OTgsImV4cCI6MTYwMDg1NzQ5OH0.59AsdHCLmxhug6nJP1hzJeH7HTElcOMCdIHSIYaVYMo"
+    }
+}
