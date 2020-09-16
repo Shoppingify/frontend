@@ -126,9 +126,9 @@ const Item: React.FC<PropTypes> = ({ data, category, history }) => {
     }
 
     return (
-        <div className="relative m-2 bg-white overflow-hidden shadow-item rounded-lg flex justify-between items-center">
-            <button className="p-3 m-1 w-full pr-24" onClick={showItem}>
-                <h4 className="font-medium text-left">
+        <div className="p-3 bg-white overflow-hidden shadow-item rounded-lg flex justify-between items-center">
+            <button className="break-all -" onClick={showItem}>
+                <h4 className="font-medium text-left break-all">
                     {data.name}{' '}
                     {history ? (
                         <span className="text-primary text-sm font-bold mx-1">
@@ -137,16 +137,12 @@ const Item: React.FC<PropTypes> = ({ data, category, history }) => {
                     ) : null}
                 </h4>
             </button>
-            <Button
-                className="m-2 hover:text-primary transition-colors duration-300 text-black absolute right-0"
-                onClick={addItemToShopList}
-                style={{
-                    height: 'fit-content',
-                    width: 'fit-content',
-                }}
-            >
-                <MdAdd size={24} />
-            </Button>
+            <button className="m-2" onClick={addItemToShopList}>
+                <MdAdd
+                    className="text-gray-light hover:text-primary transition-colors duration-300"
+                    size={24}
+                />
+            </button>
         </div>
     )
 }

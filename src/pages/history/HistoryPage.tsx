@@ -87,7 +87,7 @@ const HistoryPage = () => {
     }, [historyListsRefresh])
 
     return (
-        <div className="flex flex-col px-10 bg-gray-extra-light h-full">
+        <div className="flex flex-col px-2 lg:px-5 bg-gray-extra-light h-full">
             <h1 className="text-2xl font-bold pt-8">Shopping History</h1>
 
             {/* TODO: Make a proper loader */}
