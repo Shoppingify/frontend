@@ -21,18 +21,21 @@ import {
     shopListInfoState,
 } from '../../../global-state/shopListState'
 
+// Assets
+import ShoppingAppSVG from '../../../assets/undraw_shopping_app_flsj.svg'
+
 // Components
 import ShoppingListItem from '../shopping-list__item/ShoppingListItem'
 import ShoppingListTitle from './ShoppingListTitle'
 import ShoppingListStatusModal from './ShoppingListStatusModal'
 import Heading from '../../heading/Heading'
+import AddNewItem from '../../add-item/AddNewItemCTA'
 
 // Types
 import { ItemType } from '../../../types/items/types'
 import { shopListInfoStateInterface } from '../../../types/state/shoppingListTypes'
 import { historyListsRefreshState } from '../../../global-state/miscState'
 import { currentItemState } from '../../../global-state/currentItemState'
-import AddNewItem from '../../add-item/AddNewItemCTA'
 
 // Name generator
 const nameConfig: Config = {
@@ -281,6 +284,12 @@ const ShoppingList: React.FC = React.memo(() => {
                         })}
                     </div>
                 ))}
+                {/* Handle no items in shopping list */}
+                {shopList.length < 1 && (
+                    <div className="w-full h-full">
+                        <ShoppingAppSVG style={{ transform: 'scale(0.5)' }} />
+                    </div>
+                )}
             </div>
 
             <div className="flex-none">
