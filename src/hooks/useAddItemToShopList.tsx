@@ -1,7 +1,14 @@
+// Libs
 import { toast } from 'react-toastify'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
+
+// Api client
 import client from '../api/client'
+
+// Global state
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { shopListInfoState, shopListState } from '../global-state/shopListState'
+
+// Types
 import { ItemType } from '../types/items/types'
 
 const useAddItemToShopList = () => {
