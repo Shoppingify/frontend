@@ -57,8 +57,6 @@ describe('Edit category', () => {
         cy.get('input[name="category"]').type('a')
 
         cy.get('.mb-4 > .flex > svg').click()
-        cy.get('span').contains(
-            'The category needs to have at least 2 characters'
-        )
+        cy.get('span').contains('category must be at least 2 characters')
     })
 })

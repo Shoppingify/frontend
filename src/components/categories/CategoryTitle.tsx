@@ -28,7 +28,7 @@ const CategoryTitle = ({
         setErrors(null)
 
         if (name.length < 2) {
-            setErrors('The category needs to have at least 2 characters')
+            setErrors('category must be at least 2 characters')
             return
         }
         try {
