@@ -15,6 +15,22 @@ const useAddItemToShopList = () => {
     const setShopList = useSetRecoilState(shopListState)
     const shopListInfo = useRecoilValue(shopListInfoState)
 
+    const storeItemInDb = (id: number) => {
+        client
+            .post(`lists/${shopListInfo.activeListId}/items`, {
+                item_id: id,
+                list_id: shopListInfo.activeListId,
+            })
+            .then((response) => {
+                console.log(response)
+                toast.success('Item added to the list')
+            })
+            .catch((error) => {
+                console.log(error)
+                toast.error('Something went wrong! List only updated locally')
+            })
+    }
+
     return (itemData: ItemType) => {
         setShopList((current: any) => {
             const currentItem: ItemType = {
@@ -22,6 +38,8 @@ const useAddItemToShopList = () => {
             }
 
             const { id, categoryName } = currentItem
+
+            // Create a copy of current state of shop list
             const newItems = JSON.parse(JSON.stringify(current))
 
             // In current state check if object with category clicked already exists
@@ -41,50 +59,25 @@ const useAddItemToShopList = () => {
                 // Item already present in category.items
                 if (itemIndex > -1) {
                     newItems[catIndex].items[itemIndex].quantity += 1
+                    return newItems
                 } else {
                     newItems[catIndex].items.push({
                         ...currentItem,
                         quantity: 1,
                     })
-                    // send post to api to add new item
-                    // Using async causes the setShopList to break
-                    client
-                        .post(`lists/${shopListInfo.activeListId}/items`, {
-                            item_id: id,
-                            list_id: shopListInfo.activeListId,
-                        })
-                        .then((response) => {
-                            toast.success('Item added to the list')
-                        })
-                        .catch((error) => {
-                            toast.error(
-                                'Something went wrong! List only updated locally'
-                            )
-                        })
+                    //@ts-ignore
+                    storeItemInDb(id)
                 }
-            } else {
-                // send post to api to add new item
-                // Using async causes the setShopList to break
-                client
-                    .post(`lists/${shopListInfo.activeListId}/items`, {
-                        item_id: id,
-                        list_id: shopListInfo.activeListId,
-                    })
-                    .then((response) => {
-                        toast.success('Item added to the list')
-                    })
-                    .catch((error) => {
-                        toast.error(
-                            'Something went wrong! List only updated locally'
-                        )
-                    })
-
-                // Push to new items array
-                newItems.push({
-                    category: categoryName,
-                    items: [{ ...currentItem, quantity: 1 }],
-                })
             }
+            // send post to api to add new item
+            //@ts-ignore
+            storeItemInDb(id)
+
+            // Push to new items array
+            newItems.push({
+                category: categoryName,
+                items: [{ ...currentItem, quantity: 1 }],
+            })
 
             return newItems
         })
