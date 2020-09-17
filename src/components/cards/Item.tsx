@@ -21,6 +21,7 @@ import client from '../../api/client'
 
 // Types
 import { ItemType } from '../../types/items/types'
+import useAddItemToShopList from '../../hooks/useAddItemToShopList'
 
 // Prop types
 type PropTypes = {
@@ -40,6 +41,9 @@ const Item: React.FC<PropTypes> = ({ data, category, history }) => {
     const setCurrentItem = useSetRecoilState(currentItemState)
     const shopListInfo = useRecoilValue(shopListInfoState)
 
+    // Hooks
+    const addItemToShopList = useAddItemToShopList()
+
     /**
      * Loads the item in the sidebar
      */
@@ -49,80 +53,10 @@ const Item: React.FC<PropTypes> = ({ data, category, history }) => {
     }, [])
 
     /**
-     * Adds the item to the shopping list
+     * Handles adding item to shopping list
      */
-    const addItemToShopList = () => {
-        setShopList((current: any) => {
-            const currentItem: ItemType = {
-                ...data,
-                quantity: 1,
-                categoryName: category,
-            }
-
-            const { id } = currentItem
-            const newItems = JSON.parse(JSON.stringify(current))
-
-            // In current state check if object with category clicked already exists
-            const catIndex = current.findIndex(
-                (x: any) => x.category === category
-            )
-
-            // Category already present in the state
-            if (catIndex > -1) {
-                // Try to find item in category.items
-                const itemIndex = current[catIndex].items.findIndex(
-                    (item: ItemType) => {
-                        return item.id === id
-                    }
-                )
-
-                // Item already present in category.items
-                if (itemIndex > -1) {
-                    newItems[catIndex].items[itemIndex].quantity += 1
-                } else {
-                    newItems[catIndex].items.push(currentItem)
-                    // send post to api to add new item
-                    // Using async causes the setShopList to break
-                    client
-                        .post(`lists/${shopListInfo.activeListId}/items`, {
-                            item_id: id,
-                            list_id: shopListInfo.activeListId,
-                        })
-                        .then((response) => {
-                            toast.success('Item added to the list')
-                        })
-                        .catch((error) => {
-                            toast.error(
-                                'Something went wrong! List only updated locally'
-                            )
-                        })
-                }
-            } else {
-                // send post to api to add new item
-                // Using async causes the setShopList to break
-                client
-                    .post(`lists/${shopListInfo.activeListId}/items`, {
-                        item_id: id,
-                        list_id: shopListInfo.activeListId,
-                    })
-                    .then((response) => {
-                        toast.success('Item added to the list')
-                    })
-                    .catch((error) => {
-                        toast.error(
-                            'Something went wrong! List only updated locally'
-                        )
-                    })
-
-                // Push to new items array
-                newItems.push({
-                    category: category,
-                    items: [currentItem],
-                })
-            }
-
-            return newItems
-        })
+    const handleAddItem = () => {
+        addItemToShopList(data)
     }
 
     return (
@@ -137,7 +71,7 @@ const Item: React.FC<PropTypes> = ({ data, category, history }) => {
                     ) : null}
                 </h4>
             </button>
-            <button className="m-2" onClick={addItemToShopList}>
+            <button className="m-2" onClick={handleAddItem}>
                 <MdAdd
                     className="text-gray-light hover:text-primary transition-colors duration-300"
                     size={24}
