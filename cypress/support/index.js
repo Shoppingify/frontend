@@ -18,3 +18,24 @@ import './commands'
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+Cypress.Commands.add('login', () => {
+    cy.visit('http://localhost:8080/login')
+    cy.get('input[name="email"]').type('admin@test.fr')
+    cy.get('input[name="password"]').type('password')
+
+    cy.server()
+    cy.fixture('loginResponse.json')
+        .as('loginResponse')
+        .then((json) => {
+            window.localStorage.setItem('token', json.data.token)
+        })
+    cy.route('POST', '/api/login', '@loginResponse')
+
+    cy.get('form').submit()
+})
+
+Cypress.on('uncaught:exception', (err, runnable) => {
+    // returning false here prevents Cypress from
+    // failing the test
+    return false
+})
