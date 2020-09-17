@@ -15,6 +15,9 @@ const useAddItemToShopList = () => {
     const setShopList = useSetRecoilState(shopListState)
     const shopListInfo = useRecoilValue(shopListInfoState)
 
+    /**
+     * Makes a POST request to store item in the database under the active list
+     */
     const storeItemInDb = (id: number) => {
         client
             .post(`lists/${shopListInfo.activeListId}/items`, {
@@ -33,11 +36,13 @@ const useAddItemToShopList = () => {
 
     return (itemData: ItemType) => {
         setShopList((current: any) => {
+            console.log(current)
             const currentItem: ItemType = {
                 ...itemData,
+                quantity: 1,
             }
-
-            const { id, categoryName } = currentItem
+            // Id cant be undefined
+            const { id = -1, categoryName } = currentItem
 
             // Create a copy of current state of shop list
             const newItems = JSON.parse(JSON.stringify(current))
@@ -59,25 +64,20 @@ const useAddItemToShopList = () => {
                 // Item already present in category.items
                 if (itemIndex > -1) {
                     newItems[catIndex].items[itemIndex].quantity += 1
-                    return newItems
                 } else {
-                    newItems[catIndex].items.push({
-                        ...currentItem,
-                        quantity: 1,
-                    })
-                    //@ts-ignore
+                    newItems[catIndex].items.push(currentItem)
                     storeItemInDb(id)
                 }
-            }
-            // send post to api to add new item
-            //@ts-ignore
-            storeItemInDb(id)
+            } else {
+                // send post to api to add new item
+                storeItemInDb(id)
 
-            // Push to new items array
-            newItems.push({
-                category: categoryName,
-                items: [{ ...currentItem, quantity: 1 }],
-            })
+                // Push to new items array
+                newItems.push({
+                    category: categoryName,
+                    items: [currentItem],
+                })
+            }
 
             return newItems
         })
