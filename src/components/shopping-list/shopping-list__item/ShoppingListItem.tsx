@@ -206,7 +206,6 @@ const ShoppingListItem: React.FC<PropTypes> = React.memo(
 
                 setShopList(itemsData)
             } catch (error) {
-                // TODO Handle notifications
                 toast.error('An error occured')
                 console.log(error)
             }
@@ -217,7 +216,7 @@ const ShoppingListItem: React.FC<PropTypes> = React.memo(
                 variants={itemVariants}
                 initial="hidden"
                 animate="show"
-                className="flex justify-between items-center mb-4 xl:flex-wrap group pl-2"
+                className="flex justify-between items-center mb-6 xl:flex-wrap group pl-2 relative"
             >
                 <label
                     className={`flex items-center relative ${
