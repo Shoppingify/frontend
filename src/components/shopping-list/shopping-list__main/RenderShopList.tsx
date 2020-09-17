@@ -9,6 +9,9 @@ import { shopListState } from '../../../global-state/shopListState'
 import Heading from '../../heading/Heading'
 import ShoppingListItem from '../shopping-list__item/ShoppingListItem'
 
+// Assets
+import ShoppingAppSVG from '../../../assets/undraw_shopping_app_flsj.svg'
+
 // Types
 type PropTypes = {
     editing: boolean
