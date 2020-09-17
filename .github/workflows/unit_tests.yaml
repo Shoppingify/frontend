@@ -8,15 +8,11 @@ jobs:
         name: Run unit and integration test
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v2 # will run `yarn build` command
             - name: Install dependencies
               uses: borales/actions-yarn@v2.0.0
               with:
                   cmd: install # will run `yarn install` command
-            - name: Build the production version of the app
-              uses: borales/actions-yarn@v2.0.0
-              with:
-                  cmd: build # will run `yarn build` command
             - name: Run unit and integration tests
               uses: borales/actions-yarn@v2.0.0
               with:

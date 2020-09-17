@@ -22,17 +22,15 @@ import {
 } from '../../../global-state/shopListState'
 
 // Components
-import ShoppingListItem from '../shopping-list__item/ShoppingListItem'
 import ShoppingListTitle from './ShoppingListTitle'
 import ShoppingListStatusModal from './ShoppingListStatusModal'
-import Heading from '../../heading/Heading'
+import AddNewItem from '../../add-item/AddNewItemCTA'
+import RenderShopList from './RenderShopList'
 
 // Types
 import { ItemType } from '../../../types/items/types'
 import { shopListInfoStateInterface } from '../../../types/state/shoppingListTypes'
 import { historyListsRefreshState } from '../../../global-state/miscState'
-import { currentItemState } from '../../../global-state/currentItemState'
-import AddNewItem from '../../add-item/AddNewItemCTA'
 
 // Name generator
 const nameConfig: Config = {
@@ -57,7 +55,7 @@ type activeListData = {
  */
 const ShoppingList: React.FC = React.memo(() => {
     // Global state
-    const [shopList, setShopList] = useRecoilState(shopListState)
+    const setShopList = useSetRecoilState(shopListState)
     const [shopListInfo, setShopListInfoState] = useRecoilState(
         shopListInfoState
     )
@@ -258,29 +256,7 @@ const ShoppingList: React.FC = React.memo(() => {
                     setEditing={handleSetEditing}
                     shopListName={shopListName}
                 />
-
-                {shopList.map((category: any, index: number) => (
-                    <div key={index} className="mb-12">
-                        <Heading level={3} className="text-gray-light mb-6">
-                            {category.category}
-                        </Heading>
-                        {category.items.map((item: any, indexItem: number) => {
-                            return (
-                                <ShoppingListItem
-                                    key={`${item.name}__${indexItem}`}
-                                    quantity={item.quantity}
-                                    name={item.name}
-                                    category={item.categoryName}
-                                    item_id={item.id}
-                                    editing={editing}
-                                    done={item.done}
-                                    catIndex={index}
-                                    itemIndex={indexItem}
-                                />
-                            )
-                        })}
-                    </div>
-                ))}
+                <RenderShopList editing={editing} />
             </div>
 
             <div className="flex-none">
