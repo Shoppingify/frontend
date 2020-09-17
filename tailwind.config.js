@@ -41,6 +41,9 @@ module.exports = {
             boxShadow: {
                 item: '0px 2px 12px rgba(0, 0, 0, 0.05);',
             },
+            spacing: {
+                71: '17.75rem',
+            },
         },
     },
 }
