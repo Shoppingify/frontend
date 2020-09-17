@@ -9,19 +9,21 @@ import { shopListState } from '../../../global-state/shopListState'
 import Heading from '../../heading/Heading'
 import ShoppingListItem from '../shopping-list__item/ShoppingListItem'
 
-// Assets
-import ShoppingAppSVG from '../../../assets/undraw_shopping_app_flsj.svg'
-
 // Types
 type PropTypes = {
     editing: boolean
 }
 
-const RenderShopList: React.FC<PropTypes> = ({ editing }) => {
+const RenderShopList: React.FC<PropTypes> = React.memo(({ editing }) => {
     const shopList = useRecoilValue(shopListState)
 
     return (
-        <>
+        <motion.div
+            key="renderWithItems"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, transition: { delay: 0.5 } }}
+        >
             {shopList.map((category: any, index: number) => (
                 <div key={index} className="mb-12">
                     <Heading level={3} className="text-gray-light mb-6">
@@ -47,45 +49,8 @@ const RenderShopList: React.FC<PropTypes> = ({ editing }) => {
                     </ul>
                 </div>
             ))}
-            {/* Handle no items in shopping list */}
-            <AnimatePresence exitBeforeEnter>
-                {shopList.length === 0 && (
-                    <div className="w-full flex flex-wrap flex-grow items-end overflow-x-hidden">
-                        <div className="w-full flex justify-center items-center">
-                            <motion.p
-                                initial={{ opacity: 0 }}
-                                exit={{
-                                    opacity: 0,
-                                    transition: { delay: 0 },
-                                }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 0.5 }}
-                                className="font-bold text-xl"
-                            >
-                                No items
-                            </motion.p>
-                        </div>
-                        <motion.div
-                            initial={{ x: 100, opacity: 0 }}
-                            animate={{ x: 0, opacity: 1 }}
-                            exit={{
-                                x: 100,
-                                opacity: 0,
-                                transition: { delay: 0 },
-                            }}
-                            transition={{ delay: 0.5 }}
-                            className="w-full"
-                            style={{ height: 'fit-content' }}
-                        >
-                            <ShoppingAppSVG
-                                style={{ transform: 'scaleX(-1)' }}
-                            />
-                        </motion.div>
-                    </div>
-                )}
-            </AnimatePresence>
-        </>
+        </motion.div>
     )
-}
+})
 
 export default RenderShopList

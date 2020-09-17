@@ -31,6 +31,7 @@ import RenderShopList from './RenderShopList'
 import { ItemType } from '../../../types/items/types'
 import { shopListInfoStateInterface } from '../../../types/state/shoppingListTypes'
 import { historyListsRefreshState } from '../../../global-state/miscState'
+import RenderNoItems from './RenderNoItems'
 
 // Name generator
 const nameConfig: Config = {
@@ -63,6 +64,7 @@ const ShoppingList: React.FC = React.memo(() => {
 
     // Local state
     const [editing, setEditing] = useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(false)
 
     // For shopping list title edit
     const [shopListName, setShopListName] = useState<string>('')
@@ -81,6 +83,7 @@ const ShoppingList: React.FC = React.memo(() => {
          */
         async function initialData() {
             try {
+                setLoading(true)
                 const response = await client.get('lists?status=active')
                 const {
                     data: listData,
@@ -94,8 +97,6 @@ const ShoppingList: React.FC = React.memo(() => {
                     // Active list found
                     const activeList = listData[0]
                     const activeListId = activeList.id
-
-                    console.log(activeList)
 
                     // Set global active list id
                     setShopListInfoState(
@@ -118,10 +119,12 @@ const ShoppingList: React.FC = React.memo(() => {
                     }: {
                         data: { items: ItemType[] }
                     } = await responseItems.data
-
                     setShopList(itemsData)
+                    setLoading(false)
                 }
             } catch (error) {
+                setLoading(false)
+                toast.error('There was an error fetching active list')
                 // TODO handle notifications
                 console.log(error)
             }
@@ -135,12 +138,6 @@ const ShoppingList: React.FC = React.memo(() => {
      */
     useEffect(() => {
         if (!mounted) return
-
-        toast.warning(
-            `Shopping list is currently in ${
-                editing ? 'editing' : 'shopping'
-            } mode`
-        )
 
         if (editing) {
             setOriginalShopListName(shopListName)
@@ -257,7 +254,13 @@ const ShoppingList: React.FC = React.memo(() => {
                         setEditing={handleSetEditing}
                         shopListName={shopListName}
                     />
-                    <RenderShopList editing={editing} />
+                    <AnimatePresence exitBeforeEnter>
+                        {shopList.length === 0 && !loading ? (
+                            <RenderNoItems />
+                        ) : (
+                            <RenderShopList editing={editing} />
+                        )}
+                    </AnimatePresence>
                 </div>
             </div>
 
