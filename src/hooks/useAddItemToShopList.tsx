@@ -42,7 +42,10 @@ const useAddItemToShopList = () => {
                 if (itemIndex > -1) {
                     newItems[catIndex].items[itemIndex].quantity += 1
                 } else {
-                    newItems[catIndex].items.push(currentItem)
+                    newItems[catIndex].items.push({
+                        ...currentItem,
+                        quantity: 1,
+                    })
                     // send post to api to add new item
                     // Using async causes the setShopList to break
                     client
