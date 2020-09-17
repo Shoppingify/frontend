@@ -2,6 +2,7 @@ import React from 'react'
 
 // Libs
 import { motion } from 'framer-motion'
+import { zoomLevel } from 'zoom-level'
 
 // Assets
 import ShoppingAppSVG from '../../../assets/undraw_shopping_app_flsj.svg'
@@ -13,7 +14,7 @@ const RenderNoItems = React.memo(() => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, x: 100 }}
-            className="w-full flex flex-wrap flex-grow items-center overflow-x-hidden relative pb-71"
+            className="w-full flex flex-wrap flex-grow items-center overflow-hidden relative pb-71"
         >
             <div className="w-full flex justify-center items-center">
                 <motion.p
@@ -32,9 +33,15 @@ const RenderNoItems = React.memo(() => {
                 initial={{ x: 100, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: 100, opacity: 0 }}
-                className="w-full absolute bottom-0 overflow-hidden"
+                className="w-full absolute bottom-0"
             >
-                <ShoppingAppSVG style={{ transform: 'scaleX(-1)' }} />
+                <div
+                    style={{
+                        transform: zoomLevel() !== 2 ? 'scale(0.75)' : '',
+                    }}
+                >
+                    <ShoppingAppSVG style={{ transform: 'scaleX(-1)' }} />
+                </div>
             </motion.div>
         </motion.div>
     )
