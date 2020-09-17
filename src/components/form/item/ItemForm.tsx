@@ -22,7 +22,7 @@ const ItemSchema = Yup.object().shape({
     name: Yup.string().required('Required'),
     note: Yup.string(),
     image: Yup.string().url(),
-    category: Yup.string().required('Required'),
+    category: Yup.string().min(2).required('Required'),
 })
 
 const ItemForm: React.FC = () => {

@@ -1,0 +1,181 @@
+{
+    "status": "success",
+    "data": {
+        "items": [
+            {
+                "category_id": 233,
+                "category": "Fruits and vegetables",
+                "items": [
+                    {
+                        "id": 3854,
+                        "list_id": 379,
+                        "done": true,
+                        "quantity": 1,
+                        "name": "quantify",
+                        "category_id": 233,
+                        "categoryName": "Fruits and vegetables"
+                    },
+                    {
+                        "id": 3859,
+                        "list_id": 379,
+                        "done": true,
+                        "quantity": 1,
+                        "name": "secondary",
+                        "category_id": 233,
+                        "categoryName": "Fruits and vegetables"
+                    },
+                    {
+                        "id": 3861,
+                        "list_id": 379,
+                        "done": true,
+                        "quantity": 1,
+                        "name": "Lithuania",
+                        "category_id": 233,
+                        "categoryName": "Fruits and vegetables"
+                    }
+                ]
+            },
+            {
+                "category_id": 234,
+                "category": "Meat and fish",
+                "items": [
+                    {
+                        "id": 3863,
+                        "list_id": 379,
+                        "done": true,
+                        "quantity": 2,
+                        "name": "Car",
+                        "category_id": 234,
+                        "categoryName": "Meat and fish"
+                    },
+                    {
+                        "id": 3866,
+                        "list_id": 379,
+                        "done": true,
+                        "quantity": 1,
+                        "name": "Avon",
+                        "category_id": 234,
+                        "categoryName": "Meat and fish"
+                    }
+                ]
+            },
+            {
+                "category_id": 235,
+                "category": "Beverages",
+                "items": [
+                    {
+                        "id": 3869,
+                        "list_id": 379,
+                        "done": true,
+                        "quantity": 1,
+                        "name": "e-tailers",
+                        "category_id": 235,
+                        "categoryName": "Beverages"
+                    },
+                    {
+                        "id": 3870,
+                        "list_id": 379,
+                        "done": false,
+                        "quantity": 1,
+                        "name": "SQL",
+                        "category_id": 235,
+                        "categoryName": "Beverages"
+                    },
+                    {
+                        "id": 3871,
+                        "list_id": 379,
+                        "done": true,
+                        "quantity": 1,
+                        "name": "SMTP",
+                        "category_id": 235,
+                        "categoryName": "Beverages"
+                    },
+                    {
+                        "id": 3873,
+                        "list_id": 379,
+                        "done": false,
+                        "quantity": 2,
+                        "name": "Liaison",
+                        "category_id": 235,
+                        "categoryName": "Beverages"
+                    },
+                    {
+                        "id": 3874,
+                        "list_id": 379,
+                        "done": false,
+                        "quantity": 3,
+                        "name": "Concrete",
+                        "category_id": 235,
+                        "categoryName": "Beverages"
+                    }
+                ]
+            },
+            {
+                "category_id": 236,
+                "category": "Sports",
+                "items": [
+                    {
+                        "id": 3877,
+                        "list_id": 379,
+                        "done": true,
+                        "quantity": 1,
+                        "name": "Towels",
+                        "category_id": 236,
+                        "categoryName": "Sports"
+                    },
+                    {
+                        "id": 3878,
+                        "list_id": 379,
+                        "done": true,
+                        "quantity": 1,
+                        "name": "Account",
+                        "category_id": 236,
+                        "categoryName": "Sports"
+                    }
+                ]
+            },
+            {
+                "category_id": 237,
+                "category": "Unbranded",
+                "items": [
+                    {
+                        "id": 3883,
+                        "list_id": 379,
+                        "done": true,
+                        "quantity": 1,
+                        "name": "Bike",
+                        "category_id": 237,
+                        "categoryName": "Unbranded"
+                    },
+                    {
+                        "id": 3884,
+                        "list_id": 379,
+                        "done": true,
+                        "quantity": 2,
+                        "name": "calculating",
+                        "category_id": 237,
+                        "categoryName": "Unbranded"
+                    },
+                    {
+                        "id": 3885,
+                        "list_id": 379,
+                        "done": true,
+                        "quantity": 2,
+                        "name": "Industrial",
+                        "category_id": 237,
+                        "categoryName": "Unbranded"
+                    },
+                    {
+                        "id": 3887,
+                        "list_id": 379,
+                        "done": false,
+                        "quantity": 1,
+                        "name": "Mount",
+                        "category_id": 237,
+                        "categoryName": "Unbranded"
+                    }
+                ]
+            }
+        ]
+    }
+}

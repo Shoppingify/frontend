@@ -26,6 +26,11 @@ const CategoryTitle = ({
 
     const saveCategory = async () => {
         setErrors(null)
+
+        if (name.length < 2) {
+            setErrors('category must be at least 2 characters')
+            return
+        }
         try {
             const res = await client.put(`categories/${category_id}`, { name })
             setEditMode(false)
