@@ -173,42 +173,45 @@ const ItemsPage: React.FC = () => {
                 animate="show"
                 className="overflow-y-auto px-3 md:px-5 lg:px-10"
             >
-                {filteredItems.map((listOfItems: ItemsWithCategories) => (
-                    <li key={uuidv4()} className="mb-10">
-                        {/* Category name component */}
-                        <CategoryTitle
-                            category={listOfItems.category}
-                            category_id={listOfItems.category_id}
-                            categoryUpdated={categoryUpdated}
-                        />
-                        <ul className="grid grid-cols-2 xl:grid-cols-3 gap-x-2 gap-y-6 w-full">
-                            {listOfItems.items.length > 0 &&
-                                listOfItems.items.map((item: ItemType) => (
-                                    <motion.li
-                                        variants={itemVariants}
-                                        key={uuidv4()}
-                                    >
-                                        <Item
-                                            data={item}
-                                            category={listOfItems.category}
-                                        />
-                                    </motion.li>
-                                ))}
+                {filteredItems.map(
+                    (listOfItems: ItemsWithCategories, index: number) => (
+                        <li key={index} className="mb-10">
+                            {/* Category name component */}
+                            <CategoryTitle
+                                category={listOfItems.category}
+                                category_id={listOfItems.category_id}
+                                categoryUpdated={categoryUpdated}
+                            />
+                            <ul className="grid grid-cols-2 xl:grid-cols-3 gap-x-2 gap-y-6 w-full">
+                                {listOfItems.items.length > 0 &&
+                                    listOfItems.items.map((item: ItemType) => (
+                                        <motion.li
+                                            variants={itemVariants}
+                                            key={uuidv4()}
+                                        >
+                                            <Item
+                                                data={item}
+                                                category={listOfItems.category}
+                                            />
+                                        </motion.li>
+                                    ))}
 
-                            {listOfItems.items.length === 0 && (
-                                <Button
-                                    modifier=""
-                                    onClick={() =>
-                                        addAnItem(listOfItems.category)
-                                    }
-                                    className="text-gray"
-                                >
-                                    Add an item
-                                </Button>
-                            )}
-                        </ul>
-                    </li>
-                ))}
+                                {listOfItems.items.length === 0 && (
+                                    <Button
+                                        modifier=""
+                                        onClick={() =>
+                                            addAnItem(listOfItems.category)
+                                        }
+                                        className="text-gray"
+                                    >
+                                        Add an item
+                                    </Button>
+                                )}
+                            </ul>
+                        </li>
+                    )
+                )}
+                {filteredItems.length === 0 && <h2>No Items found</h2>}
             </motion.ul>
         </div>
     )

@@ -16,6 +16,7 @@ import ShoppingList from '../shopping-list/shopping-list__main/ShoppingList'
 import AddItemSidebar from '../item-sidebars/AddItemSidebar'
 import ShowItemSidebar from '../item-sidebars/ShowItemSidebar'
 import AddNewItem from '../add-item/AddNewItemCTA'
+import { AnimatePresence, motion } from 'framer-motion'
 
 /**
  * Sidebar of the app
@@ -29,13 +30,44 @@ function Sidebar() {
     const selectSidebar = () => {
         switch (sidebarType) {
             case ADD_SHOPPING_LIST:
-                return <ShoppingList />
+                return (
+                    <motion.div
+                        key="shoppinglistkey"
+                        initial={{ x: 500 }}
+                        animate={{ x: 0 }}
+                        exit={{ x: 500 }}
+                    >
+                        <ShoppingList />
+                    </motion.div>
+                )
             case ADD_NEW_ITEM:
-                return <AddItemSidebar />
+                return (
+                    <motion.div
+                        key="additemkey"
+                        initial={{ x: 500 }}
+                        animate={{ x: 0 }}
+                        exit={{ x: 500 }}
+                    >
+                        <AddItemSidebar />
+                    </motion.div>
+                )
             case SHOW_ITEM:
-                return <ShowItemSidebar />
+                return (
+                    <motion.div
+                        key="showitemkey"
+                        initial={{ x: 500 }}
+                        animate={{ x: 0 }}
+                        exit={{ x: 500 }}
+                    >
+                        <ShowItemSidebar />
+                    </motion.div>
+                )
             default:
-                return <ShoppingList />
+                return (
+                    <motion.div key="shoppinglistkey" exit={{ x: 500 }}>
+                        <ShoppingList />
+                    </motion.div>
+                )
         }
     }
 
@@ -54,7 +86,7 @@ function Sidebar() {
             }`}
         >
             {/* <ShoppingList /> */}
-            {selectSidebar()}
+            <AnimatePresence exitBeforeEnter>{selectSidebar()}</AnimatePresence>
         </div>
     )
 }
