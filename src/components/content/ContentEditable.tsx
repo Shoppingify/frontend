@@ -1,11 +1,36 @@
+/**
+ * SOURCE: https://github.com/lovasoa/react-contenteditable
+ */
 import * as React from 'react'
+
+// Libs
 import deepEqual from 'fast-deep-equal'
 
-function normalizeHtml(str: string): string {
+// Types
+export type ContentEditableEvent = React.SyntheticEvent<any, Event> & {
+    target: { value: string }
+}
+type Modify<T, R> = Pick<T, Exclude<keyof T, keyof R>> & R
+type DivProps = Modify<
+    JSX.IntrinsicElements['div'],
+    { onChange: (event: ContentEditableEvent) => void }
+>
+
+export interface Props extends DivProps {
+    html: string
+    disabled?: boolean
+    tagName?: string
+    className?: string
+    style?: Object
+    innerRef?: React.RefObject<HTMLElement> | Function
+}
+
+// Helper functions
+const normalizeHtml = (str: string): string => {
     return str && str.replace(/&nbsp;|\u202F|\u00A0/g, ' ')
 }
 
-function replaceCaret(el: HTMLElement) {
+const replaceCaret = (el: HTMLElement) => {
     // Place the caret at the end of the element
     const target = document.createTextNode('')
     el.appendChild(target)
@@ -39,32 +64,6 @@ export default class ContentEditable extends React.Component<Props> {
             ? this.props.innerRef
             : this.el
         ).current
-
-    render() {
-        const { tagName, html, innerRef, ...props } = this.props
-
-        return React.createElement(
-            tagName || 'div',
-            {
-                ...props,
-                ref:
-                    typeof innerRef === 'function'
-                        ? (current: HTMLElement) => {
-                              innerRef(current)
-                              this.el.current = current
-                          }
-                        : innerRef || this.el,
-                onInput: this.emitChange,
-                onBlur: this.props.onBlur || this.emitChange,
-                onKeyUp: this.props.onKeyUp || this.emitChange,
-                onKeyDown: this.props.onKeyDown || this.emitChange,
-                contentEditable: !this.props.disabled,
-                dangerouslySetInnerHTML: { __html: html },
-            },
-            this.props.children
-        )
-    }
-
     shouldComponentUpdate(nextProps: Props): boolean {
         const { props } = this
         const el = this.getEl()
@@ -120,22 +119,28 @@ export default class ContentEditable extends React.Component<Props> {
         }
         this.lastHtml = html
     }
-}
+    render() {
+        const { tagName, html, innerRef, ...props } = this.props
 
-export type ContentEditableEvent = React.SyntheticEvent<any, Event> & {
-    target: { value: string }
-}
-type Modify<T, R> = Pick<T, Exclude<keyof T, keyof R>> & R
-type DivProps = Modify<
-    JSX.IntrinsicElements['div'],
-    { onChange: (event: ContentEditableEvent) => void }
->
-
-export interface Props extends DivProps {
-    html: string
-    disabled?: boolean
-    tagName?: string
-    className?: string
-    style?: Object
-    innerRef?: React.RefObject<HTMLElement> | Function
+        return React.createElement(
+            tagName || 'div',
+            {
+                ...props,
+                ref:
+                    typeof innerRef === 'function'
+                        ? (current: HTMLElement) => {
+                              innerRef(current)
+                              this.el.current = current
+                          }
+                        : innerRef || this.el,
+                onInput: this.emitChange,
+                onBlur: this.props.onBlur || this.emitChange,
+                onKeyUp: this.props.onKeyUp || this.emitChange,
+                onKeyDown: this.props.onKeyDown || this.emitChange,
+                contentEditable: !this.props.disabled,
+                dangerouslySetInnerHTML: { __html: html },
+            },
+            this.props.children
+        )
+    }
 }
