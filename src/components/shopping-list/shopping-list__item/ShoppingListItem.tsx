@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 // Libs
 import { motion, AnimatePresence } from 'framer-motion'
@@ -28,18 +28,7 @@ interface PropTypes {
     done: boolean
     catIndex: number
     itemIndex: number
-}
-
-// Framer motion variants - animations
-const itemVariants = {
-    hidden: {
-        y: 100,
-        opacity: 0,
-    },
-    show: {
-        y: 0,
-        opacity: 1,
-    },
+    bottom: number
 }
 // TODO refactor into components
 /**
@@ -52,7 +41,16 @@ const itemVariants = {
  *  @param {boolean} editing
  */
 const ShoppingListItem: React.FC<PropTypes> = React.memo(
-    ({ name, quantity, item_id, editing, done, catIndex, itemIndex }) => {
+    ({
+        name,
+        quantity,
+        item_id,
+        editing,
+        done,
+        catIndex,
+        itemIndex,
+        bottom,
+    }) => {
         // Local state
         const [mounted, setMounted] = useState(false)
 
@@ -60,11 +58,17 @@ const ShoppingListItem: React.FC<PropTypes> = React.memo(
         const shopListInfo = useRecoilValue(shopListInfoState)
         const setShopList = useSetRecoilState(shopListState)
 
+        // Ref
+        const itemRef = useRef(document.createElement('div'))
+
         /**
          * Effect runs on component mount
          */
         useEffect(() => {
             setMounted(true)
+            console.log(itemRef.current)
+            console.log(itemRef.current.getBoundingClientRect().top)
+            console.log(`Bottom of the render list: ${bottom}`)
         }, [])
 
         /**
@@ -212,10 +216,8 @@ const ShoppingListItem: React.FC<PropTypes> = React.memo(
         }, [])
 
         return (
-            <motion.div
-                variants={itemVariants}
-                initial="hidden"
-                animate="show"
+            <div
+                ref={itemRef}
                 className="flex justify-between items-center mb-6 xl:flex-wrap group pl-2 relative"
             >
                 <label
@@ -257,7 +259,7 @@ const ShoppingListItem: React.FC<PropTypes> = React.memo(
                     handleItemDelete={handleItemDelete}
                     handleInOrDecBtnClick={handleInOrDecBtnClick}
                 />
-            </motion.div>
+            </div>
         )
     }
 )

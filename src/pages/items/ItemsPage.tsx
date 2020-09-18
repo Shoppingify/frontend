@@ -15,21 +15,6 @@ import { shopListState } from '../../global-state/shopListState'
 import { ADD_NEW_ITEM, sidebarState } from '../../global-state/sidebarState'
 import { ItemType } from '../../types/items/types'
 
-const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-        opacity: 1,
-        transition: {
-            staggerChildren: 0.1,
-        },
-    },
-}
-
-const itemVariants = {
-    hidden: { opacity: 0 },
-    show: { opacity: 1 },
-}
-
 interface ItemsWithCategories {
     category_id: number
     category: string
@@ -158,12 +143,7 @@ function ItemsPage() {
                 </h1>
                 <SearchInput search={searchItems} />
             </div>
-            <motion.ul
-                variants={containerVariants}
-                initial="hidden"
-                animate="show"
-                className="overflow-y-auto px-3 md:px-5 lg:px-10"
-            >
+            <ul className="overflow-y-auto px-3 md:px-5 lg:px-10">
                 {filteredItems.map((listOfItems: ItemsWithCategories) => (
                     <li key={uuidv4()} className="mb-10">
                         {/* Category name component */}
@@ -174,17 +154,15 @@ function ItemsPage() {
                         />
                         <ul className="grid grid-cols-2 xl:grid-cols-3 gap-x-2 gap-y-6 w-full">
                             {listOfItems.items.length > 0 &&
-                                listOfItems.items.map((item: ItemType) => (
-                                    <motion.li
-                                        variants={itemVariants}
-                                        key={uuidv4()}
-                                    >
+                                listOfItems.items.map(
+                                    (item: ItemType, index: number) => (
                                         <Item
                                             data={item}
                                             category={listOfItems.category}
+                                            key={index}
                                         />
-                                    </motion.li>
-                                ))}
+                                    )
+                                )}
 
                             {listOfItems.items.length === 0 && (
                                 <Button
@@ -200,7 +178,7 @@ function ItemsPage() {
                         </ul>
                     </li>
                 ))}
-            </motion.ul>
+            </ul>
         </div>
     )
 }
