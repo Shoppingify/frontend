@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from 'react'
 
 // Libs
 import { MdCreate, MdClose } from 'react-icons/md'
+import ContentEditable from '../../content/ContentEditable'
 import Heading from '../../heading/Heading'
 
 // Types
@@ -36,20 +37,21 @@ const ShoppingListTitle: React.FC<PropTypes> = React.memo(
                     top: '-3rem',
                 }}
             >
-                {editing ? (
-                    <textarea
-                        style={{ height: `${headingHeight}px` }}
-                        className="font-bold text-2xl w-5/6 rounded-12 p-2"
-                        value={shopListName}
-                        onChange={setShopListName}
-                    />
-                ) : (
-                    <div className="height__ref w-7/8 p-2" ref={headingRef}>
-                        <Heading level={2} className="font-bold">
-                            {shopListName}
-                        </Heading>
-                    </div>
-                )}
+                <div className="w-7/8" ref={headingRef}>
+                    <Heading
+                        level={2}
+                        className={`font-bold rounded-lg p-2  ${
+                            editing ? 'bg-white shadow-lg' : ''
+                        }`}
+                    >
+                        <ContentEditable
+                            disabled={!editing}
+                            style={{ height: 'fit-content' }}
+                            html={shopListName}
+                            onChange={setShopListName}
+                        />
+                    </Heading>
+                </div>
                 <button
                     onClick={setEditing}
                     className="w-1/8 flex justify-center pt-2"

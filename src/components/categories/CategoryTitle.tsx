@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { MdModeEdit, MdSave } from 'react-icons/md'
 import client from '../../api/client'
 import Button from '../button/Button'
+import ContentEditable from '../content/ContentEditable'
+import Heading from '../heading/Heading'
 
 interface CategoryTitleProps {
     category: string
@@ -42,6 +44,7 @@ const CategoryTitle: React.FC<CategoryTitleProps> = ({
             const res = await client.put(`categories/${category_id}`, { name })
             setEditMode(false)
             categoryUpdated(res.data.data)
+            setErrors(null)
         } catch (e) {
             console.log('Error while updating the category', e)
             if (e.response && e.response.data) {
@@ -57,57 +60,44 @@ const CategoryTitle: React.FC<CategoryTitleProps> = ({
     const cancel = () => {
         setName(category)
         setEditMode(false)
+        setErrors(null)
     }
     return (
-        <>
-            {!editMode && (
-                <div className="group flex items-center mb-4">
-                    <h3
-                        onClick={toggleEditMode}
-                        className="text-lg font-bold mr-4 cursor-pointer"
-                    >
-                        {category}
-                    </h3>
-                    <MdModeEdit
-                        onClick={toggleEditMode}
-                        className={`${iconStyle} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
+        <div className="group flex items-center mb-4">
+            <Heading
+                level={2}
+                className={`font-bold mr-4 p-2 rounded-lg ${
+                    editMode ? 'bg-white border-gray-input shadow-item ' : ''
+                }`}
+            >
+                <ContentEditable
+                    disabled={!editMode}
+                    style={{ height: 'fit-content' }}
+                    html={name}
+                    onChange={(e: {
+                        target: { value: React.SetStateAction<string> }
+                    }) => setName(e.target.value)}
+                />
+            </Heading>
+            {editMode ? (
+                <>
+                    <MdSave
+                        className={`${iconStyle} mr-4 hover:text-primary transition-colors duration-300`}
+                        onClick={saveCategory}
                     />
-                </div>
+                    <Button modifier="" className="text-black" onClick={cancel}>
+                        Cancel
+                    </Button>
+                </>
+            ) : (
+                <MdModeEdit
+                    onClick={toggleEditMode}
+                    className={`${iconStyle} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
+                />
             )}
-            {editMode && (
-                <div className="mb-4">
-                    <div className="flex items-center">
-                        <input
-                            className="p-2 mr-4 rounded border border-gray-input"
-                            type="text"
-                            name="category"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            onKeyPress={(e) => {
-                                if (e.key === 'Enter') {
-                                    saveCategory()
-                                }
-                            }}
-                        />
 
-                        <MdSave
-                            className={`${iconStyle} mr-4 hover:text-primary transition-colors duration-300`}
-                            onClick={saveCategory}
-                        />
-                        <Button
-                            modifier=""
-                            className="text-black"
-                            onClick={cancel}
-                        >
-                            Cancel
-                        </Button>
-                    </div>
-                    {errors && (
-                        <span className="text-danger text-sm">{errors}</span>
-                    )}
-                </div>
-            )}
-        </>
+            {errors && <span className="text-danger text-sm">{errors}</span>}
+        </div>
     )
 }
 
