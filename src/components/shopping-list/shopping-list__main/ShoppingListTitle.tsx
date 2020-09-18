@@ -25,7 +25,7 @@ const ShoppingListTitle: React.FC<PropTypes> = React.memo(
                 <div className="w-7/8">
                     <Heading
                         level={2}
-                        className={`font-bold rounded-lg p-2  ${
+                        className={`font-bold rounded-lg ${
                             editing ? 'bg-white shadow-lg' : ''
                         }`}
                     >
@@ -34,6 +34,7 @@ const ShoppingListTitle: React.FC<PropTypes> = React.memo(
                             style={{ height: 'fit-content' }}
                             html={shopListName}
                             onChange={setShopListName}
+                            className="p-2"
                         />
                     </Heading>
                 </div>

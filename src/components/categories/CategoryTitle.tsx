@@ -66,7 +66,7 @@ const CategoryTitle: React.FC<CategoryTitleProps> = ({
         <div className="group flex items-center mb-4">
             <Heading
                 level={2}
-                className={`font-bold mr-4 p-2 rounded-lg ${
+                className={`font-bold mr-4 rounded-lg ${
                     editMode ? 'bg-white border-gray-input shadow-item ' : ''
                 }`}
             >
@@ -77,6 +77,7 @@ const CategoryTitle: React.FC<CategoryTitleProps> = ({
                     onChange={(e: {
                         target: { value: React.SetStateAction<string> }
                     }) => setName(e.target.value)}
+                    className="p-2"
                 />
             </Heading>
             {editMode ? (
