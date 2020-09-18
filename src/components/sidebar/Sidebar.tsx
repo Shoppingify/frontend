@@ -30,44 +30,13 @@ function Sidebar() {
     const selectSidebar = () => {
         switch (sidebarType) {
             case ADD_SHOPPING_LIST:
-                return (
-                    <motion.div
-                        key="shoppinglistkey"
-                        initial={{ x: 500 }}
-                        animate={{ x: 0 }}
-                        exit={{ x: 500 }}
-                    >
-                        <ShoppingList />
-                    </motion.div>
-                )
+                return <ShoppingList />
             case ADD_NEW_ITEM:
-                return (
-                    <motion.div
-                        key="additemkey"
-                        initial={{ x: 500 }}
-                        animate={{ x: 0 }}
-                        exit={{ x: 500 }}
-                    >
-                        <AddItemSidebar />
-                    </motion.div>
-                )
+                return <AddItemSidebar />
             case SHOW_ITEM:
-                return (
-                    <motion.div
-                        key="showitemkey"
-                        initial={{ x: 500 }}
-                        animate={{ x: 0 }}
-                        exit={{ x: 500 }}
-                    >
-                        <ShowItemSidebar />
-                    </motion.div>
-                )
+                return <ShowItemSidebar />
             default:
-                return (
-                    <motion.div key="shoppinglistkey" exit={{ x: 500 }}>
-                        <ShoppingList />
-                    </motion.div>
-                )
+                return <ShoppingList />
         }
     }
 
@@ -78,7 +47,7 @@ function Sidebar() {
 
     return (
         <div
-            className={`hidden lg:block w-sidebar relative flex-none overflow-y-auto ${
+            className={`hidden lg:block w-sidebar relative flex-none overflow-y-auto overflow-x-hidden ${
                 sidebarType === ADD_SHOPPING_LIST ||
                 sidebarType === SHOW_SHOPPING_LIST
                     ? 'bg-primary-light'

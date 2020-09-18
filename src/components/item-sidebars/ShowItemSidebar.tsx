@@ -14,6 +14,7 @@ import Button from '../button/Button'
 import { MdModeEdit } from 'react-icons/md'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import 'react-lazy-load-image-component/src/effects/blur.css'
+import { motion } from 'framer-motion'
 
 const ShowItemSidebar = () => {
     const [currentItem, setCurrentItem] = useRecoilState<ItemType | null>(
@@ -81,7 +82,13 @@ const ShowItemSidebar = () => {
     }
 
     return (
-        <div className="flex flex-col h-full justify-between p-8">
+        <motion.div
+            key="showitemkey"
+            initial={{ x: 500 }}
+            animate={{ x: 0 }}
+            exit={{ x: 500 }}
+            className="flex flex-col h-full justify-between p-8 overflow-hidden"
+        >
             <div>
                 <div className="flex w-full justify-between items-center mb-6">
                     <a
@@ -138,7 +145,7 @@ const ShowItemSidebar = () => {
                     Add to list
                 </Button>
             </div>
-        </div>
+        </motion.div>
     )
 }
 
