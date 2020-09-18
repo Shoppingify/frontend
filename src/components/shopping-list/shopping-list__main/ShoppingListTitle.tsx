@@ -15,21 +15,6 @@ type PropTypes = {
 
 const ShoppingListTitle: React.FC<PropTypes> = React.memo(
     ({ editing, shopListName, setShopListName, setEditing }) => {
-        // Ref for heading container
-        const headingRef = useRef(document.createElement('div'))
-
-        // Local state
-        const [headingHeight, setHeadingHeight] = useState(0)
-
-        /**
-         * Effect runs on shopping list name change and if editing
-         * Updates the headingHeight state
-         */
-        useEffect(() => {
-            if (headingRef.current === null) return
-            setHeadingHeight(headingRef.current.getBoundingClientRect().height)
-        }, [shopListName, editing])
-
         return (
             <div
                 className="flex justify-between mb-8 pr-2 sticky bg-primary-light pt-4 z-30"
@@ -37,7 +22,7 @@ const ShoppingListTitle: React.FC<PropTypes> = React.memo(
                     top: '-3rem',
                 }}
             >
-                <div className="w-7/8" ref={headingRef}>
+                <div className="w-7/8">
                     <Heading
                         level={2}
                         className={`font-bold rounded-lg p-2  ${
