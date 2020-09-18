@@ -17,6 +17,7 @@ const shopListInfoStateConst: shopListInfoStateType = {
     default: {
         activeListId: -1,
         status: 'active',
+        name: 'No shopping list found',
     },
 }
 
