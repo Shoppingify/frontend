@@ -1,14 +1,14 @@
-import React from 'react';
+import React from 'react'
 
 /**
  * Simple statistics page component
  */
-function StatisticsPage() {
-  return (
-    <div>
-      <h1 className="text-4xl">Stats page</h1>
-    </div>
-  );
+const StatisticsPage: React.FC = () => {
+    return (
+        <div>
+            <h1 className="text-4xl">Stats page</h1>
+        </div>
+    )
 }
 
-export default StatisticsPage;
+export default StatisticsPage

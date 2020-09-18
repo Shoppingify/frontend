@@ -11,13 +11,13 @@ interface PropTypes {
 /**
  * Loading button component
  */
-const LoadingButton = ({
+const LoadingButton: React.FC<PropTypes> = ({
     text,
     type,
     loading,
     className,
     ...rest
-}: PropTypes) => {
+}) => {
     return (
         <button
             {...rest}

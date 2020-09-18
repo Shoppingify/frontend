@@ -11,19 +11,26 @@ interface CategoryTitleProps {
 
 const iconStyle = 'text-2xl cursor-pointer'
 
-const CategoryTitle = ({
+const CategoryTitle: React.FC<CategoryTitleProps> = ({
     category,
     category_id,
     categoryUpdated,
-}: CategoryTitleProps) => {
+}) => {
+    // Local state
     const [editMode, setEditMode] = useState(false)
     const [name, setName] = useState(category)
     const [errors, setErrors] = useState<string | null>(null)
 
+    /**
+     * Makes the category title editable
+     */
     const toggleEditMode = () => {
         setEditMode((editMode) => (editMode = !editMode))
     }
 
+    /**
+     * Save category name to the db
+     */
     const saveCategory = async () => {
         setErrors(null)
 

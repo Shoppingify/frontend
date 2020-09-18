@@ -1,20 +1,29 @@
-import { motion } from 'framer-motion'
 import React, { useEffect, useState } from 'react'
+
 // Libs
 import { useRecoilState, useSetRecoilState } from 'recoil/dist'
 import { v4 as uuidv4 } from 'uuid'
+import { motion } from 'framer-motion'
+
+// Api client
 import client from '../../api/client'
+
+// Components
 import Button from '../../components/button/Button'
 import Item from '../../components/cards/Item'
 import CategoryTitle from '../../components/categories/CategoryTitle'
 import SearchInput from '../../components/form-elements/SearchInput'
-import AddItemSidebar from '../../components/item-sidebars/AddItemSidebar'
+
+// Global state
 import { currentItemState } from '../../global-state/currentItemState'
 import { itemsState } from '../../global-state/itemsState'
 import { shopListState } from '../../global-state/shopListState'
 import { ADD_NEW_ITEM, sidebarState } from '../../global-state/sidebarState'
+
+// Types
 import { ItemType } from '../../types/items/types'
 
+// Animation variants
 const containerVariants = {
     hidden: { opacity: 0 },
     show: {
@@ -40,7 +49,7 @@ interface ItemsWithCategories {
 /**
  * Simple items page component
  */
-function ItemsPage() {
+const ItemsPage: React.FC = () => {
     // Local state
     const [itemsWithCategories, setItemsWithCategories] = useRecoilState(
         itemsState

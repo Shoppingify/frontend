@@ -31,7 +31,9 @@ const iconStyle = {
 /**
  * @param {ListProps} list
  */
-const List = ({ list: { id, name, status, created_at } }: ListProps) => {
+const List: React.FC<ListProps> = ({
+    list: { id, name, status, created_at },
+}) => {
     /**
      * Format the date
      * @param date
