@@ -23,6 +23,7 @@ export interface Props extends DivProps {
     className?: string
     style?: Object
     innerRef?: React.RefObject<HTMLElement> | Function
+    enterPressCallback?: any
 }
 
 // Helper functions
@@ -107,9 +108,10 @@ export default class ContentEditable extends React.Component<Props> {
         if (!el) return
 
         //@ts-ignore
-        if (originalEvt.keyCode === undefined || originalEvt.keyCode === 13) {
+        if (originalEvt.keyCode === 13) {
             console.log('enter was pressed')
             originalEvt.preventDefault()
+            this.props.enterPressCallback()
         }
 
         const html = el.innerHTML

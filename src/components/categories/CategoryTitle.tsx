@@ -85,6 +85,7 @@ const CategoryTitle: React.FC<CategoryTitleProps> = ({
                         target: { value: React.SetStateAction<string> }
                     }) => setName(e.target.value)}
                     className="p-2"
+                    enterPressCallback={saveCategory}
                 />
             </Heading>
             {editMode ? (
