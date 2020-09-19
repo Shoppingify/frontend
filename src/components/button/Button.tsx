@@ -21,7 +21,7 @@ const btnModifiers: btnModifiersTypes = {
  * Renders a button element
  *
  */
-function Button(props: PropTypes) {
+const Button: React.FC<PropTypes> = (props) => {
     // Destructure props
     const { modifier = '', disabled } = props
 

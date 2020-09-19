@@ -6,7 +6,7 @@ import LoginForm from '../../components/form/auth/LoginForm'
 /**
  * Simple homepage component
  */
-function Home() {
+const Home: React.FC = () => {
     return (
         <div>
             <h1>Homepage</h1>

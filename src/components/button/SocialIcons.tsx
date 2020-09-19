@@ -11,7 +11,7 @@ import { RiFacebookCircleFill } from 'react-icons/ri'
 // Components
 import Button from './Button'
 
-const SocialIcons = () => {
+const SocialIcons: React.FC = () => {
     const showAlert = () => {
         alert(
             "Try Github instead ;). Didn't implemented other social network yet ;)"

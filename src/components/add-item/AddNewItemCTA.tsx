@@ -12,7 +12,7 @@ import Heading from '../heading/Heading'
 // Assets
 import SupermarketSVG from '../../assets/supermarket.svg'
 
-const AddNewItem = React.memo(() => {
+const AddNewItem: React.FC = React.memo(() => {
     // Global state
     const setSidebarType = useSetRecoilState(sidebarState)
     const setCurrentItem = useSetRecoilState(currentItemState)

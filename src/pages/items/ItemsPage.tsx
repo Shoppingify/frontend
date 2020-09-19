@@ -1,19 +1,43 @@
-import { motion } from 'framer-motion'
 import React, { useEffect, useState } from 'react'
+
 // Libs
 import { useRecoilState, useSetRecoilState } from 'recoil/dist'
 import { v4 as uuidv4 } from 'uuid'
+import { motion } from 'framer-motion'
+
+// Api client
 import client from '../../api/client'
+
+// Components
 import Button from '../../components/button/Button'
 import Item from '../../components/cards/Item'
 import CategoryTitle from '../../components/categories/CategoryTitle'
 import SearchInput from '../../components/form-elements/SearchInput'
-import AddItemSidebar from '../../components/item-sidebars/AddItemSidebar'
+
+// Global state
 import { currentItemState } from '../../global-state/currentItemState'
 import { itemsState } from '../../global-state/itemsState'
 import { shopListState } from '../../global-state/shopListState'
 import { ADD_NEW_ITEM, sidebarState } from '../../global-state/sidebarState'
+
+// Types
 import { ItemType } from '../../types/items/types'
+
+// Animation variants
+const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.1,
+        },
+    },
+}
+
+const itemVariants = {
+    hidden: { opacity: 0 },
+    show: { opacity: 1 },
+}
 
 interface ItemsWithCategories {
     category_id: number
@@ -25,14 +49,14 @@ interface ItemsWithCategories {
 /**
  * Simple items page component
  */
-function ItemsPage() {
+const ItemsPage: React.FC = () => {
     // Local state
     const [itemsWithCategories, setItemsWithCategories] = useRecoilState(
         itemsState
     )
     const setShopList = useSetRecoilState(shopListState)
     const [filteredItems, setFilteredItems] = useState([])
-    const [currentItem, setCurrentItem] = useRecoilState(currentItemState)
+    const setCurrentItem = useSetRecoilState(currentItemState)
     const setSidebarType = useSetRecoilState(sidebarState)
 
     useEffect(() => {
@@ -76,6 +100,7 @@ function ItemsPage() {
                 ...newLists[index],
                 items: newItems,
                 category: cat.name,
+                category_id: cat.id,
             }
             console.log('newLists', newLists)
             return newLists
@@ -96,11 +121,9 @@ function ItemsPage() {
         })
 
         // Update the categoryName on the currentItem
-        if (currentItem) {
-            setCurrentItem((old) => {
-                return { ...old, categoryName: cat.name }
-            })
-        }
+        setCurrentItem((old) => {
+            return old !== null ? { ...old, categoryName: cat.name } : old
+        })
     }
 
     /**
@@ -143,42 +166,58 @@ function ItemsPage() {
                 </h1>
                 <SearchInput search={searchItems} />
             </div>
-            <ul className="overflow-y-auto px-3 md:px-5 lg:px-10">
-                {filteredItems.map((listOfItems: ItemsWithCategories) => (
-                    <li key={uuidv4()} className="mb-10">
-                        {/* Category name component */}
-                        <CategoryTitle
-                            category={listOfItems.category}
-                            category_id={listOfItems.category_id}
-                            categoryUpdated={categoryUpdated}
-                        />
-                        <ul className="grid grid-cols-2 xl:grid-cols-3 gap-x-2 gap-y-6 w-full">
-                            {listOfItems.items.length > 0 &&
-                                listOfItems.items.map(
-                                    (item: ItemType, index: number) => (
-                                        <Item
-                                            data={item}
-                                            category={listOfItems.category}
-                                            key={index}
-                                        />
-                                    )
-                                )}
 
-                            {listOfItems.items.length === 0 && (
-                                <Button
-                                    modifier=""
-                                    onClick={() =>
-                                        addAnItem(listOfItems.category)
-                                    }
-                                    className="text-gray"
-                                >
-                                    Add an item
-                                </Button>
-                            )}
-                        </ul>
-                    </li>
-                ))}
-            </ul>
+            {filteredItems.length === 0 && (
+                <div className="flex justify-center">
+                    <h3 className="text-xl font-bold">No item found...</h3>
+                </div>
+            )}
+
+            {filteredItems.length > 0 && (
+                <motion.ul
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="show"
+                    className="overflow-y-auto px-3 md:px-5 lg:px-10"
+                >
+                    {filteredItems.map((listOfItems: ItemsWithCategories) => (
+                        <li key={uuidv4()} className="mb-10">
+                            {/* Category name component */}
+                            <CategoryTitle
+                                category={listOfItems.category}
+                                category_id={listOfItems.category_id}
+                                categoryUpdated={categoryUpdated}
+                            />
+                            <ul className="grid grid-cols-2 xl:grid-cols-3 gap-x-2 gap-y-6 w-full">
+                                {listOfItems.items.length > 0 &&
+                                    listOfItems.items.map((item: ItemType) => (
+                                        <motion.li
+                                            variants={itemVariants}
+                                            key={uuidv4()}
+                                        >
+                                            <Item
+                                                data={item}
+                                                category={listOfItems.category}
+                                            />
+                                        </motion.li>
+                                    ))}
+
+                                {listOfItems.items.length === 0 && (
+                                    <Button
+                                        modifier=""
+                                        onClick={() =>
+                                            addAnItem(listOfItems.category)
+                                        }
+                                        className="text-gray"
+                                    >
+                                        Add an item
+                                    </Button>
+                                )}
+                            </ul>
+                        </li>
+                    ))}
+                </motion.ul>
+            )}
         </div>
     )
 }
