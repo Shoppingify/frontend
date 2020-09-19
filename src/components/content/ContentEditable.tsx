@@ -24,6 +24,7 @@ export interface Props extends DivProps {
     style?: Object
     innerRef?: React.RefObject<HTMLElement> | Function
     enterPressCallback?: any
+    shouldFocus?: boolean
 }
 
 // Helper functions
@@ -101,6 +102,10 @@ export default class ContentEditable extends React.Component<Props> {
         }
         this.lastHtml = this.props.html
         replaceCaret(el)
+
+        if (!this.props.disabled && this.props.shouldFocus) {
+            el.focus()
+        }
     }
 
     emitChange = (originalEvt: React.SyntheticEvent<any>) => {

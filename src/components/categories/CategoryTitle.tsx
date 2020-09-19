@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useEffect } from 'react'
 import { MdModeEdit, MdSave } from 'react-icons/md'
 import client from '../../api/client'
@@ -24,10 +24,15 @@ const CategoryTitle: React.FC<CategoryTitleProps> = ({
     const [name, setName] = useState(category)
     const [errors, setErrors] = useState<string | null>(null)
 
+    const editFieldRef = useRef(document.createElement('div'))
+
     /**
      * Makes the category title editable
      */
     const toggleEditMode = () => {
+        if (editMode) {
+            editFieldRef.current.focus()
+        }
         setEditMode((editMode) => (editMode = !editMode))
     }
 
@@ -80,6 +85,7 @@ const CategoryTitle: React.FC<CategoryTitleProps> = ({
                     }) => setName(e.target.value)}
                     className="p-2"
                     enterPressCallback={saveCategory}
+                    shouldFocus={true}
                 />
             </Heading>
             {editMode ? (
