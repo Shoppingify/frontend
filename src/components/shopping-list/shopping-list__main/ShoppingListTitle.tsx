@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useRef, useEffect } from 'react'
 
 // Libs
 import { MdCreate, MdClose } from 'react-icons/md'
@@ -15,12 +15,28 @@ type PropTypes = {
 
 const ShoppingListTitle: React.FC<PropTypes> = React.memo(
     ({ editing, shopListName, setShopListName, setEditing }) => {
+        const titleHeaderRef = useRef(document.createElement('div'))
+
+        useEffect(() => {
+            const observer = new IntersectionObserver(
+                ([e]) =>
+                    e.target.classList.toggle(
+                        'border-opacity-25',
+                        e.intersectionRatio < 1
+                    ),
+                { threshold: [1] }
+            )
+
+            observer.observe(titleHeaderRef.current)
+        }, [])
+
         return (
             <div
-                className="flex justify-between mb-8 pr-2 sticky bg-primary-light pt-4 z-30"
+                className="flex justify-between mb-8 pr-2 sticky bg-primary-light pt-4 z-30 border-b-2 border-gray border-opacity-0"
                 style={{
                     top: '-3rem',
                 }}
+                ref={titleHeaderRef}
             >
                 <div className="w-7/8">
                     <Heading

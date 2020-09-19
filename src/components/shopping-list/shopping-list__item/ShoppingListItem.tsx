@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 // Libs
 import { motion, AnimatePresence } from 'framer-motion'
@@ -30,26 +30,8 @@ interface PropTypes {
     itemIndex: number
 }
 
-// Framer motion variants - animations
-const itemVariants = {
-    hidden: {
-        y: 100,
-        opacity: 0,
-    },
-    show: {
-        y: 0,
-        opacity: 1,
-    },
-}
-// TODO refactor into components
 /**
  *  A component that displays single item in the shoping list in the sidebar
- *
- *  @param {string} name
- *  @param {number} quantity
- *  @param {id} number
- *  @param {string} category
- *  @param {boolean} editing
  */
 const ShoppingListItem: React.FC<PropTypes> = React.memo(
     ({ name, quantity, item_id, editing, done, catIndex, itemIndex }) => {
@@ -206,19 +188,13 @@ const ShoppingListItem: React.FC<PropTypes> = React.memo(
 
                 setShopList(itemsData)
             } catch (error) {
-                // TODO Handle notifications
                 toast.error('An error occured')
                 console.log(error)
             }
         }, [])
 
         return (
-            <motion.div
-                variants={itemVariants}
-                initial="hidden"
-                animate="show"
-                className="flex justify-between items-center mb-4 xl:flex-wrap group pl-2"
-            >
+            <div className="flex justify-between items-center mb-6 xl:flex-wrap group pl-2 relative">
                 <label
                     className={`flex items-center relative ${
                         editing ? 'w-1/3' : ''
@@ -258,7 +234,7 @@ const ShoppingListItem: React.FC<PropTypes> = React.memo(
                     handleItemDelete={handleItemDelete}
                     handleInOrDecBtnClick={handleInOrDecBtnClick}
                 />
-            </motion.div>
+            </div>
         )
     }
 )
