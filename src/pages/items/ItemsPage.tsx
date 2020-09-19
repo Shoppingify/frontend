@@ -56,7 +56,7 @@ const ItemsPage: React.FC = () => {
     )
     const setShopList = useSetRecoilState(shopListState)
     const [filteredItems, setFilteredItems] = useState([])
-    const [currentItem, setCurrentItem] = useRecoilState(currentItemState)
+    const setCurrentItem = useSetRecoilState(currentItemState)
     const setSidebarType = useSetRecoilState(sidebarState)
 
     useEffect(() => {
@@ -100,6 +100,7 @@ const ItemsPage: React.FC = () => {
                 ...newLists[index],
                 items: newItems,
                 category: cat.name,
+                category_id: cat.id,
             }
             console.log('newLists', newLists)
             return newLists
@@ -120,11 +121,9 @@ const ItemsPage: React.FC = () => {
         })
 
         // Update the categoryName on the currentItem
-        if (currentItem) {
-            setCurrentItem((old) => {
-                return { ...old, categoryName: cat.name }
-            })
-        }
+        setCurrentItem((old) => {
+            return old !== null ? { ...old, categoryName: cat.name } : old
+        })
     }
 
     /**
