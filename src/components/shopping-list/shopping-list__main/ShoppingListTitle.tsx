@@ -25,7 +25,7 @@ const ShoppingListTitle: React.FC<PropTypes> = React.memo(
                 <div className="w-7/8">
                     <Heading
                         level={2}
-                        className={`font-bold rounded-lg ${
+                        className={`font-bold rounded-lg break-all w-full ${
                             editing ? 'bg-white shadow-lg' : ''
                         }`}
                     >

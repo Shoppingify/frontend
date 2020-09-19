@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useEffect } from 'react'
 import { MdModeEdit, MdSave } from 'react-icons/md'
 import client from '../../api/client'
 import Button from '../button/Button'
@@ -11,7 +12,7 @@ interface CategoryTitleProps {
     categoryUpdated: (cat: any) => void
 }
 
-const iconStyle = 'text-2xl cursor-pointer'
+const iconStyle = 'text-2xl cursor-pointer text-black '
 
 const CategoryTitle: React.FC<CategoryTitleProps> = ({
     category,
@@ -22,6 +23,12 @@ const CategoryTitle: React.FC<CategoryTitleProps> = ({
     const [editMode, setEditMode] = useState(false)
     const [name, setName] = useState(category)
     const [errors, setErrors] = useState<string | null>(null)
+
+    useEffect(() => {
+        return () => {
+            console.log('Category title unmounted')
+        }
+    }, [])
 
     /**
      * Makes the category title editable
@@ -82,10 +89,12 @@ const CategoryTitle: React.FC<CategoryTitleProps> = ({
             </Heading>
             {editMode ? (
                 <>
-                    <MdSave
-                        className={`${iconStyle} mr-4 hover:text-primary transition-colors duration-300`}
-                        onClick={saveCategory}
-                    />
+                    <Button type="submit" className="group h-full">
+                        <MdSave
+                            className={`${iconStyle} group-hover:text-primary transition-colors duration-300`}
+                            onClick={saveCategory}
+                        />
+                    </Button>
                     <Button modifier="" className="text-black" onClick={cancel}>
                         Cancel
                     </Button>

@@ -106,6 +106,12 @@ export default class ContentEditable extends React.Component<Props> {
         const el = this.getEl()
         if (!el) return
 
+        //@ts-ignore
+        if (originalEvt.keyCode === undefined || originalEvt.keyCode === 13) {
+            console.log('enter was pressed')
+            originalEvt.preventDefault()
+        }
+
         const html = el.innerHTML
         if (this.props.onChange && html !== this.lastHtml) {
             // Clone event with Object.assign to avoid
@@ -119,6 +125,7 @@ export default class ContentEditable extends React.Component<Props> {
         }
         this.lastHtml = html
     }
+
     render() {
         const { tagName, html, innerRef, ...props } = this.props
 
