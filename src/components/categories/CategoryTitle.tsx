@@ -24,12 +24,6 @@ const CategoryTitle: React.FC<CategoryTitleProps> = ({
     const [name, setName] = useState(category)
     const [errors, setErrors] = useState<string | null>(null)
 
-    useEffect(() => {
-        return () => {
-            console.log('Category title unmounted')
-        }
-    }, [])
-
     /**
      * Makes the category title editable
      */
@@ -90,7 +84,7 @@ const CategoryTitle: React.FC<CategoryTitleProps> = ({
             </Heading>
             {editMode ? (
                 <>
-                    <Button type="submit" className="group h-full">
+                    <Button className="group h-full">
                         <MdSave
                             className={`${iconStyle} group-hover:text-primary transition-colors duration-300`}
                             onClick={saveCategory}
@@ -101,10 +95,12 @@ const CategoryTitle: React.FC<CategoryTitleProps> = ({
                     </Button>
                 </>
             ) : (
-                <MdModeEdit
-                    onClick={toggleEditMode}
-                    className={`${iconStyle} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
-                />
+                <Button>
+                    <MdModeEdit
+                        onClick={toggleEditMode}
+                        className={`${iconStyle} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
+                    />
+                </Button>
             )}
 
             {errors && <span className="text-danger text-sm">{errors}</span>}
