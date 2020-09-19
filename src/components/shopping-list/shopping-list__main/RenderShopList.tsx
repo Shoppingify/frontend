@@ -22,17 +22,6 @@ const RenderShopList: React.FC<PropTypes> = React.memo(({ editing }) => {
     const shopList = useRecoilValue(shopListState)
     const renderListRef = useRef(document.createElement('div'))
 
-    const [bottomPosOfRenderList, setBottomPostOfRenderList] = useState(0)
-    const [mounted, setMounted] = useState(false)
-
-    useEffect(() => {
-        console.log(renderListRef.current.getBoundingClientRect().height)
-        setBottomPostOfRenderList(
-            renderListRef.current.getBoundingClientRect().bottom
-        )
-        setMounted(true)
-    }, [])
-
     return (
         <div ref={renderListRef}>
             {shopList.map((category: any, index: number) => (
@@ -51,11 +40,6 @@ const RenderShopList: React.FC<PropTypes> = React.memo(({ editing }) => {
                                     animate={{
                                         y: 0,
                                         opacity: 1,
-                                        transition: {
-                                            delay: !mounted
-                                                ? indexItem / 10
-                                                : 0,
-                                        },
                                     }}
                                     key={`${item.name}__${indexItem}`}
                                 >
@@ -68,7 +52,6 @@ const RenderShopList: React.FC<PropTypes> = React.memo(({ editing }) => {
                                         done={item.done}
                                         catIndex={index}
                                         itemIndex={indexItem}
-                                        bottom={bottomPosOfRenderList}
                                     />
                                 </motion.li>
                             )

@@ -28,29 +28,13 @@ interface PropTypes {
     done: boolean
     catIndex: number
     itemIndex: number
-    bottom: number
 }
-// TODO refactor into components
+
 /**
  *  A component that displays single item in the shoping list in the sidebar
- *
- *  @param {string} name
- *  @param {number} quantity
- *  @param {id} number
- *  @param {string} category
- *  @param {boolean} editing
  */
 const ShoppingListItem: React.FC<PropTypes> = React.memo(
-    ({
-        name,
-        quantity,
-        item_id,
-        editing,
-        done,
-        catIndex,
-        itemIndex,
-        bottom,
-    }) => {
+    ({ name, quantity, item_id, editing, done, catIndex, itemIndex }) => {
         // Local state
         const [mounted, setMounted] = useState(false)
 
@@ -58,17 +42,11 @@ const ShoppingListItem: React.FC<PropTypes> = React.memo(
         const shopListInfo = useRecoilValue(shopListInfoState)
         const setShopList = useSetRecoilState(shopListState)
 
-        // Ref
-        const itemRef = useRef(document.createElement('div'))
-
         /**
          * Effect runs on component mount
          */
         useEffect(() => {
             setMounted(true)
-            console.log(itemRef.current)
-            console.log(itemRef.current.getBoundingClientRect().top)
-            console.log(`Bottom of the render list: ${bottom}`)
         }, [])
 
         /**
@@ -216,10 +194,7 @@ const ShoppingListItem: React.FC<PropTypes> = React.memo(
         }, [])
 
         return (
-            <div
-                ref={itemRef}
-                className="flex justify-between items-center mb-6 xl:flex-wrap group pl-2 relative"
-            >
+            <div className="flex justify-between items-center mb-6 xl:flex-wrap group pl-2 relative">
                 <label
                     className={`flex items-center relative ${
                         editing ? 'w-1/3' : ''
