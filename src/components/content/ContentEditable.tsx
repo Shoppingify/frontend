@@ -109,9 +109,10 @@ export default class ContentEditable extends React.Component<Props> {
 
         //@ts-ignore
         if (originalEvt.keyCode === 13) {
-            console.log('enter was pressed')
             originalEvt.preventDefault()
-            this.props.enterPressCallback()
+            if (this.props.enterPressCallback) {
+                this.props.enterPressCallback()
+            }
         }
 
         const html = el.innerHTML
@@ -134,7 +135,6 @@ export default class ContentEditable extends React.Component<Props> {
         return React.createElement(
             tagName || 'div',
             {
-                ...props,
                 ref:
                     typeof innerRef === 'function'
                         ? (current: HTMLElement) => {
@@ -148,6 +148,8 @@ export default class ContentEditable extends React.Component<Props> {
                 onKeyDown: this.props.onKeyDown || this.emitChange,
                 contentEditable: !this.props.disabled,
                 dangerouslySetInnerHTML: { __html: html },
+                className: this.props.className,
+                style: this.props.style,
             },
             this.props.children
         )
