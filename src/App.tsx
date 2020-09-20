@@ -69,6 +69,9 @@ const App: React.FC = () => {
     useEffect(() => {
         console.log('user id')
         console.log(user)
+        if (user !== null) {
+            initialActiveShopListData()
+        }
     }, [user])
 
     const getConnectedUser = useCallback(async () => {
@@ -76,7 +79,6 @@ const App: React.FC = () => {
             const res = await client.get('me')
             const { id } = res.data.data
             console.log('res', res.data)
-            initialActiveShopListData()
             setUser(id)
             setInit(false)
             // history.
