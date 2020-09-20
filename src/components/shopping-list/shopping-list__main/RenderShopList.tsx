@@ -1,5 +1,7 @@
-import { AnimatePresence, motion } from 'framer-motion'
-import React from 'react'
+import React, { useState } from 'react'
+
+// Libs
+import { motion } from 'framer-motion'
 
 // Global state
 import { useRecoilValue } from 'recoil'
@@ -8,9 +10,8 @@ import { shopListState } from '../../../global-state/shopListState'
 // Components
 import Heading from '../../heading/Heading'
 import ShoppingListItem from '../shopping-list__item/ShoppingListItem'
-
-// Assets
-import ShoppingAppSVG from '../../../assets/undraw_shopping_app_flsj.svg'
+import { useRef } from 'react'
+import { useEffect } from 'react'
 
 // Types
 type PropTypes = {
@@ -19,14 +20,10 @@ type PropTypes = {
 
 const RenderShopList: React.FC<PropTypes> = React.memo(({ editing }) => {
     const shopList = useRecoilValue(shopListState)
+    const renderListRef = useRef(document.createElement('div'))
 
     return (
-        <motion.div
-            key="renderWithItems"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0, transition: { delay: 0.5 } }}
-        >
+        <div ref={renderListRef}>
             {shopList.map((category: any, index: number) => (
                 <div key={index} className="mb-12">
                     <Heading level={3} className="text-gray-light mb-6">
@@ -35,7 +32,17 @@ const RenderShopList: React.FC<PropTypes> = React.memo(({ editing }) => {
                     <ul>
                         {category.items.map((item: any, indexItem: number) => {
                             return (
-                                <li key={`${item.name}__${indexItem}`}>
+                                <motion.li
+                                    initial={{
+                                        y: 100,
+                                        opacity: 0,
+                                    }}
+                                    animate={{
+                                        y: 0,
+                                        opacity: 1,
+                                    }}
+                                    key={`${item.name}__${indexItem}`}
+                                >
                                     <ShoppingListItem
                                         quantity={item.quantity}
                                         name={item.name}
@@ -46,13 +53,13 @@ const RenderShopList: React.FC<PropTypes> = React.memo(({ editing }) => {
                                         catIndex={index}
                                         itemIndex={indexItem}
                                     />
-                                </li>
+                                </motion.li>
                             )
                         })}
                     </ul>
                 </div>
             ))}
-        </motion.div>
+        </div>
     )
 })
 

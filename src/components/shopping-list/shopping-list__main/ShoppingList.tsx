@@ -130,13 +130,11 @@ const ShoppingList: React.FC = React.memo(() => {
                         setEditing={handleSetEditing}
                         shopListName={shopListName}
                     />
-                    <AnimatePresence>
-                        {shopList.length === 0 ? (
-                            <RenderNoItems />
-                        ) : (
-                            <RenderShopList editing={editing} />
-                        )}
-                    </AnimatePresence>
+                    {shopList.length === 0 ? (
+                        <RenderNoItems />
+                    ) : (
+                        <RenderShopList editing={editing} />
+                    )}
                 </div>
             </div>
 
