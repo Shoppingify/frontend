@@ -15,6 +15,7 @@ import { MdModeEdit } from 'react-icons/md'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import 'react-lazy-load-image-component/src/effects/blur.css'
 import { motion } from 'framer-motion'
+import { fadeInRightBig } from '../../animation/variants/move-in/fade-in'
 
 const ShowItemSidebar = () => {
     const [currentItem, setCurrentItem] = useRecoilState<ItemType | null>(
@@ -88,9 +89,11 @@ const ShowItemSidebar = () => {
     return (
         <motion.div
             key="showitemkey"
-            initial={{ x: 500 }}
-            animate={{ x: 0 }}
-            exit={{ x: 500 }}
+            variants={fadeInRightBig}
+            initial="hidden"
+            animate="show"
+            exit="exit"
+            transition={{ type: 'Tween' }}
             className="flex flex-col h-full justify-between p-8 overflow-hidden"
         >
             <div>
