@@ -29,7 +29,7 @@ const containerVariants = {
     show: {
         opacity: 1,
         transition: {
-            staggerChildren: 0.1,
+            staggerChildren: 0.01,
         },
     },
 }
@@ -56,7 +56,7 @@ const ItemsPage: React.FC = () => {
     )
     const setShopList = useSetRecoilState(shopListState)
     const [filteredItems, setFilteredItems] = useState([])
-    const [currentItem, setCurrentItem] = useRecoilState(currentItemState)
+    const setCurrentItem = useSetRecoilState(currentItemState)
     const setSidebarType = useSetRecoilState(sidebarState)
 
     useEffect(() => {
@@ -100,6 +100,7 @@ const ItemsPage: React.FC = () => {
                 ...newLists[index],
                 items: newItems,
                 category: cat.name,
+                category_id: cat.id,
             }
             console.log('newLists', newLists)
             return newLists
@@ -120,11 +121,9 @@ const ItemsPage: React.FC = () => {
         })
 
         // Update the categoryName on the currentItem
-        if (currentItem) {
-            setCurrentItem((old) => {
-                return { ...old, categoryName: cat.name }
-            })
-        }
+        setCurrentItem((old) => {
+            return old !== null ? { ...old, categoryName: cat.name } : old
+        })
     }
 
     /**
@@ -167,15 +166,22 @@ const ItemsPage: React.FC = () => {
                 </h1>
                 <SearchInput search={searchItems} />
             </div>
-            <motion.ul
-                variants={containerVariants}
-                initial="hidden"
-                animate="show"
-                className="overflow-y-auto px-3 md:px-5 lg:px-10"
-            >
-                {filteredItems.map(
-                    (listOfItems: ItemsWithCategories, index: number) => (
-                        <li key={index} className="mb-10">
+
+            {filteredItems.length === 0 && (
+                <div className="flex justify-center">
+                    <h3 className="text-xl font-bold">No item found...</h3>
+                </div>
+            )}
+
+            {filteredItems.length > 0 && (
+                <motion.ul
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="show"
+                    className="overflow-y-auto px-3 md:px-5 lg:px-10"
+                >
+                    {filteredItems.map((listOfItems: ItemsWithCategories) => (
+                        <li key={uuidv4()} className="mb-10">
                             {/* Category name component */}
                             <CategoryTitle
                                 category={listOfItems.category}
@@ -209,10 +215,9 @@ const ItemsPage: React.FC = () => {
                                 )}
                             </ul>
                         </li>
-                    )
-                )}
-                {filteredItems.length === 0 && <h2>No Items found</h2>}
-            </motion.ul>
+                    ))}
+                </motion.ul>
+            )}
         </div>
     )
 }

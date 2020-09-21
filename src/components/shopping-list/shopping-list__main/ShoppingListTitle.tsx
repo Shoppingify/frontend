@@ -1,7 +1,8 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useRef, useEffect } from 'react'
 
 // Libs
 import { MdCreate, MdClose } from 'react-icons/md'
+import ContentEditable from '../../content/ContentEditable'
 import Heading from '../../heading/Heading'
 
 // Types
@@ -14,42 +15,45 @@ type PropTypes = {
 
 const ShoppingListTitle: React.FC<PropTypes> = React.memo(
     ({ editing, shopListName, setShopListName, setEditing }) => {
-        // Ref for heading container
-        const headingRef = useRef(document.createElement('div'))
+        const titleHeaderRef = useRef(document.createElement('div'))
 
-        // Local state
-        const [headingHeight, setHeadingHeight] = useState(0)
-
-        /**
-         * Effect runs on shopping list name change and if editing
-         * Updates the headingHeight state
-         */
         useEffect(() => {
-            if (headingRef.current === null) return
-            setHeadingHeight(headingRef.current.getBoundingClientRect().height)
-        }, [shopListName, editing])
+            const observer = new IntersectionObserver(
+                ([e]) =>
+                    e.target.classList.toggle(
+                        'border-opacity-25',
+                        e.intersectionRatio < 1
+                    ),
+                { threshold: [1] }
+            )
+
+            observer.observe(titleHeaderRef.current)
+        }, [])
 
         return (
             <div
-                className="flex justify-between mb-8 pr-2 sticky bg-primary-light pt-4 z-30"
+                className="flex justify-between mb-8 pr-2 sticky bg-primary-light pt-4 z-30 border-b-2 border-gray border-opacity-0"
                 style={{
                     top: '-3rem',
                 }}
+                ref={titleHeaderRef}
             >
-                {editing ? (
-                    <textarea
-                        style={{ height: `${headingHeight}px` }}
-                        className="font-bold text-2xl w-5/6 rounded-12 p-2"
-                        value={shopListName}
-                        onChange={setShopListName}
-                    />
-                ) : (
-                    <div className="height__ref w-7/8 p-2" ref={headingRef}>
-                        <Heading level={2} className="font-bold">
-                            {shopListName}
-                        </Heading>
-                    </div>
-                )}
+                <div className="w-7/8">
+                    <Heading
+                        level={2}
+                        className={`font-bold rounded-lg break-all w-full ${
+                            editing ? 'bg-white shadow-lg' : ''
+                        }`}
+                    >
+                        <ContentEditable
+                            disabled={!editing}
+                            style={{ height: 'fit-content' }}
+                            html={shopListName}
+                            onChange={setShopListName}
+                            className="p-2"
+                        />
+                    </Heading>
+                </div>
                 <button
                     onClick={setEditing}
                     className="w-1/8 flex justify-center pt-2"

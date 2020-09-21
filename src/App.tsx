@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 
 // Libs
 import { Switch, useHistory, useLocation, Redirect } from 'react-router-dom'
-import { useRecoilState } from 'recoil/dist'
+import { useRecoilState, useSetRecoilState } from 'recoil/dist'
 
 // Router components
 import PrivateRoutesController from './routes/PrivateRoutesController'
@@ -21,6 +21,9 @@ import { userState } from './global-state/miscState'
 // Api
 import client from './api/client'
 
+// Hooks
+import useLoadActiveListData from './hooks/useLoadActiveListData'
+
 /**
  * Main app component
  */
@@ -33,9 +36,10 @@ const App: React.FC = () => {
     const history = useHistory()
     const location = useLocation()
 
+    // Hooks
+    const initialActiveShopListData = useLoadActiveListData()
+
     useEffect(() => {
-        // console.log('history location', location)
-        console.log('location search', location.search)
         if (location.search.length > 0) {
             const access_token = new URLSearchParams(location.search).get(
                 'access_token'
@@ -50,7 +54,24 @@ const App: React.FC = () => {
     }, [location.search])
 
     useEffect(() => {
-        console.log('User', user)
+        //Check if we have a token
+        if (localStorage.getItem('token')) {
+            // Fetch the user
+            if (location.search === '') {
+                getConnectedUser()
+            }
+        } else {
+            setInit(false)
+            history.push('/login')
+        }
+    }, [])
+
+    useEffect(() => {
+        console.log('user id')
+        console.log(user)
+        if (user !== null) {
+            initialActiveShopListData()
+        }
     }, [user])
 
     const getConnectedUser = useCallback(async () => {
@@ -63,19 +84,6 @@ const App: React.FC = () => {
             // history.
         } catch (e) {
             console.log('Error fetching the connected user', e)
-            setInit(false)
-            history.push('/login')
-        }
-    }, [])
-
-    useEffect(() => {
-        //Check if we have a token
-        if (localStorage.getItem('token')) {
-            // Fetch the user
-            if (location.search === '') {
-                getConnectedUser()
-            }
-        } else {
             setInit(false)
             history.push('/login')
         }

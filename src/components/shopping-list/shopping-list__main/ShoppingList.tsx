@@ -4,18 +4,11 @@ import React, { useEffect, useState, useCallback } from 'react'
 import client from '../../../api/client'
 
 // Libs
-import {
-    uniqueNamesGenerator,
-    Config,
-    adjectives,
-    colors,
-    names,
-} from 'unique-names-generator'
 import { AnimatePresence, motion } from 'framer-motion'
 import { toast } from 'react-toastify'
 
 // state
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import {
     shopListState,
     shopListInfoState,
@@ -28,43 +21,19 @@ import AddNewItem from '../../add-item/AddNewItemCTA'
 import RenderShopList from './RenderShopList'
 
 // Types
-import { ItemType } from '../../../types/items/types'
-import { shopListInfoStateInterface } from '../../../types/state/shoppingListTypes'
-import { historyListsRefreshState } from '../../../global-state/miscState'
 import RenderNoItems from './RenderNoItems'
-
-// Name generator
-const nameConfig: Config = {
-    dictionaries: [adjectives, colors, names],
-    length: 3,
-    separator: ' ',
-    style: 'capital',
-}
-
-// Types
-type activeListData = {
-    created_at: string
-    id: number
-    name: string
-    status: 'active' | 'complete' | 'canceled'
-    updated_at: string
-    user_id: number
-}
+import useCreateNewShoppingList from '../../../hooks/useCreateNewShoppingList'
 
 /**
  * Main shopping list component
  */
 const ShoppingList: React.FC = React.memo(() => {
     // Global state
-    const [shopList, setShopList] = useRecoilState(shopListState)
-    const [shopListInfo, setShopListInfoState] = useRecoilState(
-        shopListInfoState
-    )
-    const setHistoryListsRefresh = useSetRecoilState(historyListsRefreshState)
+    const shopList = useRecoilValue(shopListState)
+    const shopListInfo = useRecoilValue(shopListInfoState)
 
     // Local state
     const [editing, setEditing] = useState<boolean>(false)
-    const [loading, setLoading] = useState<boolean>(false)
 
     // For shopping list title edit
     const [shopListName, setShopListName] = useState<string>('')
@@ -73,64 +42,19 @@ const ShoppingList: React.FC = React.memo(() => {
     // Component mounted
     const [mounted, setMounted] = useState<boolean>(false)
 
+    // Hooks
+    const createNewList = useCreateNewShoppingList()
+
+    useEffect(() => {
+        setShopListName(shopListInfo.name)
+    }, [shopListInfo])
+
     /**
      * Component mounted effect
      */
     useEffect(() => {
         setMounted(true)
-        /**
-         * Fetches initial list data
-         */
-        async function initialData() {
-            try {
-                setLoading(true)
-                const response = await client.get('lists?status=active')
-                const {
-                    data: listData,
-                }: { data: Array<activeListData> } = await response.data
-
-                if (listData.length === 0) {
-                    // No Active list
-                    // Create a new list
-                    createNewList()
-                } else {
-                    // Active list found
-                    const activeList = listData[0]
-                    const activeListId = activeList.id
-
-                    // Set global active list id
-                    setShopListInfoState(
-                        (current: shopListInfoStateInterface) => ({
-                            ...current,
-                            activeListId,
-                            status: activeList.status,
-                        })
-                    )
-                    // Set local state for shopping list name
-                    setShopListName(activeList.name)
-
-                    // Another request to fetch items
-                    const responseItems = await client.get(
-                        `lists/${activeListId}/items`
-                    )
-
-                    const {
-                        data: { items: itemsData },
-                    }: {
-                        data: { items: ItemType[] }
-                    } = await responseItems.data
-                    setShopList(itemsData)
-                    setLoading(false)
-                }
-            } catch (error) {
-                setLoading(false)
-                toast.error('There was an error fetching active list')
-                // TODO handle notifications
-                console.log(error)
-            }
-        }
-
-        initialData()
+        return () => console.log('shopping list unmounted')
     }, [])
 
     /**
@@ -178,54 +102,6 @@ const ShoppingList: React.FC = React.memo(() => {
         }
     }
 
-    /**
-     * Creates a new list and sets local state to that list
-     */
-    const createNewList = async () => {
-        try {
-            // POST new list with a random name
-            const responseNewList = await client.post('/lists', {
-                name: uniqueNamesGenerator(nameConfig),
-            })
-
-            // Store created list info in variable
-            const createdList = await responseNewList.data.data.list
-
-            // Fetch items of this list
-            const responseItems = await client.get(
-                `lists/${createdList.id}/items`
-            )
-            // Store items
-            const {
-                data: { items: itemsData },
-            }: {
-                data: { items: ItemType[] }
-            } = await responseItems.data
-
-            /**
-             * Setting local state
-             */
-            // Set global active list id
-            setShopListInfoState((current: shopListInfoStateInterface) => ({
-                ...current,
-                activeListId: createdList.id,
-                status: createdList.status,
-            }))
-            // Refresh history list
-            setHistoryListsRefresh((current) => ({ ...current, refresh: true }))
-            // Set local state for shopping list name
-            setShopListName(createdList.name)
-            // Set items to local shop list state
-            setShopList(itemsData)
-
-            toast.success(`Created new active list: ${createdList.name}`)
-        } catch (error) {
-            // TODO handle notifications
-            toast.error('An error occured')
-            console.log(error)
-        }
-    }
-
     // Functions that won't change during component lifecycle
     /**
      * Handles state of editing
@@ -260,13 +136,11 @@ const ShoppingList: React.FC = React.memo(() => {
                         setEditing={handleSetEditing}
                         shopListName={shopListName}
                     />
-                    <AnimatePresence exitBeforeEnter>
-                        {shopList.length === 0 && !loading ? (
-                            <RenderNoItems />
-                        ) : (
-                            <RenderShopList editing={editing} />
-                        )}
-                    </AnimatePresence>
+                    {shopList.length === 0 ? (
+                        <RenderNoItems />
+                    ) : (
+                        <RenderShopList editing={editing} />
+                    )}
                 </div>
             </div>
 

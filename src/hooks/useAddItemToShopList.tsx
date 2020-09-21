@@ -75,6 +75,7 @@ const useAddItemToShopList = () => {
                 // Push to new items array
                 newItems.push({
                     category: categoryName,
+                    category_id: currentItem.category_id,
                     items: [currentItem],
                 })
             }

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useRecoilState, useSetRecoilState } from 'recoil'
 import client from '../../api/client'
 import { itemsState } from '../../global-state/itemsState'
@@ -25,6 +25,10 @@ const ShowItemSidebar = () => {
     const [sidebarHistory, setSidebarHistory] = useRecoilState(
         sidebarHistoryState
     )
+
+    useEffect(() => {
+        console.log('Showitemsidebar mounted')
+    }, [])
 
     const addItem = async () => {
         try {
