@@ -129,9 +129,9 @@ const ItemsPage: React.FC = () => {
 
             {filteredItems.length > 0 && (
                 <motion.ul
-                    // variants={containerVariants}
-                    // initial="hidden"
-                    // animate="show"
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="show"
                     className="overflow-y-auto px-3 md:px-5 lg:px-10"
                 >
                     {filteredItems.map((listOfItems: ItemsWithCategories) => (
@@ -144,15 +144,15 @@ const ItemsPage: React.FC = () => {
                             <ul className="grid grid-cols-2 xl:grid-cols-3 gap-x-2 gap-y-6 w-full">
                                 {listOfItems.items.length > 0 &&
                                     listOfItems.items.map((item: ItemType) => (
-                                        <li
-                                            // variants={itemVariants}
+                                        <motion.li
+                                            variants={itemVariants}
                                             key={item.id}
                                         >
                                             <Item
                                                 data={item}
                                                 category={listOfItems.category}
                                             />
-                                        </li>
+                                        </motion.li>
                                     ))}
 
                                 {listOfItems.items.length === 0 && (
