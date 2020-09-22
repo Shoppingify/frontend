@@ -61,11 +61,11 @@ const ShowItemSidebar = () => {
     }
 
     const back = () => {
-        console.log('sidebarHistory back', sidebarHistory)
-        const goTo = sidebarHistory[sidebarHistory.length - 2]
+        // console.log('sidebarHistory back', sidebarHistory)
+        // const goTo = sidebarHistory[sidebarHistory.length - 2]
         // Reset l'history?
         setSidebarHistory([])
-        setSidebarType(goTo)
+        setSidebarType(SHOW_SHOPPING_LIST)
     }
 
     /**

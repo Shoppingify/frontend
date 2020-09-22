@@ -66,7 +66,7 @@ const Item: React.FC<PropTypes> = ({ data, category, history }) => {
                     {data.name}{' '}
                     {history ? (
                         <span className="text-primary text-sm font-bold mx-1">
-                            {data.quantity && data.quantity > 1 ? 'pcs' : 'pc'}
+                            {data.quantity} {data.quantity! > 1 ? 'pcs' : 'pc'}
                         </span>
                     ) : null}
                 </h4>
