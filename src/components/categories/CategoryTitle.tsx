@@ -90,45 +90,54 @@ const CategoryTitle: React.FC<CategoryTitleProps> = ({
         setErrors(null)
     }
     return (
-        <div className="group flex items-center mb-4">
-            <Heading
-                level={2}
-                className={`font-bold mr-4 rounded-lg ${
-                    editMode ? 'bg-white border-gray-input shadow-item ' : ''
-                }`}
-            >
-                <ContentEditable
-                    disabled={!editMode}
-                    style={{ height: 'fit-content' }}
-                    html={name}
-                    onChange={(e: {
-                        target: { value: React.SetStateAction<string> }
-                    }) => setName(e.target.value)}
-                    className="p-2"
-                    enterPressCallback={saveCategory}
-                    shouldFocus={true}
-                />
-            </Heading>
-            {editMode ? (
-                <>
-                    <Button className="group h-full" onClick={saveCategory}>
-                        <MdSave
-                            className={`${iconStyle} group-hover:text-primary transition-colors duration-300`}
+        <div className="mb-4">
+            <div className="group flex items-center ">
+                <Heading
+                    level={2}
+                    className={`font-bold mr-4 rounded-lg ${
+                        editMode
+                            ? 'bg-white border-gray-input shadow-item '
+                            : ''
+                    }`}
+                >
+                    <ContentEditable
+                        disabled={!editMode}
+                        style={{ height: 'fit-content' }}
+                        html={name}
+                        onChange={(e: {
+                            target: { value: React.SetStateAction<string> }
+                        }) => setName(e.target.value)}
+                        className="p-2"
+                        enterPressCallback={saveCategory}
+                        shouldFocus={true}
+                    />
+                </Heading>
+                {editMode ? (
+                    <>
+                        <Button className="group h-full" onClick={saveCategory}>
+                            <MdSave
+                                className={`${iconStyle} group-hover:text-primary transition-colors duration-300`}
+                            />
+                        </Button>
+                        <Button
+                            modifier=""
+                            className="text-black"
+                            onClick={cancel}
+                        >
+                            Cancel
+                        </Button>
+                    </>
+                ) : (
+                    <Button onClick={toggleEditMode}>
+                        <MdModeEdit
+                            className={`${iconStyle} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
                         />
                     </Button>
-                    <Button modifier="" className="text-black" onClick={cancel}>
-                        Cancel
-                    </Button>
-                </>
-            ) : (
-                <Button onClick={toggleEditMode}>
-                    <MdModeEdit
-                        className={`${iconStyle} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
-                    />
-                </Button>
+                )}
+            </div>
+            {errors && editMode && (
+                <span className="text-danger text-sm">{errors}</span>
             )}
-
-            {errors && <span className="text-danger text-sm">{errors}</span>}
         </div>
     )
 }

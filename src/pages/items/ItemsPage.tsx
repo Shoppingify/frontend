@@ -58,6 +58,7 @@ const ItemsPage: React.FC = () => {
     const [filteredItems, setFilteredItems] = useState([])
     const setCurrentItem = useSetRecoilState(currentItemState)
     const setSidebarType = useSetRecoilState(sidebarState)
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         async function getItems() {
@@ -66,6 +67,8 @@ const ItemsPage: React.FC = () => {
                 setItemsWithCategories(res.data.data)
             } catch (e) {
                 console.log('Error', e)
+            } finally {
+                setLoading(false)
             }
         }
         getItems()
@@ -123,7 +126,9 @@ const ItemsPage: React.FC = () => {
 
             {filteredItems.length === 0 && (
                 <div className="flex justify-center">
-                    <h3 className="text-xl font-bold">No item found...</h3>
+                    <h3 className="text-xl font-bold">
+                        {loading ? 'Loading...' : 'No item found...'}
+                    </h3>
                 </div>
             )}
 
