@@ -12,3 +12,18 @@ export const fadeInRight = {
         opacity: 0,
     },
 }
+
+export const fadeInRightBig = {
+    hidden: {
+        x: 500,
+        opacity: 0,
+    },
+    show: {
+        x: 0,
+        opacity: 1,
+    },
+    exit: {
+        x: 500,
+        opacity: 0,
+    },
+}

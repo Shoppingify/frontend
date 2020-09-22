@@ -16,6 +16,7 @@ import ShoppingList from '../shopping-list/shopping-list__main/ShoppingList'
 import AddItemSidebar from '../item-sidebars/AddItemSidebar'
 import ShowItemSidebar from '../item-sidebars/ShowItemSidebar'
 import AddNewItem from '../add-item/AddNewItemCTA'
+import { AnimatePresence, motion } from 'framer-motion'
 
 /**
  * Sidebar of the app
@@ -46,7 +47,7 @@ function Sidebar() {
 
     return (
         <div
-            className={`hidden lg:block w-sidebar relative flex-none overflow-y-auto ${
+            className={`hidden lg:block w-sidebar relative flex-none overflow-y-auto overflow-x-hidden ${
                 sidebarType === ADD_SHOPPING_LIST ||
                 sidebarType === SHOW_SHOPPING_LIST
                     ? 'bg-primary-light'
@@ -54,7 +55,7 @@ function Sidebar() {
             }`}
         >
             {/* <ShoppingList /> */}
-            {selectSidebar()}
+            <AnimatePresence exitBeforeEnter>{selectSidebar()}</AnimatePresence>
         </div>
     )
 }

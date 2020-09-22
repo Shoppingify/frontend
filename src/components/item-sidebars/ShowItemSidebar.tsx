@@ -14,6 +14,8 @@ import Button from '../button/Button'
 import { MdModeEdit } from 'react-icons/md'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import 'react-lazy-load-image-component/src/effects/blur.css'
+import { motion } from 'framer-motion'
+import { fadeInRightBig } from '../../animation/variants/move-in/fade-in'
 import { singleCategoryState } from '../../global-state/categoriesState'
 import CategoryHeading from '../heading/CategoryHeading'
 
@@ -92,7 +94,15 @@ const ShowItemSidebar = () => {
     }
 
     return (
-        <div className="flex flex-col h-full justify-between p-8">
+        <motion.div
+            key="showitemkey"
+            variants={fadeInRightBig}
+            initial="hidden"
+            animate="show"
+            exit="exit"
+            transition={{ type: 'Tween' }}
+            className="flex flex-col h-full justify-between p-8 overflow-hidden"
+        >
             <div>
                 <div className="flex w-full justify-between items-center mb-6">
                     <a
@@ -151,7 +161,7 @@ const ShowItemSidebar = () => {
                     Add to list
                 </Button>
             </div>
-        </div>
+        </motion.div>
     )
 }
 

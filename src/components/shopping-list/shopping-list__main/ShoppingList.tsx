@@ -23,6 +23,7 @@ import RenderShopList from './RenderShopList'
 // Types
 import RenderNoItems from './RenderNoItems'
 import useCreateNewShoppingList from '../../../hooks/useCreateNewShoppingList'
+import { fadeInRightBig } from '../../../animation/variants/move-in/fade-in'
 
 /**
  * Main shopping list component
@@ -120,7 +121,15 @@ const ShoppingList: React.FC = React.memo(() => {
     )
 
     return (
-        <div className="flex flex-col h-full overflow-hidden">
+        <motion.div
+            key="shoppinglistkey"
+            variants={fadeInRightBig}
+            initial="hidden"
+            animate="show"
+            exit="exit"
+            transition={{ type: 'Tween' }}
+            className="flex flex-col h-full overflow-hidden"
+        >
             <div className="flex-auto overflow-y-auto">
                 <div className="flex flex-col h-full p-8 overflow-y-auto">
                     <AddNewItem />
@@ -142,9 +151,13 @@ const ShoppingList: React.FC = React.memo(() => {
                 <AnimatePresence>
                     {!editing && shopList.length > 0 && (
                         <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
+                            initial={{ y: 300 }}
+                            animate={{
+                                y: 0,
+                                transition: { delay: 0.5, type: 'Tween' },
+                            }}
+                            exit={{ y: 300 }}
+                            transition={{ type: 'Tween' }}
                         >
                             <ShoppingListStatusModal
                                 handleListStatus={handleListStatus}
@@ -153,7 +166,7 @@ const ShoppingList: React.FC = React.memo(() => {
                     )}
                 </AnimatePresence>
             </div>
-        </div>
+        </motion.div>
     )
 })
 
