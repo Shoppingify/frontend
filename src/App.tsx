@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 
 // Libs
 import { Switch, useHistory, useLocation, Redirect } from 'react-router-dom'
-import { useRecoilState, useSetRecoilState } from 'recoil/dist'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 
 // Router components
 import PrivateRoutesController from './routes/PrivateRoutesController'
@@ -23,6 +23,7 @@ import client from './api/client'
 
 // Hooks
 import useLoadActiveListData from './hooks/useLoadActiveListData'
+import useFetchCategories from './hooks/useFetchCategories'
 
 /**
  * Main app component
@@ -38,6 +39,7 @@ const App: React.FC = () => {
 
     // Hooks
     const initialActiveShopListData = useLoadActiveListData()
+    const fetchCategories = useFetchCategories()
 
     useEffect(() => {
         if (location.search.length > 0) {
@@ -71,6 +73,7 @@ const App: React.FC = () => {
         console.log(user)
         if (user !== null) {
             initialActiveShopListData()
+            fetchCategories()
         }
     }, [user])
 

@@ -61,12 +61,12 @@ const Item: React.FC<PropTypes> = ({ data, category, history }) => {
 
     return (
         <div className="p-3 bg-white overflow-hidden shadow-item rounded-lg flex justify-between items-center">
-            <button className="break-all -" onClick={showItem}>
+            <button className="break-all flex-auto" onClick={showItem}>
                 <h4 className="font-medium text-left break-all">
                     {data.name}{' '}
                     {history ? (
                         <span className="text-primary text-sm font-bold mx-1">
-                            {data.quantity && data.quantity > 1 ? 'pcs' : 'pc'}
+                            {data.quantity} {data.quantity! > 1 ? 'pcs' : 'pc'}
                         </span>
                     ) : null}
                 </h4>

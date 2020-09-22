@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid'
 import client from '../../api/client'
 import Button from '../../components/button/Button'
 import Item from '../../components/cards/Item'
+import Heading from '../../components/heading/Heading'
 import { ListType } from '../../types/interfaces/db_interfaces'
 import { ItemType } from '../../types/items/types'
 
@@ -100,13 +101,14 @@ const HistoryShowPage = () => {
                         (listOfItems: ItemsWithCategories) => (
                             <li key={uuidv4()} className="mb-5">
                                 {/* Category name component */}
-                                <h3 className="text-lg font-bold mr-4">
-                                    {listOfItems.category}
-                                </h3>
-                                <ul
-                                    style={{ marginLeft: '-12px' }}
-                                    className="flex flex-wrap w-full"
+                                <Heading
+                                    level={2}
+                                    className={`font-bold mr-4 rounded-lg mb-2`}
                                 >
+                                    {listOfItems.category}
+                                </Heading>
+
+                                <ul className="grid grid-cols-2 xl:grid-cols-3 gap-x-2 gap-y-6 w-full">
                                     {listOfItems.items.length > 0 &&
                                         listOfItems.items.map(
                                             (item: ItemType) => (

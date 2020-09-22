@@ -6,6 +6,7 @@ import client from '../../api/client'
 import { useRecoilValue, useRecoilState } from 'recoil'
 import { shopListInfoState } from '../../global-state/shopListState'
 import { historyListsRefreshState } from '../../global-state/miscState'
+import BasicLoader from '../../components/loader/BasicLoader'
 
 /**
  * Simple history page component
@@ -88,10 +89,18 @@ const HistoryPage = () => {
 
     return (
         <div className="flex flex-col px-2 lg:px-5 bg-gray-extra-light h-full">
-            <h1 className="text-2xl font-bold pt-8">Shopping History</h1>
+            <h1 className="text-2xl font-bold pt-8 mb-8">Shopping History</h1>
 
             {/* TODO: Make a proper loader */}
-            {loading && <div>Loading...</div>}
+            {lists.length === 0 && !loading && (
+                <div className="flex justify-center">
+                    <h3 className="text-xl font-bold">
+                        No list in the history yet ;)
+                    </h3>
+                </div>
+            )}
+
+            {loading && <BasicLoader />}
 
             {/* Lists */}
             {lists.map((item: any) => (

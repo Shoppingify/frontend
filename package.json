@@ -36,7 +36,7 @@
         "react-lazy-load-image-component": "^1.5.0",
         "react-router-dom": "^5.2.0",
         "react-toastify": "^6.0.8",
-        "recoil": "0.0.10",
+        "recoil": "0.0.13",
         "tailwindcss": "^1.7.3",
         "tippy.js": "^6.2.6",
         "ts-jest": "^26.3.0",

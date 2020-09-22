@@ -4,7 +4,7 @@ import React from 'react'
 import { Route, Redirect, RouteProps } from 'react-router-dom'
 
 // State
-import { useRecoilValue } from 'recoil/dist'
+import { useRecoilValue } from 'recoil'
 import { userState } from '../../global-state/miscState'
 
 // Ok to use any? Investigate further if for some reason this causes issues
@@ -25,7 +25,7 @@ const PrivateRoute: React.FC<PropTypes> = ({
     ...rest
 }) => {
     const user = useRecoilValue(userState)
-    console.log('User in private route', user)
+    // console.log('User in private route', user)
     return (
         <Route
             {...rest}

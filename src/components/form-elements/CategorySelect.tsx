@@ -34,7 +34,7 @@ const CategorySelect = ({ label, ...props }: any) => {
 
     useEffect(() => {
         if (categories.length > 0) {
-            // I check if I have the category has changed
+            // I check if I the category has changed
             const categoryIndex = categories.findIndex((cat: any) => {
                 return currentItem?.categoryName === cat.name
             })
@@ -48,7 +48,7 @@ const CategorySelect = ({ label, ...props }: any) => {
     }, [currentItem])
 
     useEffect(() => {
-        helpers.setValue(currentItem?.categoryName, true)
+        helpers.setValue(currentItem?.categoryName || '', true)
         helpers.setTouched(true, true)
     }, [currentItem])
 
@@ -63,7 +63,7 @@ const CategorySelect = ({ label, ...props }: any) => {
             setShowAutocomplete(false)
         }
         const categoriesFiltered = categories.filter((cat: Category) =>
-            cat.name.toLowerCase().startsWith(e.target.value.toLowerCase())
+            cat.name.toLowerCase().includes(e.target.value.toLowerCase())
         )
         setFiltered(() => categoriesFiltered)
 
@@ -79,6 +79,7 @@ const CategorySelect = ({ label, ...props }: any) => {
         e: React.MouseEvent<HTMLLIElement, MouseEvent>,
         cat: Category
     ) => {
+        helpers.setError(null)
         helpers.setValue(cat.name, true)
         helpers.setTouched(true, true)
         setShowAutocomplete(false)
@@ -114,7 +115,10 @@ const CategorySelect = ({ label, ...props }: any) => {
             </ErrorMessage>
 
             {filtered.length > 0 && showAutocomplete && (
-                <ul className="mt-2 shadow rounded-lg p-2">
+                <ul
+                    style={{ maxHeight: '150px' }}
+                    className="mt-2 shadow rounded-lg p-2 overflow-y-auto"
+                >
                     {filtered.map((cat: Category) => (
                         <li
                             className="focus:bg-gray-medium-light hover:bg-gray-medium-light my-2 cursor-pointer rounded-lg p-2"
