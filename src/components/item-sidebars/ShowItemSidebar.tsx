@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import client from '../../api/client'
 import { itemsState } from '../../global-state/itemsState'
 import { currentItemState } from '../../global-state/currentItemState'
@@ -14,6 +14,13 @@ import Button from '../button/Button'
 import { MdModeEdit } from 'react-icons/md'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import 'react-lazy-load-image-component/src/effects/blur.css'
+import { singleCategoryState } from '../../global-state/categoriesState'
+import CategoryHeading from '../heading/CategoryHeading'
+
+// const CategoryText = ({ category_id }: any) => {
+//     const singleCategory = useRecoilValue(singleCategoryState(category_id))
+//     return <div className="text-xl mt-2">{singleCategory.name}</div>
+// }
 
 const ShowItemSidebar = () => {
     const [currentItem, setCurrentItem] = useRecoilState<ItemType | null>(
@@ -118,9 +125,11 @@ const ShowItemSidebar = () => {
                 </div>
                 <div className="mb-4">
                     <div className="text-sm text-gray-light">Category</div>
-                    <div className="text-xl mt-2">
-                        {currentItem?.categoryName}
-                    </div>
+                    <CategoryHeading
+                        level={3}
+                        className="text-xl mt-2"
+                        category_id={currentItem?.category_id}
+                    />
                 </div>
                 {currentItem?.note && (
                     <div className="mb-4">

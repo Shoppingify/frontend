@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 // Libs
-import { useRecoilState, useSetRecoilState } from 'recoil/dist'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 import { v4 as uuidv4 } from 'uuid'
 import { motion } from 'framer-motion'
 
@@ -11,7 +11,7 @@ import client from '../../api/client'
 // Components
 import Button from '../../components/button/Button'
 import Item from '../../components/cards/Item'
-import CategoryTitle from '../../components/categories/CategoryTitle'
+import CategoryHeadingEditable from '../../components/heading/CategoryHeadingEditable'
 import SearchInput from '../../components/form-elements/SearchInput'
 
 // Global state
@@ -22,6 +22,7 @@ import { ADD_NEW_ITEM, sidebarState } from '../../global-state/sidebarState'
 
 // Types
 import { ItemType } from '../../types/items/types'
+import { categoriesState } from '../../global-state/categoriesState'
 
 // Animation variants
 const containerVariants = {
@@ -54,10 +55,10 @@ const ItemsPage: React.FC = () => {
     const [itemsWithCategories, setItemsWithCategories] = useRecoilState(
         itemsState
     )
-    const setShopList = useSetRecoilState(shopListState)
     const [filteredItems, setFilteredItems] = useState([])
     const setCurrentItem = useSetRecoilState(currentItemState)
     const setSidebarType = useSetRecoilState(sidebarState)
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         async function getItems() {
@@ -66,6 +67,8 @@ const ItemsPage: React.FC = () => {
                 setItemsWithCategories(res.data.data)
             } catch (e) {
                 console.log('Error', e)
+            } finally {
+                setLoading(false)
             }
         }
         getItems()
@@ -79,52 +82,6 @@ const ItemsPage: React.FC = () => {
             setFilteredItems(sorted)
         }
     }, [itemsWithCategories])
-
-    /**
-     * Callback to update the list when a category is updated
-     * @param cat
-     */
-    const categoryUpdated = (cat: any) => {
-        const index = itemsWithCategories.findIndex(
-            (list) => list.category_id === cat.id
-        )
-
-        // Update the categoryName on the list and for each items
-        setItemsWithCategories((oldLists) => {
-            const newLists = [...oldLists]
-            let newItems: ItemType[] = []
-            newLists[index].items.forEach((item: ItemType) => {
-                newItems.push({ ...item, categoryName: cat.name })
-            })
-            newLists[index] = {
-                ...newLists[index],
-                items: newItems,
-                category: cat.name,
-                category_id: cat.id,
-            }
-            console.log('newLists', newLists)
-            return newLists
-        })
-
-        // Update the categoryName in the shopList
-        setShopList((oldList: any) => {
-            const newList = [...oldList]
-            const index = newList.findIndex((el) => {
-                console.log('el', el)
-                return el.category_id === cat.id
-            })
-            if (index > -1) {
-                newList[index] = { ...newList[index], category: cat.name }
-            }
-
-            return newList
-        })
-
-        // Update the categoryName on the currentItem
-        setCurrentItem((old) => {
-            return old !== null ? { ...old, categoryName: cat.name } : old
-        })
-    }
 
     /**
      * Search the items in the lists
@@ -169,7 +126,9 @@ const ItemsPage: React.FC = () => {
 
             {filteredItems.length === 0 && (
                 <div className="flex justify-center">
-                    <h3 className="text-xl font-bold">No item found...</h3>
+                    <h3 className="text-xl font-bold">
+                        {loading ? 'Loading...' : 'No item found...'}
+                    </h3>
                 </div>
             )}
 
@@ -183,17 +142,16 @@ const ItemsPage: React.FC = () => {
                     {filteredItems.map((listOfItems: ItemsWithCategories) => (
                         <li key={uuidv4()} className="mb-10">
                             {/* Category name component */}
-                            <CategoryTitle
+                            <CategoryHeadingEditable
                                 category={listOfItems.category}
                                 category_id={listOfItems.category_id}
-                                categoryUpdated={categoryUpdated}
                             />
                             <ul className="grid grid-cols-2 xl:grid-cols-3 gap-x-2 gap-y-6 w-full">
                                 {listOfItems.items.length > 0 &&
                                     listOfItems.items.map((item: ItemType) => (
                                         <motion.li
                                             variants={itemVariants}
-                                            key={uuidv4()}
+                                            key={item.id}
                                         >
                                             <Item
                                                 data={item}

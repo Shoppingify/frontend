@@ -61,7 +61,7 @@ const Item: React.FC<PropTypes> = ({ data, category, history }) => {
 
     return (
         <div className="p-3 bg-white overflow-hidden shadow-item rounded-lg flex justify-between items-center">
-            <button className="break-all -" onClick={showItem}>
+            <button className="break-all flex-auto" onClick={showItem}>
                 <h4 className="font-medium text-left break-all">
                     {data.name}{' '}
                     {history ? (
