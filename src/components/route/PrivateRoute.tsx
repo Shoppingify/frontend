@@ -4,7 +4,7 @@ import React from 'react'
 import { Route, Redirect, RouteProps } from 'react-router-dom'
 
 // State
-import { useRecoilValue } from 'recoil/dist'
+import { useRecoilValue } from 'recoil'
 import { userState } from '../../global-state/miscState'
 
 // Ok to use any? Investigate further if for some reason this causes issues

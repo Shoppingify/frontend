@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 // Libs
-import { useRecoilState, useSetRecoilState } from 'recoil/dist'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 import { v4 as uuidv4 } from 'uuid'
 import { motion } from 'framer-motion'
 
@@ -22,6 +22,7 @@ import { ADD_NEW_ITEM, sidebarState } from '../../global-state/sidebarState'
 
 // Types
 import { ItemType } from '../../types/items/types'
+import { categoriesState } from '../../global-state/categoriesState'
 
 // Animation variants
 const containerVariants = {
@@ -54,7 +55,6 @@ const ItemsPage: React.FC = () => {
     const [itemsWithCategories, setItemsWithCategories] = useRecoilState(
         itemsState
     )
-    const setShopList = useSetRecoilState(shopListState)
     const [filteredItems, setFilteredItems] = useState([])
     const setCurrentItem = useSetRecoilState(currentItemState)
     const setSidebarType = useSetRecoilState(sidebarState)
@@ -79,52 +79,6 @@ const ItemsPage: React.FC = () => {
             setFilteredItems(sorted)
         }
     }, [itemsWithCategories])
-
-    /**
-     * Callback to update the list when a category is updated
-     * @param cat
-     */
-    const categoryUpdated = (cat: any) => {
-        const index = itemsWithCategories.findIndex(
-            (list) => list.category_id === cat.id
-        )
-
-        // Update the categoryName on the list and for each items
-        setItemsWithCategories((oldLists) => {
-            const newLists = [...oldLists]
-            let newItems: ItemType[] = []
-            newLists[index].items.forEach((item: ItemType) => {
-                newItems.push({ ...item, categoryName: cat.name })
-            })
-            newLists[index] = {
-                ...newLists[index],
-                items: newItems,
-                category: cat.name,
-                category_id: cat.id,
-            }
-            console.log('newLists', newLists)
-            return newLists
-        })
-
-        // Update the categoryName in the shopList
-        setShopList((oldList: any) => {
-            const newList = [...oldList]
-            const index = newList.findIndex((el) => {
-                console.log('el', el)
-                return el.category_id === cat.id
-            })
-            if (index > -1) {
-                newList[index] = { ...newList[index], category: cat.name }
-            }
-
-            return newList
-        })
-
-        // Update the categoryName on the currentItem
-        setCurrentItem((old) => {
-            return old !== null ? { ...old, categoryName: cat.name } : old
-        })
-    }
 
     /**
      * Search the items in the lists
@@ -186,7 +140,6 @@ const ItemsPage: React.FC = () => {
                             <CategoryTitle
                                 category={listOfItems.category}
                                 category_id={listOfItems.category_id}
-                                categoryUpdated={categoryUpdated}
                             />
                             <ul className="grid grid-cols-2 xl:grid-cols-3 gap-x-2 gap-y-6 w-full">
                                 {listOfItems.items.length > 0 &&

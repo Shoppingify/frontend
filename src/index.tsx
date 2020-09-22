@@ -11,7 +11,7 @@ import './styles/styles.css'
 require('typeface-quicksand')
 
 // Libs
-import { RecoilRoot } from 'recoil/dist'
+import { RecoilRoot } from 'recoil'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 

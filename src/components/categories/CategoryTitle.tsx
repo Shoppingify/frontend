@@ -1,7 +1,12 @@
 import React, { useRef, useState } from 'react'
 import { useEffect } from 'react'
 import { MdModeEdit, MdSave } from 'react-icons/md'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import client from '../../api/client'
+import {
+    categoriesState,
+    singleCategoryState,
+} from '../../global-state/categoriesState'
 import Button from '../button/Button'
 import ContentEditable from '../content/ContentEditable'
 import Heading from '../heading/Heading'
@@ -9,7 +14,6 @@ import Heading from '../heading/Heading'
 interface CategoryTitleProps {
     category: string
     category_id: number
-    categoryUpdated: (cat: any) => void
 }
 
 const iconStyle = 'text-2xl cursor-pointer text-black '
@@ -17,11 +21,12 @@ const iconStyle = 'text-2xl cursor-pointer text-black '
 const CategoryTitle: React.FC<CategoryTitleProps> = ({
     category,
     category_id,
-    categoryUpdated,
 }) => {
     // Local state
+    const singleCategory = useRecoilValue(singleCategoryState(category_id))
+    const setCategory = useSetRecoilState(categoriesState)
     const [editMode, setEditMode] = useState(false)
-    const [name, setName] = useState(category)
+    const [name, setName] = useState(singleCategory.name)
     const [errors, setErrors] = useState<string | null>(null)
 
     const editFieldRef = useRef(document.createElement('div'))
@@ -48,9 +53,19 @@ const CategoryTitle: React.FC<CategoryTitleProps> = ({
         }
         try {
             const res = await client.put(`categories/${category_id}`, { name })
+
+            setCategory((old: any) => {
+                const newCategories: any[] = [...old]
+                const index = newCategories.findIndex(
+                    (cat: any) => cat.id === category_id
+                )
+                if (index > -1) {
+                    newCategories[index] = { ...newCategories[index], name }
+                    return newCategories
+                }
+                return old
+            })
             setEditMode(false)
-            categoryUpdated(res.data.data)
-            setErrors(null)
         } catch (e) {
             console.log('Error while updating the category', e)
             if (e.response && e.response.data) {

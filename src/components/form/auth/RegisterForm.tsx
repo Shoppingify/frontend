@@ -9,7 +9,7 @@ import * as Yup from 'yup'
 import Button from '../../button/Button'
 
 // Global state
-import { useRecoilState } from 'recoil/dist'
+import { useRecoilState } from 'recoil'
 import { userState } from '../../../global-state/miscState'
 import { userStateInterface } from '../../../types/state/userStateTypes'
 import AuthInput from '../../form-elements/AuthInput'

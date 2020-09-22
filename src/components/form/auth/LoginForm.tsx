@@ -11,7 +11,7 @@ import AuthInput from '../../form-elements/AuthInput'
 import { MdEmail, MdLock } from 'react-icons/md'
 
 // Global state
-import { useRecoilState } from 'recoil/dist'
+import { useRecoilState } from 'recoil'
 import { userState } from '../../../global-state/miscState'
 import { userStateInterface } from '../../../types/state/userStateTypes'
 
