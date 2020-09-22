@@ -25,7 +25,7 @@ const PrivateRoute: React.FC<PropTypes> = ({
     ...rest
 }) => {
     const user = useRecoilValue(userState)
-    console.log('User in private route', user)
+    // console.log('User in private route', user)
     return (
         <Route
             {...rest}

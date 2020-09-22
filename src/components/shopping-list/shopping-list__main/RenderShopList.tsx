@@ -12,10 +12,22 @@ import Heading from '../../heading/Heading'
 import ShoppingListItem from '../shopping-list__item/ShoppingListItem'
 import { useRef } from 'react'
 import { useEffect } from 'react'
+import { singleCategoryState } from '../../../global-state/categoriesState'
 
 // Types
 type PropTypes = {
     editing: boolean
+}
+
+const CategoryHeading = ({ category }: any) => {
+    const singleCategory = useRecoilValue(
+        singleCategoryState(category.category_id)
+    )
+    return (
+        <Heading level={3} className="text-gray-light mb-6">
+            {singleCategory.name}
+        </Heading>
+    )
 }
 
 const RenderShopList: React.FC<PropTypes> = React.memo(({ editing }) => {
@@ -26,9 +38,7 @@ const RenderShopList: React.FC<PropTypes> = React.memo(({ editing }) => {
         <div ref={renderListRef}>
             {shopList.map((category: any, index: number) => (
                 <div key={index} className="mb-12">
-                    <Heading level={3} className="text-gray-light mb-6">
-                        {category.category}
-                    </Heading>
+                    <CategoryHeading category={category} />
                     <ul>
                         {category.items.map((item: any, indexItem: number) => {
                             return (

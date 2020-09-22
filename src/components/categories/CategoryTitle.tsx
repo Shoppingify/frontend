@@ -7,6 +7,7 @@ import {
     categoriesState,
     singleCategoryState,
 } from '../../global-state/categoriesState'
+import { currentItemState } from '../../global-state/currentItemState'
 import Button from '../button/Button'
 import ContentEditable from '../content/ContentEditable'
 import Heading from '../heading/Heading'
@@ -25,6 +26,7 @@ const CategoryTitle: React.FC<CategoryTitleProps> = ({
     // Local state
     const singleCategory = useRecoilValue(singleCategoryState(category_id))
     const setCategory = useSetRecoilState(categoriesState)
+    const setCurrentItem = useSetRecoilState(currentItemState)
     const [editMode, setEditMode] = useState(false)
     const [name, setName] = useState(singleCategory.name)
     const [errors, setErrors] = useState<string | null>(null)
@@ -65,6 +67,10 @@ const CategoryTitle: React.FC<CategoryTitleProps> = ({
                 }
                 return old
             })
+            setCurrentItem((old) => {
+                return old !== null ? { ...old, categoryName: name } : old
+            })
+
             setEditMode(false)
         } catch (e) {
             console.log('Error while updating the category', e)
@@ -105,10 +111,9 @@ const CategoryTitle: React.FC<CategoryTitleProps> = ({
             </Heading>
             {editMode ? (
                 <>
-                    <Button className="group h-full">
+                    <Button className="group h-full" onClick={saveCategory}>
                         <MdSave
                             className={`${iconStyle} group-hover:text-primary transition-colors duration-300`}
-                            onClick={saveCategory}
                         />
                     </Button>
                     <Button modifier="" className="text-black" onClick={cancel}>
@@ -116,9 +121,8 @@ const CategoryTitle: React.FC<CategoryTitleProps> = ({
                     </Button>
                 </>
             ) : (
-                <Button>
+                <Button onClick={toggleEditMode}>
                     <MdModeEdit
-                        onClick={toggleEditMode}
                         className={`${iconStyle} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
                     />
                 </Button>
