@@ -68,12 +68,20 @@ const App: React.FC = () => {
         }
     }, [])
 
+    const initData = async () => {
+        await initialActiveShopListData()
+        await fetchCategories()
+    }
+
     useEffect(() => {
         console.log('user id')
         console.log(user)
         if (user !== null) {
-            initialActiveShopListData()
-            fetchCategories()
+            // initData()
+            fetchCategories().then(() => {
+                initialActiveShopListData()
+                setInit(false)
+            })
         }
     }, [user])
 
@@ -83,7 +91,7 @@ const App: React.FC = () => {
             const { id } = res.data.data
             console.log('res', res.data)
             setUser(id)
-            setInit(false)
+            // setInit(false)
             // history.
         } catch (e) {
             console.log('Error fetching the connected user', e)
