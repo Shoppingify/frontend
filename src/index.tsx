@@ -21,7 +21,7 @@ ReactDOM.render(
     <Router>
         <RecoilRoot>
             <App />
-            <ToastContainer position="top-left" />
+            <ToastContainer autoClose={1500} position="top-left" />
         </RecoilRoot>
     </Router>,
     mountNode
