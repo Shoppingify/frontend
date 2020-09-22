@@ -11,7 +11,7 @@ import client from '../../api/client'
 // Components
 import Button from '../../components/button/Button'
 import Item from '../../components/cards/Item'
-import CategoryTitle from '../../components/categories/CategoryTitle'
+import CategoryHeadingEditable from '../../components/heading/CategoryHeadingEditable'
 import SearchInput from '../../components/form-elements/SearchInput'
 
 // Global state
@@ -142,7 +142,7 @@ const ItemsPage: React.FC = () => {
                     {filteredItems.map((listOfItems: ItemsWithCategories) => (
                         <li key={uuidv4()} className="mb-10">
                             {/* Category name component */}
-                            <CategoryTitle
+                            <CategoryHeadingEditable
                                 category={listOfItems.category}
                                 category_id={listOfItems.category_id}
                             />

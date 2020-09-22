@@ -10,7 +10,7 @@ import {
 import { currentItemState } from '../../global-state/currentItemState'
 import Button from '../button/Button'
 import ContentEditable from '../content/ContentEditable'
-import Heading from '../heading/Heading'
+import Heading from './Heading'
 
 interface CategoryTitleProps {
     category: string
@@ -19,7 +19,7 @@ interface CategoryTitleProps {
 
 const iconStyle = 'text-2xl cursor-pointer text-black '
 
-const CategoryTitle: React.FC<CategoryTitleProps> = ({
+const CategoryHeadingEditable: React.FC<CategoryTitleProps> = ({
     category,
     category_id,
 }) => {
@@ -142,4 +142,4 @@ const CategoryTitle: React.FC<CategoryTitleProps> = ({
     )
 }
 
-export default CategoryTitle
+export default CategoryHeadingEditable

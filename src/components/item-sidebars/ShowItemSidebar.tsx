@@ -15,11 +15,12 @@ import { MdModeEdit } from 'react-icons/md'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import 'react-lazy-load-image-component/src/effects/blur.css'
 import { singleCategoryState } from '../../global-state/categoriesState'
+import CategoryHeading from '../heading/CategoryHeading'
 
-const CategoryText = ({ category_id }: any) => {
-    const singleCategory = useRecoilValue(singleCategoryState(category_id))
-    return <div className="text-xl mt-2">{singleCategory.name}</div>
-}
+// const CategoryText = ({ category_id }: any) => {
+//     const singleCategory = useRecoilValue(singleCategoryState(category_id))
+//     return <div className="text-xl mt-2">{singleCategory.name}</div>
+// }
 
 const ShowItemSidebar = () => {
     const [currentItem, setCurrentItem] = useRecoilState<ItemType | null>(
@@ -124,7 +125,11 @@ const ShowItemSidebar = () => {
                 </div>
                 <div className="mb-4">
                     <div className="text-sm text-gray-light">Category</div>
-                    <CategoryText category_id={currentItem?.category_id} />
+                    <CategoryHeading
+                        level={3}
+                        className="text-xl mt-2"
+                        category_id={currentItem?.category_id}
+                    />
                 </div>
                 {currentItem?.note && (
                     <div className="mb-4">
