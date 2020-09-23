@@ -56,38 +56,20 @@ interface ItemsWithCategories {
  */
 const ItemsPage: React.FC = () => {
     // Local state
-    const [itemsWithCategories, setItemsWithCategories] = useRecoilState(
-        itemsState
-    )
-    const categoriesLoaded = useRecoilValue(categoriesLoadedState)
 
+    const itemsWithCategories = useRecoilValue(itemsState)
     const [filteredItems, setFilteredItems] = useState<any[]>([])
     const setCurrentItem = useSetRecoilState(currentItemState)
     const setSidebarType = useSetRecoilState(sidebarState)
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        async function getItems() {
-            try {
-                if (itemsWithCategories.length === 0) {
-                    const res = await client.get('items')
-                    setItemsWithCategories(res.data.data)
-                    setFilteredItems(res.data.data)
-                } else {
-                    setFilteredItems(itemsWithCategories)
-                }
-            } catch (e) {
-                console.log('Error', e)
-            } finally {
-                setLoading(false)
-            }
+        console.log('ItemsWithCategories called', itemsWithCategories)
+        if (itemsWithCategories.length > 0) {
+            setFilteredItems(itemsWithCategories)
+            setLoading(false)
         }
-
-        // Need to wait the categories to be loaded
-        if (categoriesLoaded.loaded && !categoriesLoaded.loading) {
-            getItems()
-        }
-    }, [categoriesLoaded])
+    }, [itemsWithCategories])
 
     /**
      * Search the items in the lists
@@ -146,7 +128,7 @@ const ItemsPage: React.FC = () => {
                     className="overflow-y-auto px-3 md:px-5 lg:px-10"
                 >
                     {filteredItems.map((listOfItems: ItemsWithCategories) => (
-                        <li key={uuidv4()} className="mb-10">
+                        <li key={listOfItems.category_id} className="mb-10">
                             {/* Category name component */}
                             <CategoryHeadingEditable
                                 category={listOfItems.category}
