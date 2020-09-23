@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 
 // Libs
 import { Switch, useHistory, useLocation, Redirect } from 'react-router-dom'
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { useRecoilState } from 'recoil'
 
 // Router components
 import PrivateRoutesController from './routes/PrivateRoutesController'
@@ -24,6 +24,7 @@ import client from './api/client'
 // Hooks
 import useLoadActiveListData from './hooks/useLoadActiveListData'
 import useFetchCategories from './hooks/useFetchCategories'
+import BasicLoader from './components/loader/BasicLoader'
 
 /**
  * Main app component
@@ -48,7 +49,6 @@ const App: React.FC = () => {
             )
             if (access_token) {
                 // Connect the user
-                console.log('access_token', access_token)
                 localStorage.setItem('token', access_token)
                 getConnectedUser()
             }
@@ -69,19 +69,14 @@ const App: React.FC = () => {
     }, [])
 
     const initData = async () => {
-        await initialActiveShopListData()
-        await fetchCategories()
+        fetchCategories()
+        initialActiveShopListData()
     }
 
     useEffect(() => {
-        console.log('user id')
-        console.log(user)
         if (user !== null) {
-            // initData()
-            fetchCategories().then(() => {
-                initialActiveShopListData()
-                setInit(false)
-            })
+            initData()
+            setInit(false)
         }
     }, [user])
 
@@ -89,10 +84,7 @@ const App: React.FC = () => {
         try {
             const res = await client.get('me')
             const { id } = res.data.data
-            console.log('res', res.data)
             setUser(id)
-            // setInit(false)
-            // history.
         } catch (e) {
             console.log('Error fetching the connected user', e)
             setInit(false)
@@ -100,7 +92,12 @@ const App: React.FC = () => {
         }
     }, [])
 
-    if (init) return <LoggingLoader />
+    if (init)
+        return (
+            <div className="h-screen">
+                <BasicLoader />
+            </div>
+        )
 
     if (user) {
         return (

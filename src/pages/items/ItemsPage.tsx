@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 // Libs
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { v4 as uuidv4 } from 'uuid'
 import { motion } from 'framer-motion'
 
@@ -22,7 +22,11 @@ import { ADD_NEW_ITEM, sidebarState } from '../../global-state/sidebarState'
 
 // Types
 import { ItemType } from '../../types/items/types'
-import { categoriesState } from '../../global-state/categoriesState'
+import {
+    categoriesLoadedState,
+    categoriesState,
+} from '../../global-state/categoriesState'
+import useFetchCategories from '../../hooks/useFetchCategories'
 
 // Animation variants
 const containerVariants = {
@@ -55,7 +59,9 @@ const ItemsPage: React.FC = () => {
     const [itemsWithCategories, setItemsWithCategories] = useRecoilState(
         itemsState
     )
-    const [filteredItems, setFilteredItems] = useState([])
+    const categoriesLoaded = useRecoilValue(categoriesLoadedState)
+
+    const [filteredItems, setFilteredItems] = useState<any[]>([])
     const setCurrentItem = useSetRecoilState(currentItemState)
     const setSidebarType = useSetRecoilState(sidebarState)
     const [loading, setLoading] = useState(true)
@@ -63,25 +69,25 @@ const ItemsPage: React.FC = () => {
     useEffect(() => {
         async function getItems() {
             try {
-                const res = await client.get('items')
-                setItemsWithCategories(res.data.data)
+                if (itemsWithCategories.length === 0) {
+                    const res = await client.get('items')
+                    setItemsWithCategories(res.data.data)
+                    setFilteredItems(res.data.data)
+                } else {
+                    setFilteredItems(itemsWithCategories)
+                }
             } catch (e) {
                 console.log('Error', e)
             } finally {
                 setLoading(false)
             }
         }
-        getItems()
-    }, [])
 
-    useEffect(() => {
-        if (itemsWithCategories.length > 0) {
-            const sorted: any = [...itemsWithCategories].sort((a, b) => {
-                return b.items.length - a.items.length
-            })
-            setFilteredItems(sorted)
+        // Need to wait the categories to be loaded
+        if (categoriesLoaded.loaded && !categoriesLoaded.loading) {
+            getItems()
         }
-    }, [itemsWithCategories])
+    }, [categoriesLoaded])
 
     /**
      * Search the items in the lists
