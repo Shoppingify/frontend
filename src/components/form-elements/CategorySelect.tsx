@@ -16,7 +16,7 @@ interface Category {
 const CategorySelect = ({ label, ...props }: any) => {
     const [categories, setCategories] = useRecoilState(categoriesState)
     const [field, meta, helpers] = useField(props)
-    const [filtered, setFiltered] = useState([])
+    const [filtered, setFiltered] = useState<any[]>([])
     const [showAutocomplete, setShowAutocomplete] = useState(false)
     const currentItem = useRecoilValue(currentItemState)
 
@@ -48,7 +48,11 @@ const CategorySelect = ({ label, ...props }: any) => {
     }, [currentItem])
 
     useEffect(() => {
-        helpers.setValue(currentItem?.categoryName || '', true)
+        const catNameUpToDate: any = categories.find((cat: any) => {
+            return cat.id === currentItem?.category_id
+        })
+
+        helpers.setValue(catNameUpToDate?.name || '', true)
         helpers.setTouched(true, true)
     }, [currentItem])
 

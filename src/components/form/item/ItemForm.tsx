@@ -16,6 +16,7 @@ import {
 import Button from '../../button/Button'
 import BasicInput from '../../form-elements/BasicInput'
 import CategorySelect from '../../form-elements/CategorySelect'
+import useFetchItems from '../../../hooks/useFetchItems'
 
 // Validation schema
 const ItemSchema = Yup.object().shape({
@@ -30,13 +31,14 @@ const ItemForm: React.FC = () => {
     const setSidebarType = useSetRecoilState(sidebarState)
     const [currentItem, setCurrentItem] = useRecoilState(currentItemState)
 
+    const fetchItems = useFetchItems()
+
     // Add a new item
     const addItem = async (values: any, { setSubmitting, resetForm }: any) => {
         setSubmitting(true)
         try {
             const response = await client.post('items', values)
-            const itemsResponse = await client.get('items')
-            setLists(itemsResponse.data.data)
+            fetchItems()
 
             resetForm({ name: '', note: '', image: '', category: '' })
             setCurrentItem(response.data.data)
@@ -55,8 +57,7 @@ const ItemForm: React.FC = () => {
         try {
             const response = await client.put(`items/${currentItem.id}`, values)
 
-            const itemsResponse = await client.get('items')
-            setLists(itemsResponse.data.data)
+            fetchItems()
 
             resetForm({ name: '', note: '', image: '', category: '' })
             setCurrentItem(response.data.data)

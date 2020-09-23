@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 // Libs
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { v4 as uuidv4 } from 'uuid'
 import { motion } from 'framer-motion'
 
@@ -22,7 +22,11 @@ import { ADD_NEW_ITEM, sidebarState } from '../../global-state/sidebarState'
 
 // Types
 import { ItemType } from '../../types/items/types'
-import { categoriesState } from '../../global-state/categoriesState'
+import {
+    categoriesLoadedState,
+    categoriesState,
+} from '../../global-state/categoriesState'
+import useFetchCategories from '../../hooks/useFetchCategories'
 
 // Animation variants
 const containerVariants = {
@@ -52,34 +56,18 @@ interface ItemsWithCategories {
  */
 const ItemsPage: React.FC = () => {
     // Local state
-    const [itemsWithCategories, setItemsWithCategories] = useRecoilState(
-        itemsState
-    )
-    const [filteredItems, setFilteredItems] = useState([])
+
+    const itemsWithCategories = useRecoilValue(itemsState)
+    const [filteredItems, setFilteredItems] = useState<any[]>([])
     const setCurrentItem = useSetRecoilState(currentItemState)
     const setSidebarType = useSetRecoilState(sidebarState)
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        async function getItems() {
-            try {
-                const res = await client.get('items')
-                setItemsWithCategories(res.data.data)
-            } catch (e) {
-                console.log('Error', e)
-            } finally {
-                setLoading(false)
-            }
-        }
-        getItems()
-    }, [])
-
-    useEffect(() => {
+        console.log('ItemsWithCategories called', itemsWithCategories)
         if (itemsWithCategories.length > 0) {
-            const sorted: any = [...itemsWithCategories].sort((a, b) => {
-                return b.items.length - a.items.length
-            })
-            setFilteredItems(sorted)
+            setFilteredItems(itemsWithCategories)
+            setLoading(false)
         }
     }, [itemsWithCategories])
 
@@ -140,7 +128,7 @@ const ItemsPage: React.FC = () => {
                     className="overflow-y-auto px-3 md:px-5 lg:px-10"
                 >
                     {filteredItems.map((listOfItems: ItemsWithCategories) => (
-                        <li key={uuidv4()} className="mb-10">
+                        <li key={listOfItems.category_id} className="mb-10">
                             {/* Category name component */}
                             <CategoryHeadingEditable
                                 category={listOfItems.category}

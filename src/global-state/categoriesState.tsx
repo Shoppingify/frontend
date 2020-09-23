@@ -1,8 +1,16 @@
 import { atom, selectorFamily } from 'recoil'
 
-export const categoriesState = atom({
+export const categoriesState = atom<any[]>({
     key: 'categories',
     default: [],
+})
+
+export const categoriesLoadedState = atom({
+    key: 'categoriesLoaded',
+    default: {
+        loading: true,
+        loaded: false,
+    },
 })
 
 export const singleCategoryState = selectorFamily({

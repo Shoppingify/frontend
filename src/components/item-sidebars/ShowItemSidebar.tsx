@@ -18,6 +18,8 @@ import { motion } from 'framer-motion'
 import { fadeInRightBig } from '../../animation/variants/move-in/fade-in'
 import { singleCategoryState } from '../../global-state/categoriesState'
 import CategoryHeading from '../heading/CategoryHeading'
+import useFetchItems from '../../hooks/useFetchItems'
+import useAddItemToShopList from '../../hooks/useAddItemToShopList'
 
 // const CategoryText = ({ category_id }: any) => {
 //     const singleCategory = useRecoilValue(singleCategoryState(category_id))
@@ -34,14 +36,19 @@ const ShowItemSidebar = () => {
         sidebarHistoryState
     )
 
+    // Hooks
+    const fetchItems = useFetchItems()
+    const addItemToShopList = useAddItemToShopList()
+
     useEffect(() => {
         console.log('Showitemsidebar mounted')
     }, [])
 
     const addItem = async () => {
         try {
-            // TODO add an item to the active list
-            // await client.post("/")
+            if (currentItem) {
+                addItemToShopList(currentItem)
+            }
         } catch (e) {
             console.log('Error while adding an item', e)
         }
@@ -50,9 +57,9 @@ const ShowItemSidebar = () => {
     const deleteItem = async () => {
         try {
             await client.delete(`items/${currentItem?.id}`)
-            const itemResponse = await client.get('items')
 
-            setLists(itemResponse.data.data)
+            fetchItems()
+
             setCurrentItem(null)
             setSidebarType(SHOW_SHOPPING_LIST)
         } catch (e) {
