@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import { useRecoilValue } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { shopListState } from '../../global-state/shopListState'
 import { ItemType } from '../../types/items/types'
 import { MdShoppingCart, MdCheck } from 'react-icons/md'
 import { motion, AnimatePresence } from 'framer-motion'
+import { sidebarMobileShowState } from '../../global-state/sidebarState'
 
 const ShoppingBasket = () => {
+    // Global state
     const shopList = useRecoilValue(shopListState)
+    const setSidebarShow = useSetRecoilState(sidebarMobileShowState)
 
     const [remainingItemCount, setRemainingItemCount] = useState(0)
 
@@ -33,7 +36,10 @@ const ShoppingBasket = () => {
     }, [shopList])
 
     return (
-        <div className="w-16 h-16 flex justify-center items-center relative">
+        <div
+            className="w-16 h-16 flex justify-center items-center relative"
+            onClick={() => setSidebarShow((current: boolean) => !current)}
+        >
             {remainingItemCount !== 0 && (
                 <motion.div
                     key={'count-display'}
