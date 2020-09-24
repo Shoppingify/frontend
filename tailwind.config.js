@@ -23,6 +23,7 @@ module.exports = {
             'gray-medium-light': '#F2F2F2;',
             'gray-extra-light': '#FAFAFE',
             'gray-input': '#BDBDBD',
+            'gray-progress': '#E0E0E0',
             purple: '#80485B',
         },
         fontFamily: {
