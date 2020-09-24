@@ -1,12 +1,92 @@
-import React from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
+import { useRecoilState } from 'recoil'
+import client from '../../api/client'
+import Button from '../../components/button/Button'
+import Heading from '../../components/heading/Heading'
+import StatsChart from '../../components/stats/StatsChart'
+import StatsListing from '../../components/stats/StatsListing'
+import { statisticsState } from '../../global-state/statisticsState'
 
 /**
  * Simple statistics page component
  */
 const StatisticsPage: React.FC = () => {
+    const [stats, setStats] = useRecoilState(statisticsState)
+    const [interval, setTimeInterval] = useState('month')
+
+    const fetchStats = useCallback(async () => {
+        try {
+            const res = await client.get('stats')
+            console.log('response', res.data.data)
+            setStats(res.data.data)
+        } catch (e) {
+            console.log('Error while fetching stats', e)
+        }
+    }, [])
+
+    useEffect(() => {
+        fetchStats()
+    }, [])
+
     return (
-        <div>
-            <h1 className="text-4xl">Stats page</h1>
+        <div className="p-4 md:p-6">
+            {/* Switch */}
+            <div className="flex justify-end mb-8">
+                <Button
+                    onClick={() => setTimeInterval('month')}
+                    modifier={interval === 'month' ? 'primary' : ''}
+                    className={`mx-2 ${
+                        interval === 'month' ? '' : 'text-black'
+                    }`}
+                >
+                    Month
+                </Button>
+                <Button
+                    onClick={() => setTimeInterval('year')}
+                    modifier={interval === 'year' ? 'primary' : ''}
+                    className={`mx-2 ${
+                        interval === 'year' ? '' : 'text-black'
+                    }`}
+                >
+                    Year
+                </Button>
+            </div>
+            <div className="flex mb-10">
+                {/* Items */}
+                <StatsListing
+                    data={
+                        interval === 'month'
+                            ? stats.month.itemsByMonth
+                            : stats.year.itemsByYear
+                    }
+                    title="Top Items"
+                />
+                {/* Categories */}
+                <StatsListing
+                    data={
+                        interval === 'month'
+                            ? stats.month.categoriesByMonth
+                            : stats.year.categoriesByYear
+                    }
+                    title="Top Categories"
+                />
+            </div>
+            {/* Graph */}
+            <div className="flex justify-center items-center">
+                <StatsChart
+                    data={
+                        interval === 'month'
+                            ? stats.month.quantityByDay
+                            : stats.year.quantityByMonth
+                    }
+                    title={
+                        interval === 'month'
+                            ? 'Monthly Summary'
+                            : 'Yearly Summary'
+                    }
+                    interval={interval}
+                />
+            </div>
         </div>
     )
 }
