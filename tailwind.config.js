@@ -35,6 +35,7 @@ module.exports = {
                 12: '12px',
             },
             width: {
+                'sidebar-mobile': 'calc(100vw - 4rem)',
                 sidebar: '410px',
                 '1/8': '12.5%',
                 '7/8': '87.5%',
