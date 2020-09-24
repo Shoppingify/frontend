@@ -57,7 +57,7 @@ const StatsChart: React.FC<StatsChartProps> = ({
                 margin={{
                     top: 5,
                     right: 30,
-                    left: -35,
+                    left: -15,
                     bottom: 5,
                 }}
             >
