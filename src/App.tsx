@@ -4,6 +4,8 @@ import React, { useCallback, useEffect, useState } from 'react'
 // Libs
 import { Switch, useHistory, useLocation, Redirect } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
+import { isMobile } from 'react-device-detect'
+import { Swipeable } from 'react-swipeable'
 
 // Router components
 import PrivateRoutesController from './routes/PrivateRoutesController'
@@ -11,7 +13,6 @@ import PrivateRoutesController from './routes/PrivateRoutesController'
 // Components
 import Navbar from './components/navbar/Navbar'
 import Sidebar from './components/sidebar/Sidebar'
-import LoggingLoader from './components/loader/LoggingLoader'
 import PublicRoute from './components/route/PublicRoute'
 import AuthPage from './pages/auth/AuthPage'
 
@@ -26,6 +27,7 @@ import useLoadActiveListData from './hooks/useLoadActiveListData'
 import useFetchCategories from './hooks/useFetchCategories'
 import BasicLoader from './components/loader/BasicLoader'
 import useFetchItems from './hooks/useFetchItems'
+import { sidebarMobileShowState } from './global-state/sidebarState'
 
 /**
  * Main app component
@@ -34,6 +36,7 @@ const App: React.FC = () => {
     // Recoil user state
     const [user, setUser] = useRecoilState(userState)
     const [init, setInit] = useState(true)
+    const [sidebarShow, setSidebarShow] = useRecoilState(sidebarMobileShowState)
 
     // Router
     const history = useHistory()
@@ -68,6 +71,9 @@ const App: React.FC = () => {
             setInit(false)
             history.push('/login')
         }
+
+        console.log('Is app mobile?')
+        console.log(isMobile)
     }, [])
 
     const initData = async () => {
@@ -104,13 +110,23 @@ const App: React.FC = () => {
 
     if (user) {
         return (
-            <div className="flex justify-between h-screen">
-                <Navbar />
-                <div className="flex-grow bg-gray-extra-light">
-                    <PrivateRoutesController />
+            <Swipeable
+                onSwiped={(eventData) => {
+                    if (eventData.dir === 'Left') {
+                        setSidebarShow(true)
+                    } else if (eventData.dir === 'Right') {
+                        setSidebarShow(false)
+                    }
+                }}
+            >
+                <div className="flex justify-between h-screen w-full overflow-hidden relative">
+                    <Navbar />
+                    <div className="flex-grow bg-gray-extra-light">
+                        <PrivateRoutesController />
+                    </div>
+                    <Sidebar />
                 </div>
-                <Sidebar />
-            </div>
+            </Swipeable>
         )
     }
 
