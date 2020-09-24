@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
     LineChart,
     Line,
@@ -38,6 +38,13 @@ const StatsChart: React.FC<StatsChartProps> = ({
         ][month - 1]
     }
 
+    const getMaxYValue = () => {
+        const quantities = data.map((el) => parseInt(el.quantity, 10))
+        return quantities.reduce((acc, current) => {
+            return Math.max(acc, current)
+        }, 0)
+    }
+
     return (
         <div>
             <Heading className="font-bold mb-10" level={3}>
@@ -56,7 +63,7 @@ const StatsChart: React.FC<StatsChartProps> = ({
             >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="date" />
-                <YAxis padding={{ top: 50, bottom: 0 }} />
+                <YAxis domain={[0, getMaxYValue()]} />
                 {interval === 'year' && (
                     <Tooltip
                         content={({ active, payload, label }: any) => {
