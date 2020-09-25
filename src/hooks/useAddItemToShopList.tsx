@@ -34,6 +34,19 @@ const useAddItemToShopList = () => {
             })
     }
 
+    /**
+     * Makes a PUT request to update item in the active list
+     */
+    const updateSingleItem = (item: ItemType) => {
+        // If quantity is higher than 0 update the shop list, no need for app state update since the app state shop list update triggers this effect
+        client.put(`/lists/${shopListInfo.activeListId}/items`, {
+            item_id: item.id,
+            list_id: shopListInfo.activeListId,
+            quantity: item.quantity ? item.quantity + 1 : 1,
+            done: item.done,
+        })
+    }
+
     return (itemData: ItemType) => {
         setShopList((current: any) => {
             console.log(current)
@@ -63,6 +76,7 @@ const useAddItemToShopList = () => {
 
                 // Item already present in category.items
                 if (itemIndex > -1) {
+                    updateSingleItem(newItems[catIndex].items[itemIndex])
                     newItems[catIndex].items[itemIndex].quantity += 1
                 } else {
                     newItems[catIndex].items.push(currentItem)
