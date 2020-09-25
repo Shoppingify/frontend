@@ -1,5 +1,5 @@
 import { atom } from 'recoil'
-import { ItemType } from '../types/items/types'
+import { ItemType, ListOfItems } from '../types/items/types'
 import { shopListInfoStateInterface } from '../types/state/shoppingListTypes'
 
 type shopListInfoStateType = {
@@ -7,7 +7,7 @@ type shopListInfoStateType = {
     default: shopListInfoStateInterface
 }
 
-const shopListStateConst: { key: string; default: ItemType[] } = {
+const shopListStateConst: { key: string; default: ListOfItems[] } = {
     key: 'shopList',
     default: [],
 }
