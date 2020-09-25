@@ -57,7 +57,7 @@ const StatisticsPage: React.FC = () => {
     }
 
     return (
-        <div className="p-4 md:p-6">
+        <div className="h-full overflow-y-auto p-4 md:p-6">
             {/* Switch */}
             <div className="flex justify-end mb-8">
                 <Button
@@ -79,7 +79,7 @@ const StatisticsPage: React.FC = () => {
                     Year
                 </Button>
             </div>
-            <div className="flex mb-10">
+            <div className="flex flex-col md:flex-row mb-10">
                 {/* Items */}
                 <StatsListing
                     data={
