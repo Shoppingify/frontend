@@ -13,16 +13,9 @@ import { useSetRecoilState, useRecoilValue } from 'recoil'
 import { currentItemState } from '../../global-state/currentItemState'
 import { sidebarState, SHOW_ITEM } from '../../global-state/sidebarState'
 
-// Components
-import Button from '../button/Button'
-
-// Api client
-import client from '../../api/client'
-
 // Types
 import { ItemType } from '../../types/items/types'
 import useAddItemToShopList from '../../hooks/useAddItemToShopList'
-import { itemsState } from '../../global-state/itemsState'
 
 // Prop types
 type PropTypes = {
@@ -37,12 +30,8 @@ type PropTypes = {
  */
 const Item: React.FC<PropTypes> = ({ data, category, history }) => {
     // Global state
-    const setShopList = useSetRecoilState(shopListState)
     const setSidebarType = useSetRecoilState(sidebarState)
     const setCurrentItem = useSetRecoilState(currentItemState)
-    const shopListInfo = useRecoilValue(shopListInfoState)
-
-    console.log('data', data)
 
     // Hooks
     const addItemToShopList = useAddItemToShopList()
