@@ -48,11 +48,17 @@ const CategorySelect = ({ label, ...props }: any) => {
     }, [currentItem])
 
     useEffect(() => {
-        const catNameUpToDate: any = categories.find((cat: any) => {
-            return cat.id === currentItem?.category_id
-        })
+        let catNameUpToDate
+        if (currentItem?.category_id) {
+            const category = categories.find((cat: any) => {
+                return cat.id === currentItem?.category_id
+            })
+            catNameUpToDate = category.name
+        } else {
+            catNameUpToDate = currentItem?.categoryName
+        }
 
-        helpers.setValue(catNameUpToDate?.name || '', true)
+        helpers.setValue(catNameUpToDate || '', true)
         helpers.setTouched(true, true)
     }, [currentItem])
 
