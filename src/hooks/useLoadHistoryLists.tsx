@@ -1,7 +1,11 @@
+// Libs
 import { format } from 'date-fns'
-import { useState } from 'react'
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { useSetRecoilState } from 'recoil'
+
+// Api client
 import client from '../api/client'
+
+// Global state
 import { shopListHistoryState } from '../global-state/shopListHistoryState'
 
 /**
@@ -32,8 +36,14 @@ const groupByDate = (data: any) => {
     }, [])
 }
 
+/**
+ * Hook that fetches shopping lists history
+ */
 const useLoadHistoryLists = () => {
+    // Use global recoil state for history lists
     const setLists = useSetRecoilState(shopListHistoryState)
+
+    // Return function for fetching/updating history lists
     return async () => {
         try {
             const response = await client.get('lists')
