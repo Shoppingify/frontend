@@ -8,6 +8,7 @@ import {
     singleCategoryState,
 } from '../../global-state/categoriesState'
 import { currentItemState } from '../../global-state/currentItemState'
+import useFetchItems from '../../hooks/useFetchItems'
 import Button from '../button/Button'
 import ContentEditable from '../content/ContentEditable'
 import Heading from './Heading'
@@ -33,6 +34,9 @@ const CategoryHeadingEditable: React.FC<CategoryTitleProps> = ({
 
     const editFieldRef = useRef(document.createElement('div'))
 
+    // Hooks
+    const fetchItems = useFetchItems()
+
     /**
      * Makes the category title editable
      */
@@ -55,6 +59,8 @@ const CategoryHeadingEditable: React.FC<CategoryTitleProps> = ({
         }
         try {
             const res = await client.put(`categories/${category_id}`, { name })
+
+            fetchItems()
 
             setCategory((old: any) => {
                 const newCategories: any[] = [...old]

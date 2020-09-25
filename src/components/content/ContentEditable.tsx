@@ -29,7 +29,13 @@ export interface Props extends DivProps {
 
 // Helper functions
 const normalizeHtml = (str: string): string => {
-    return str && str.replace(/&nbsp;|\u202F|\u00A0/g, ' ')
+    return (
+        str &&
+        str
+            .replace(/&nbsp;|\u202F|\u00A0/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim()
+    )
 }
 
 const replaceCaret = (el: HTMLElement) => {
@@ -95,17 +101,18 @@ export default class ContentEditable extends React.Component<Props> {
         const el = this.getEl()
         if (!el) return
 
+        if (!this.props.disabled && this.props.shouldFocus) {
+            el.focus()
+        }
+
         // Perhaps React (whose VDOM gets outdated because we often prevent
         // rerendering) did not update the DOM. So we update it manually now.
         if (this.props.html !== el.innerHTML) {
             el.innerHTML = this.props.html
         }
+
         this.lastHtml = this.props.html
         replaceCaret(el)
-
-        if (!this.props.disabled && this.props.shouldFocus) {
-            el.focus()
-        }
     }
 
     emitChange = (originalEvt: React.SyntheticEvent<any>) => {
@@ -120,7 +127,10 @@ export default class ContentEditable extends React.Component<Props> {
             }
         }
 
-        const html = el.innerHTML
+        // Normalize html
+        const html = normalizeHtml(el.innerHTML)
+
+        // Handle passing of the html to parent
         if (this.props.onChange && html !== this.lastHtml) {
             // Clone event with Object.assign to avoid
             // "Cannot assign to read only property 'target' of object"
@@ -152,7 +162,7 @@ export default class ContentEditable extends React.Component<Props> {
                 onKeyUp: this.props.onKeyUp || this.emitChange,
                 onKeyDown: this.props.onKeyDown || this.emitChange,
                 contentEditable: !this.props.disabled,
-                dangerouslySetInnerHTML: { __html: html },
+                dangerouslySetInnerHTML: { __html: normalizeHtml(html) },
                 className: this.props.className,
                 style: this.props.style,
             },
