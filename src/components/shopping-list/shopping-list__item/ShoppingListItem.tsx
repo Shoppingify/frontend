@@ -185,7 +185,7 @@ const ShoppingListItem: React.FC<PropTypes> = React.memo(
                 const {
                     data: { items: itemsData },
                 } = await responseItems.data
-
+                toast.warn('Item removed from shopping list')
                 setShopList(itemsData)
             } catch (error) {
                 toast.error('An error occured')
