@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import client from '../../api/client'
 import { itemsState } from '../../global-state/itemsState'
@@ -9,7 +9,7 @@ import {
     sidebarState,
     sidebarHistoryState,
 } from '../../global-state/sidebarState'
-import { ItemType } from '../../types/items/types'
+import { ItemType, ListOfItems } from '../../types/items/types'
 import Button from '../button/Button'
 import { MdModeEdit } from 'react-icons/md'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
@@ -20,6 +20,8 @@ import { singleCategoryState } from '../../global-state/categoriesState'
 import CategoryHeading from '../heading/CategoryHeading'
 import useFetchItems from '../../hooks/useFetchItems'
 import useAddItemToShopList from '../../hooks/useAddItemToShopList'
+import { shopListState } from '../../global-state/shopListState'
+import { CategoryType } from '../../types/interfaces/db_interfaces'
 
 // const CategoryText = ({ category_id }: any) => {
 //     const singleCategory = useRecoilValue(singleCategoryState(category_id))
@@ -30,19 +32,12 @@ const ShowItemSidebar = () => {
     const [currentItem, setCurrentItem] = useRecoilState<ItemType | null>(
         currentItemState
     )
-    const setLists = useSetRecoilState(itemsState)
     const setSidebarType = useSetRecoilState(sidebarState)
-    const [sidebarHistory, setSidebarHistory] = useRecoilState(
-        sidebarHistoryState
-    )
+    const setSidebarHistory = useSetRecoilState(sidebarHistoryState)
 
     // Hooks
     const fetchItems = useFetchItems()
     const addItemToShopList = useAddItemToShopList()
-
-    useEffect(() => {
-        console.log('Showitemsidebar mounted')
-    }, [])
 
     const addItem = async () => {
         try {

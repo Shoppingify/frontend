@@ -9,7 +9,7 @@ import client from '../api/client'
 import { shopListInfoState, shopListState } from '../global-state/shopListState'
 
 // Types
-import { ItemType } from '../types/items/types'
+import { ItemType, ListOfItems } from '../types/items/types'
 import { shopListInfoStateInterface } from '../types/state/shoppingListTypes'
 import useCreateNewShoppingList from './useCreateNewShoppingList'
 
@@ -62,7 +62,7 @@ const useLoadActiveListData = () => {
                 const {
                     data: { items: itemsData },
                 }: {
-                    data: { items: ItemType[] }
+                    data: { items: ListOfItems[] }
                 } = await responseItems.data
                 setShopList(itemsData)
             }
