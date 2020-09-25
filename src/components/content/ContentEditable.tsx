@@ -122,6 +122,11 @@ export default class ContentEditable extends React.Component<Props> {
         //@ts-ignore
         if (originalEvt.keyCode === 13) {
             originalEvt.preventDefault()
+
+            // Remove extra spaces and reset caret
+            el.innerHTML = normalizeHtml(el.innerHTML)
+            replaceCaret(el)
+
             if (this.props.enterPressCallback) {
                 this.props.enterPressCallback()
             }
