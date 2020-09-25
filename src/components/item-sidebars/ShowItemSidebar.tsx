@@ -34,31 +34,10 @@ const ShowItemSidebar = () => {
     )
     const setSidebarType = useSetRecoilState(sidebarState)
     const setSidebarHistory = useSetRecoilState(sidebarHistoryState)
-    const shopList = useRecoilValue(shopListState)
-
-    // Local state
-    const [itemInList, setItemInList] = useState(false)
 
     // Hooks
     const fetchItems = useFetchItems()
     const addItemToShopList = useAddItemToShopList()
-
-    /**
-     * Mount effect
-     */
-    useEffect(() => {
-        // Check if item is in current shop list
-        let indexOfItem = -1
-
-        shopList.forEach((category: ListOfItems) => {
-            indexOfItem = category.items.findIndex(
-                //@ts-ignore
-                (x: ItemType) => x.id === currentItem.id
-            )
-        })
-
-        if (indexOfItem !== -1) setItemInList(true)
-    }, [shopList])
 
     const addItem = async () => {
         try {
@@ -181,7 +160,7 @@ const ShowItemSidebar = () => {
                     Delete
                 </Button>
                 <Button onClick={addItem} type="submit" modifier="primary">
-                    {itemInList ? 'Add more' : 'Add to list'}
+                    Add to list
                 </Button>
             </div>
         </motion.div>
