@@ -1,3 +1,12 @@
+export const fadeIn = {
+    hidden: {
+        opacity: 0,
+    },
+    show: {
+        opacity: 1,
+    },
+}
+
 export const fadeInRight = {
     hidden: {
         x: 100,

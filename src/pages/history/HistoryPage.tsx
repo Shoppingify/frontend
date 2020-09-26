@@ -7,10 +7,13 @@ import { useRecoilValue, useRecoilState } from 'recoil'
 import { shopListInfoState } from '../../global-state/shopListState'
 import { historyListsRefreshState } from '../../global-state/miscState'
 import BasicLoader from '../../components/loader/BasicLoader'
+import { motion } from 'framer-motion'
+import { fadeIn } from '../../animation/variants/move-in/fade-in'
 
 /**
  * Simple history page component
  */
+
 const HistoryPage = () => {
     const [lists, setLists] = useState([])
     const [loading, setLoading] = useState(true)
@@ -106,11 +109,15 @@ const HistoryPage = () => {
             {lists.map((item: any) => (
                 <div className="mt-10 px-4 overflow-y-auto" key={item.date}>
                     <h3 className="text-sm mb-4 font-medium">{item.date}</h3>
-                    <ul>
+                    <motion.ul
+                        variants={fadeIn}
+                        initial="hidden"
+                        animate="show"
+                    >
                         {item.lists.map((list: any) => (
                             <List key={list.id} list={list} />
                         ))}
-                    </ul>
+                    </motion.ul>
                 </div>
             ))}
         </div>

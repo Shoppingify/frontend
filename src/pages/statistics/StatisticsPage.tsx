@@ -1,5 +1,7 @@
+import { motion } from 'framer-motion'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
+import { fadeIn } from '../../animation/variants/move-in/fade-in'
 import client from '../../api/client'
 import Button from '../../components/button/Button'
 import Heading from '../../components/heading/Heading'
@@ -57,7 +59,12 @@ const StatisticsPage: React.FC = () => {
     }
 
     return (
-        <div className="h-full overflow-y-auto p-4 md:p-6">
+        <motion.div
+            variants={fadeIn}
+            initial="hidden"
+            animate="show"
+            className="h-full overflow-y-auto p-4 md:p-6"
+        >
             {/* Switch */}
             <div className="flex justify-end mb-8">
                 <Button
@@ -115,7 +122,7 @@ const StatisticsPage: React.FC = () => {
                     interval={interval}
                 />
             </div>
-        </div>
+        </motion.div>
     )
 }
 
