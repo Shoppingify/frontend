@@ -28,6 +28,7 @@
         "lodash.throttle": "^4.1.1",
         "react": "^16.13.1",
         "react-debounce-input": "^3.2.2",
+        "react-device-detect": "^1.13.1",
         "react-dom": "^16.13.1",
         "react-hot-loader": "^4.12.21",
         "react-icons": "^3.11.0",
