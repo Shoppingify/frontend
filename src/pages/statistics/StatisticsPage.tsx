@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 // Libs
 import { useRecoilValue } from 'recoil'
@@ -12,6 +12,7 @@ import StatsListing from '../../components/stats/StatsListing'
 
 // State
 import { statisticsState } from '../../global-state/statisticsState'
+import useFetchStats from '../../hooks/useFetchStats'
 
 /**
  * Simple statistics page component
@@ -19,6 +20,16 @@ import { statisticsState } from '../../global-state/statisticsState'
 const StatisticsPage: React.FC = () => {
     const { loading, stats, noStats } = useRecoilValue(statisticsState)
     const [interval, setTimeInterval] = useState('month')
+
+    // Hooks
+    const fetchStats = useFetchStats()
+
+    /**
+     * Component mounted effect
+     */
+    useEffect(() => {
+        fetchStats()
+    }, [])
 
     if (loading) {
         return (

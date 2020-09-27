@@ -26,7 +26,6 @@ import useLoadActiveListData from './hooks/useLoadActiveListData'
 import useFetchCategories from './hooks/useFetchCategories'
 import useFetchItems from './hooks/useFetchItems'
 import useLoadHistoryLists from './hooks/useFetchHistoryLists'
-import useFetchStats from './hooks/useFetchStats'
 
 /**
  * Main app component
@@ -45,7 +44,6 @@ const App: React.FC = () => {
     const fetchCategories = useFetchCategories()
     const fetchItems = useFetchItems()
     const fetchShopListHistory = useLoadHistoryLists()
-    const fetchStats = useFetchStats()
 
     useEffect(() => {
         if (location.search.length > 0) {
@@ -78,7 +76,6 @@ const App: React.FC = () => {
         fetchItems()
         initialActiveShopListData()
         fetchShopListHistory()
-        fetchStats()
     }
 
     useEffect(() => {
