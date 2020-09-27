@@ -9,24 +9,17 @@ import {
     sidebarState,
     sidebarHistoryState,
 } from '../../global-state/sidebarState'
-import { ItemType, ListOfItems } from '../../types/items/types'
+import { ItemType } from '../../types/items/types'
 import Button from '../button/Button'
 import { MdModeEdit } from 'react-icons/md'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import 'react-lazy-load-image-component/src/effects/blur.css'
 import { motion } from 'framer-motion'
 import { fadeInRightBig } from '../../animation/variants/move-in/fade-in'
-import { singleCategoryState } from '../../global-state/categoriesState'
 import CategoryHeading from '../heading/CategoryHeading'
 import useFetchItems from '../../hooks/useFetchItems'
 import useAddItemToShopList from '../../hooks/useAddItemToShopList'
-import { shopListState } from '../../global-state/shopListState'
-import { CategoryType } from '../../types/interfaces/db_interfaces'
-
-// const CategoryText = ({ category_id }: any) => {
-//     const singleCategory = useRecoilValue(singleCategoryState(category_id))
-//     return <div className="text-xl mt-2">{singleCategory.name}</div>
-// }
+import useLoadActiveListData from '../../hooks/useLoadActiveListData'
 
 const ShowItemSidebar = () => {
     const [currentItem, setCurrentItem] = useRecoilState<ItemType | null>(
@@ -38,11 +31,13 @@ const ShowItemSidebar = () => {
     // Hooks
     const fetchItems = useFetchItems()
     const addItemToShopList = useAddItemToShopList()
+    const fetchActiveList = useLoadActiveListData()
 
     const addItem = async () => {
         try {
             if (currentItem) {
-                addItemToShopList(currentItem)
+                await addItemToShopList(currentItem)
+                setSidebarType(SHOW_SHOPPING_LIST)
             }
         } catch (e) {
             console.log('Error while adding an item', e)
@@ -53,7 +48,8 @@ const ShowItemSidebar = () => {
         try {
             await client.delete(`items/${currentItem?.id}`)
 
-            fetchItems()
+            await fetchItems()
+            await fetchActiveList()
 
             setCurrentItem(null)
             setSidebarType(SHOW_SHOPPING_LIST)
@@ -135,14 +131,16 @@ const ShowItemSidebar = () => {
                     <div className="text-sm text-gray-light">Name</div>
                     <div className="text-xl mt-2">{currentItem?.name}</div>
                 </div>
-                <div className="mb-4">
-                    <div className="text-sm text-gray-light">Category</div>
-                    <CategoryHeading
-                        level={3}
-                        className="text-xl mt-2"
-                        category_id={currentItem?.category_id}
-                    />
-                </div>
+                {currentItem?.category_id && (
+                    <div className="mb-4">
+                        <div className="text-sm text-gray-light">Category</div>
+                        <CategoryHeading
+                            level={3}
+                            className="text-xl mt-2"
+                            category_id={currentItem?.category_id}
+                        />
+                    </div>
+                )}
                 {currentItem?.note && (
                     <div className="mb-4">
                         <div className="text-sm text-gray-light">Note</div>

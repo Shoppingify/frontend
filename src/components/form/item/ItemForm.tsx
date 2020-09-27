@@ -19,6 +19,7 @@ import CategorySelect from '../../form-elements/CategorySelect'
 import useFetchItems from '../../../hooks/useFetchItems'
 import useFetchCategories from '../../../hooks/useFetchCategories'
 import { categoriesState } from '../../../global-state/categoriesState'
+import useLoadActiveListData from '../../../hooks/useLoadActiveListData'
 
 // Validation schema
 const ItemSchema = Yup.object().shape({
@@ -35,6 +36,7 @@ const ItemForm: React.FC = () => {
 
     const fetchItems = useFetchItems()
     const fetchCategories = useFetchCategories()
+    const fetchActiveList = useLoadActiveListData()
 
     // Add a new item
     const addItem = async (values: any, { setSubmitting, resetForm }: any) => {
@@ -68,6 +70,7 @@ const ItemForm: React.FC = () => {
                 await fetchCategories()
             }
             await fetchItems()
+            await fetchActiveList()
 
             resetForm({ name: '', note: '', image: '', category: '' })
             setCurrentItem(response.data.data)
