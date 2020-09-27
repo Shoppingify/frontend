@@ -13,12 +13,6 @@ import { useSetRecoilState, useRecoilValue } from 'recoil'
 import { currentItemState } from '../../global-state/currentItemState'
 import { sidebarState, SHOW_ITEM } from '../../global-state/sidebarState'
 
-// Components
-import Button from '../button/Button'
-
-// Api client
-import client from '../../api/client'
-
 // Types
 import { ItemType } from '../../types/items/types'
 import useAddItemToShopList from '../../hooks/useAddItemToShopList'
@@ -36,10 +30,8 @@ type PropTypes = {
  */
 const Item: React.FC<PropTypes> = ({ data, category, history }) => {
     // Global state
-    const setShopList = useSetRecoilState(shopListState)
     const setSidebarType = useSetRecoilState(sidebarState)
     const setCurrentItem = useSetRecoilState(currentItemState)
-    const shopListInfo = useRecoilValue(shopListInfoState)
 
     // Hooks
     const addItemToShopList = useAddItemToShopList()
@@ -60,8 +52,16 @@ const Item: React.FC<PropTypes> = ({ data, category, history }) => {
     }
 
     return (
-        <div className="p-3 bg-white overflow-hidden shadow-item rounded-lg flex justify-between items-center">
-            <button className="break-all flex-auto" onClick={showItem}>
+        <div
+            className={`p-3 ${
+                data.deleted_at === null ? 'bg-white' : 'border border-danger'
+            } overflow-hidden shadow-item rounded-lg flex justify-between items-center`}
+        >
+            <button
+                className="break-all flex-auto"
+                onClick={showItem}
+                disabled={data.deleted_at !== null}
+            >
                 <h4 className="font-medium text-left break-all">
                     {data.name}{' '}
                     {history ? (
@@ -71,11 +71,22 @@ const Item: React.FC<PropTypes> = ({ data, category, history }) => {
                     ) : null}
                 </h4>
             </button>
-            <button className="m-2" onClick={handleAddItem}>
-                <MdAdd
-                    className="text-gray-light hover:text-primary transition-colors duration-300"
-                    size={24}
-                />
+            <button
+                className="m-2"
+                onClick={handleAddItem}
+                disabled={data.deleted_at !== null}
+            >
+                {!data.deleted_at && (
+                    <MdAdd
+                        className="text-gray-light hover:text-primary transition-colors duration-300"
+                        size={24}
+                    />
+                )}
+                {data.deleted_at && (
+                    <span className="text-danger text-sm font-medium">
+                        Item deleted
+                    </span>
+                )}
             </button>
         </div>
     )
