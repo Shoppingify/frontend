@@ -2,15 +2,16 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { format } from 'date-fns'
 
 import List from '../../components/cards/List'
-import client from '../../api/client'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import BasicLoader from '../../components/loader/BasicLoader'
-import useLoadHistoryLists from '../../hooks/useFetchHistoryLists'
+import { motion } from 'framer-motion'
+import { fadeIn } from '../../animation/variants/move-in/fade-in'
 import { shopListHistoryState } from '../../global-state/shopListHistoryState'
 
 /**
  * Simple history page component
  */
+
 const HistoryPage = () => {
     const [mounted, setMounted] = useState(false)
     const lists = useRecoilValue(shopListHistoryState)
@@ -27,7 +28,7 @@ const HistoryPage = () => {
             {lists.length === 0 && (
                 <div className="flex justify-center">
                     <h3 className="text-xl font-bold">
-                        No list in the history yet ;)
+                        No list in the history yet
                     </h3>
                 </div>
             )}
@@ -36,11 +37,15 @@ const HistoryPage = () => {
             {lists.map((item: any) => (
                 <div className="mt-10 px-4 overflow-y-auto" key={item.date}>
                     <h3 className="text-sm mb-4 font-medium">{item.date}</h3>
-                    <ul>
+                    <motion.ul
+                        variants={fadeIn}
+                        initial="hidden"
+                        animate="show"
+                    >
                         {item.lists.map((list: any) => (
                             <List key={list.id} list={list} />
                         ))}
-                    </ul>
+                    </motion.ul>
                 </div>
             ))}
         </div>
