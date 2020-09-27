@@ -102,7 +102,7 @@ const HistoryShowPage = () => {
                             <li key={uuidv4()} className="mb-5">
                                 {/* Category name component */}
                                 <Heading
-                                    level={2}
+                                    level={3}
                                     className={`font-bold mr-4 rounded-lg mb-2`}
                                 >
                                     {listOfItems.category}
