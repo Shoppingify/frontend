@@ -1,13 +1,17 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { useRecoilState, useRecoilValue } from 'recoil'
-import client from '../../api/client'
+import React, { useState } from 'react'
+
+// Libs
+import { useRecoilValue } from 'recoil'
+
+// Components
 import Button from '../../components/button/Button'
 import Heading from '../../components/heading/Heading'
 import BasicLoader from '../../components/loader/BasicLoader'
 import StatsChart from '../../components/stats/StatsChart'
 import StatsListing from '../../components/stats/StatsListing'
+
+// State
 import { statisticsState } from '../../global-state/statisticsState'
-import useFetchStats from '../../hooks/useFetchStats'
 
 /**
  * Simple statistics page component
