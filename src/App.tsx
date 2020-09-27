@@ -11,9 +11,9 @@ import PrivateRoutesController from './routes/PrivateRoutesController'
 // Components
 import Navbar from './components/navbar/Navbar'
 import Sidebar from './components/sidebar/Sidebar'
-import LoggingLoader from './components/loader/LoggingLoader'
 import PublicRoute from './components/route/PublicRoute'
 import AuthPage from './pages/auth/AuthPage'
+import BasicLoader from './components/loader/BasicLoader'
 
 // State
 import { userState } from './global-state/miscState'
@@ -24,8 +24,8 @@ import client from './api/client'
 // Hooks
 import useLoadActiveListData from './hooks/useLoadActiveListData'
 import useFetchCategories from './hooks/useFetchCategories'
-import BasicLoader from './components/loader/BasicLoader'
 import useFetchItems from './hooks/useFetchItems'
+import useLoadHistoryLists from './hooks/useFetchHistoryLists'
 
 /**
  * Main app component
@@ -43,6 +43,7 @@ const App: React.FC = () => {
     const initialActiveShopListData = useLoadActiveListData()
     const fetchCategories = useFetchCategories()
     const fetchItems = useFetchItems()
+    const fetchShopListHistory = useLoadHistoryLists()
 
     useEffect(() => {
         if (location.search.length > 0) {
@@ -74,6 +75,7 @@ const App: React.FC = () => {
         fetchCategories()
         fetchItems()
         initialActiveShopListData()
+        fetchShopListHistory()
     }
 
     useEffect(() => {

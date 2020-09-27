@@ -10,6 +10,7 @@ export interface ItemType {
     user_id?: number
     quantity?: number
     done?: boolean
+    deleted_at?: string
 }
 
 export interface ListOfItems {
