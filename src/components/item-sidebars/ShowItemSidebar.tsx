@@ -145,7 +145,7 @@ const ShowItemSidebar = () => {
                 </div>
                 {currentItem?.note && (
                     <div className="mb-4">
-                        <div className="text-sm text-gray-light">Name</div>
+                        <div className="text-sm text-gray-light">Note</div>
                         <div className="text-xl mt-2">{currentItem?.note}</div>
                     </div>
                 )}
