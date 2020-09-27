@@ -44,7 +44,6 @@ const List: React.FC<ListProps> = ({
     }
 
     const statusColor = (status: string): string => {
-        console.log(status)
         switch (status) {
             case 'active':
                 return 'primary'
