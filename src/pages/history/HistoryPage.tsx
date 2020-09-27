@@ -5,7 +5,7 @@ import List from '../../components/cards/List'
 import client from '../../api/client'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import BasicLoader from '../../components/loader/BasicLoader'
-import useLoadHistoryLists from '../../hooks/useLoadHistoryLists'
+import useLoadHistoryLists from '../../hooks/useFetchHistoryLists'
 import { shopListHistoryState } from '../../global-state/shopListHistoryState'
 
 /**

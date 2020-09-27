@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import client from '../../api/client'
 import Button from '../../components/button/Button'
 import Heading from '../../components/heading/Heading'
@@ -7,36 +7,14 @@ import BasicLoader from '../../components/loader/BasicLoader'
 import StatsChart from '../../components/stats/StatsChart'
 import StatsListing from '../../components/stats/StatsListing'
 import { statisticsState } from '../../global-state/statisticsState'
+import useFetchStats from '../../hooks/useFetchStats'
 
 /**
  * Simple statistics page component
  */
 const StatisticsPage: React.FC = () => {
-    const [stats, setStats] = useRecoilState(statisticsState)
+    const { loading, stats, noStats } = useRecoilValue(statisticsState)
     const [interval, setTimeInterval] = useState('month')
-    const [loading, setLoading] = useState(true)
-    const [noStats, setNoStats] = useState(false)
-
-    const fetchStats = useCallback(async () => {
-        try {
-            const res = await client.get('stats')
-            console.log('res', res.status)
-            console.log('response', res.data.data)
-            if (res.status !== 204) {
-                setStats(res.data.data)
-            } else {
-                setNoStats(true)
-            }
-        } catch (e) {
-            console.log('Error while fetching stats', e)
-        } finally {
-            setLoading(false)
-        }
-    }, [])
-
-    useEffect(() => {
-        fetchStats()
-    }, [])
 
     if (loading) {
         return (

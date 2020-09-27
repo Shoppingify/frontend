@@ -18,7 +18,7 @@ import { shopListInfoState, shopListState } from '../global-state/shopListState'
 // Types
 import { ItemType } from '../types/items/types'
 import { shopListInfoStateInterface } from '../types/state/shoppingListTypes'
-import useLoadHistoryLists from './useLoadHistoryLists'
+import useLoadHistoryLists from './useFetchHistoryLists'
 
 // Name generator
 const nameConfig: Config = {
