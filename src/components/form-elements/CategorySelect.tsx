@@ -49,23 +49,22 @@ const CategorySelect = ({ label, ...props }: any) => {
 
     useEffect(() => {
         let catNameUpToDate
+
         if (currentItem?.category_id) {
             const category = categories.find((cat: any) => {
                 return cat.id === currentItem?.category_id
             })
-            catNameUpToDate = category.name
+            catNameUpToDate = category?.name
         } else {
             // It's a new item on an empty category so I need to always
             // check if the category name has been updated too
             const category = categories.find((cat: any) => {
-                console.log('cat.name', cat.name)
-                console.log('currentItem cat name', currentItem?.categoryName)
                 return (
                     cat.name.toLowerCase() ===
                     currentItem?.categoryName?.toLowerCase()
                 )
             })
-            catNameUpToDate = category.name
+            catNameUpToDate = category?.name
         }
 
         helpers.setValue(catNameUpToDate || '', true)
