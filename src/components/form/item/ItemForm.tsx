@@ -17,6 +17,9 @@ import Button from '../../button/Button'
 import BasicInput from '../../form-elements/BasicInput'
 import CategorySelect from '../../form-elements/CategorySelect'
 import useFetchItems from '../../../hooks/useFetchItems'
+import useFetchCategories from '../../../hooks/useFetchCategories'
+import { categoriesState } from '../../../global-state/categoriesState'
+import useLoadActiveListData from '../../../hooks/useLoadActiveListData'
 
 // Validation schema
 const ItemSchema = Yup.object().shape({
@@ -27,18 +30,25 @@ const ItemSchema = Yup.object().shape({
 })
 
 const ItemForm: React.FC = () => {
-    const setLists = useSetRecoilState(itemsState)
     const setSidebarType = useSetRecoilState(sidebarState)
     const [currentItem, setCurrentItem] = useRecoilState(currentItemState)
+    const categories = useRecoilValue(categoriesState)
 
     const fetchItems = useFetchItems()
+    const fetchCategories = useFetchCategories()
+    const fetchActiveList = useLoadActiveListData()
 
     // Add a new item
     const addItem = async (values: any, { setSubmitting, resetForm }: any) => {
         setSubmitting(true)
         try {
             const response = await client.post('items', values)
-            fetchItems()
+
+            // Check if the categories exists?
+            if (!categoryExists(values.category)) {
+                await fetchCategories()
+            }
+            await fetchItems()
 
             resetForm({ name: '', note: '', image: '', category: '' })
             setCurrentItem(response.data.data)
@@ -56,8 +66,11 @@ const ItemForm: React.FC = () => {
         setSubmitting(true)
         try {
             const response = await client.put(`items/${currentItem.id}`, values)
-
-            fetchItems()
+            if (!categoryExists(values.category)) {
+                await fetchCategories()
+            }
+            await fetchItems()
+            await fetchActiveList()
 
             resetForm({ name: '', note: '', image: '', category: '' })
             setCurrentItem(response.data.data)
@@ -80,6 +93,12 @@ const ItemForm: React.FC = () => {
             image: currentItem?.image || '',
             category: currentItem?.categoryName || '',
         }
+    }
+
+    const categoryExists = (category: string) => {
+        return categories.find(
+            (cat) => cat.name.toLowerCase() === category.toLowerCase()
+        )
     }
 
     useEffect(() => {

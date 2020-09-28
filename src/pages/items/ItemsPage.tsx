@@ -27,6 +27,7 @@ import {
     categoriesState,
 } from '../../global-state/categoriesState'
 import useFetchCategories from '../../hooks/useFetchCategories'
+import AddItemButton from '../../components/button/AddItemButton'
 
 // Animation variants
 const containerVariants = {
@@ -92,16 +93,6 @@ const ItemsPage: React.FC = () => {
         setFilteredItems(() => filtered)
     }
 
-    const addAnItem = (category: string) => {
-        setCurrentItem({
-            name: '',
-            note: '',
-            image: '',
-            categoryName: category,
-        })
-        setSidebarType(ADD_NEW_ITEM)
-    }
-
     return (
         <div className="container mx-auto flex flex-col h-full">
             <div className="flex flex-col xl:flex-row mb-5 px-6 lg:px-20 py-4">
@@ -149,15 +140,9 @@ const ItemsPage: React.FC = () => {
                                     ))}
 
                                 {listOfItems.items.length === 0 && (
-                                    <Button
-                                        modifier=""
-                                        onClick={() =>
-                                            addAnItem(listOfItems.category)
-                                        }
-                                        className="text-gray"
-                                    >
-                                        Add an item
-                                    </Button>
+                                    <AddItemButton
+                                        category_id={listOfItems.category_id}
+                                    />
                                 )}
                             </ul>
                         </li>

@@ -72,10 +72,10 @@ const App: React.FC = () => {
     }, [])
 
     const initData = async () => {
-        fetchCategories()
-        fetchItems()
-        initialActiveShopListData()
-        fetchShopListHistory()
+        await fetchCategories()
+        await fetchItems()
+        await initialActiveShopListData()
+        await fetchShopListHistory()
     }
 
     useEffect(() => {
