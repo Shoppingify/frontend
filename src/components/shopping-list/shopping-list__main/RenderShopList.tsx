@@ -20,7 +20,10 @@ type PropTypes = {
 }
 
 const RenderShopList: React.FC<PropTypes> = React.memo(({ editing }) => {
+    // Global state
     const shopList = useRecoilValue(shopListState)
+
+    // Refs
     const renderListRef = useRef(document.createElement('div'))
 
     return (
