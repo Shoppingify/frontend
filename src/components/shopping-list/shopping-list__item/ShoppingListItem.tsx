@@ -197,7 +197,7 @@ const ShoppingListItem: React.FC<PropTypes> = React.memo(
         return (
             <div className="flex justify-between items-center mb-6 xl:flex-wrap group relative">
                 <label
-                    className={`flex items-center relative pl-4 focus:border-black ${
+                    className={`flex items-center relative pl-4 ${
                         editing ? 'w-1/3' : ''
                     }`}
                 >
