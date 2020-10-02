@@ -18,20 +18,36 @@ const useAddItemToShopList = () => {
     /**
      * Makes a POST request to store item in the database under the active list
      */
-    const storeItemInDb = (id: number) => {
-        client
-            .post(`lists/${shopListInfo.activeListId}/items`, {
+    const storeItemInDb = async (id: number) => {
+        try {
+            await client.post(`lists/${shopListInfo.activeListId}/items`, {
                 item_id: id,
                 list_id: shopListInfo.activeListId,
             })
-            .then((response) => {
-                console.log(response)
-                toast.success('Item added to the list')
+            toast.success('Item added to the list')
+        } catch (e) {
+            console.log(e)
+            toast.error('Something went wrong! List only updated locally')
+        }
+    }
+
+    /**
+     * Makes a PUT request to update item in the active list
+     */
+    const updateSingleItem = async (item: ItemType) => {
+        try {
+            await client.put(`/lists/${shopListInfo.activeListId}/items`, {
+                item_id: item.id,
+                list_id: shopListInfo.activeListId,
+                quantity: item.quantity,
+                done: item.done,
             })
-            .catch((error) => {
-                console.log(error)
-                toast.error('Something went wrong! List only updated locally')
-            })
+
+            toast.success('Item amount increased')
+        } catch (e) {
+            console.log(e)
+            toast.error('Something went wrong! List only updated locally')
+        }
     }
 
     return (itemData: ItemType) => {
@@ -64,6 +80,7 @@ const useAddItemToShopList = () => {
                 // Item already present in category.items
                 if (itemIndex > -1) {
                     newItems[catIndex].items[itemIndex].quantity += 1
+                    updateSingleItem(newItems[catIndex].items[itemIndex])
                 } else {
                     newItems[catIndex].items.push(currentItem)
                     storeItemInDb(id)

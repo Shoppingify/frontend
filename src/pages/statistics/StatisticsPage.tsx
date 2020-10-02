@@ -1,35 +1,63 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { useRecoilState } from 'recoil'
-import client from '../../api/client'
+import { motion } from 'framer-motion'
+import React, { useEffect, useState } from 'react'
+import { fadeIn } from '../../animation/variants/move-in/fade-in'
+
+// Libs
+import { useRecoilValue } from 'recoil'
+
+// Components
 import Button from '../../components/button/Button'
 import Heading from '../../components/heading/Heading'
+import BasicLoader from '../../components/loader/BasicLoader'
 import StatsChart from '../../components/stats/StatsChart'
 import StatsListing from '../../components/stats/StatsListing'
+
+// State
 import { statisticsState } from '../../global-state/statisticsState'
+import useFetchStats from '../../hooks/useFetchStats'
 
 /**
  * Simple statistics page component
  */
 const StatisticsPage: React.FC = () => {
-    const [stats, setStats] = useRecoilState(statisticsState)
+    const { loading, stats, noStats } = useRecoilValue(statisticsState)
     const [interval, setTimeInterval] = useState('month')
 
-    const fetchStats = useCallback(async () => {
-        try {
-            const res = await client.get('stats')
-            console.log('response', res.data.data)
-            setStats(res.data.data)
-        } catch (e) {
-            console.log('Error while fetching stats', e)
-        }
-    }, [])
+    // Hooks
+    const fetchStats = useFetchStats()
 
+    /**
+     * Component mounted effect
+     */
     useEffect(() => {
         fetchStats()
     }, [])
 
+    if (loading) {
+        return (
+            <div className="w-full h-screen">
+                <BasicLoader />
+            </div>
+        )
+    }
+
+    if (!loading && noStats) {
+        return (
+            <div className="flex w-full justify-center pt-10">
+                <Heading level={3} className="font-bold">
+                    No statistics to display!
+                </Heading>
+            </div>
+        )
+    }
+
     return (
-        <div className="p-4 md:p-6">
+        <motion.div
+            variants={fadeIn}
+            initial="hidden"
+            animate="show"
+            className="h-full overflow-y-auto p-4 md:p-6"
+        >
             {/* Switch */}
             <div className="flex justify-end mb-8">
                 <Button
@@ -51,7 +79,7 @@ const StatisticsPage: React.FC = () => {
                     Year
                 </Button>
             </div>
-            <div className="flex mb-10">
+            <div className="flex flex-col md:flex-row mb-10">
                 {/* Items */}
                 <StatsListing
                     data={
@@ -87,7 +115,7 @@ const StatisticsPage: React.FC = () => {
                     interval={interval}
                 />
             </div>
-        </div>
+        </motion.div>
     )
 }
 

@@ -11,6 +11,7 @@ import { currentItemState } from '../../global-state/currentItemState'
 import Button from '../button/Button'
 import ContentEditable from '../content/ContentEditable'
 import Heading from './Heading'
+import { isMobile } from 'react-device-detect'
 
 interface CategoryTitleProps {
     category: string
@@ -54,7 +55,7 @@ const CategoryHeadingEditable: React.FC<CategoryTitleProps> = ({
             return
         }
         try {
-            const res = await client.put(`categories/${category_id}`, { name })
+            await client.put(`categories/${category_id}`, { name })
 
             setCategory((old: any) => {
                 const newCategories: any[] = [...old]
@@ -93,7 +94,7 @@ const CategoryHeadingEditable: React.FC<CategoryTitleProps> = ({
         <div className="mb-4">
             <div className="group flex items-center ">
                 <Heading
-                    level={2}
+                    level={3}
                     className={`font-bold mr-4 rounded-lg ${
                         editMode
                             ? 'bg-white border-gray-input shadow-item '
@@ -130,7 +131,11 @@ const CategoryHeadingEditable: React.FC<CategoryTitleProps> = ({
                 ) : (
                     <Button onClick={toggleEditMode}>
                         <MdModeEdit
-                            className={`${iconStyle} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
+                            className={`${iconStyle} ${
+                                !isMobile
+                                    ? 'opacity-0 group-hover:opacity-100'
+                                    : ''
+                            } transition-opacity duration-300`}
                         />
                     </Button>
                 )}

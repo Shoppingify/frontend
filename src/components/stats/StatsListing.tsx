@@ -10,7 +10,7 @@ const StatsListing: React.FC<StatsListingProps> = ({
     title,
 }: StatsListingProps) => {
     return (
-        <div className="flex flex-col w-1/2 mx-4">
+        <div className="flex flex-col md:w-1/2 mx-4 mb-6 md:mb-0">
             <Heading className="mb-4 font-bold" level={3}>
                 {title}
             </Heading>

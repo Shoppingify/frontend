@@ -20,12 +20,4 @@ const userStateConst: userStateType = {
     default: null,
 }
 
-const historyListsRefresh = {
-    key: 'historyListsRefresh',
-    default: {
-        refresh: false,
-    },
-}
-
-export const historyListsRefreshState = atom(historyListsRefresh)
 export const userState = atom(userStateConst)

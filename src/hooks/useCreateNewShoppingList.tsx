@@ -13,12 +13,12 @@ import {
 import client from '../api/client'
 
 // Global state
-import { historyListsRefreshState } from '../global-state/miscState'
 import { shopListInfoState, shopListState } from '../global-state/shopListState'
 
 // Types
-import { ItemType } from '../types/items/types'
+import { ItemType, ListOfItems } from '../types/items/types'
 import { shopListInfoStateInterface } from '../types/state/shoppingListTypes'
+import useLoadHistoryLists from './useFetchHistoryLists'
 
 // Name generator
 const nameConfig: Config = {
@@ -31,7 +31,7 @@ const nameConfig: Config = {
 const useCreateNewShoppingList = () => {
     const setShopList = useSetRecoilState(shopListState)
     const setShopListInfoState = useSetRecoilState(shopListInfoState)
-    const setHistoryListsRefresh = useSetRecoilState(historyListsRefreshState)
+    const fetchShopListHistory = useLoadHistoryLists()
 
     return async () => {
         try {
@@ -51,7 +51,7 @@ const useCreateNewShoppingList = () => {
             const {
                 data: { items: itemsData },
             }: {
-                data: { items: ItemType[] }
+                data: { items: ListOfItems[] }
             } = await responseItems.data
 
             /**
@@ -65,10 +65,11 @@ const useCreateNewShoppingList = () => {
                 name: createdList.name,
             }))
             // Refresh history list
-            setHistoryListsRefresh((current) => ({ ...current, refresh: true }))
+
             // Set items to local shop list state
             setShopList(itemsData)
-
+            // Refetch history lists
+            fetchShopListHistory()
             toast.success(`Created new active list: ${createdList.name}`)
         } catch (error) {
             // TODO handle notifications
