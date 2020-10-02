@@ -80,4 +80,9 @@ progress[value]::-webkit-progress-value {
     @apply bg-primary rounded-lg;
 }
 
+/* custom checkbox styles */
+.checkbox input:focus + .icon {
+    outline: -webkit-focus-ring-color auto 1px;
+}
+
 @tailwind utilities;

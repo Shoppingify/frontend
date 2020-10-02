@@ -17,6 +17,7 @@ import {
 import ShoppingListItemQuantity from './ShoppingListItemQuantity'
 import { toast } from 'react-toastify'
 import { useCallback } from 'react'
+import Checkbox from '../../form-elements/Checkbox'
 
 // Prop Types
 interface PropTypes {
@@ -194,25 +195,27 @@ const ShoppingListItem: React.FC<PropTypes> = React.memo(
         }, [])
 
         return (
-            <div className="flex justify-between items-center mb-6 xl:flex-wrap group pl-2 relative">
+            <div className="flex justify-between items-center mb-6 xl:flex-wrap group relative">
                 <label
-                    className={`flex items-center relative ${
+                    className={`flex items-center relative pl-4 focus:border-black ${
                         editing ? 'w-1/3' : ''
                     }`}
                 >
                     {/** Checkbox */}
                     <AnimatePresence>
                         {!editing && (
-                            <motion.input
-                                initial={{ x: -20, opacity: 0 }}
+                            <motion.div
+                                initial={{ x: -10, opacity: 0 }}
                                 animate={{ x: 0, opacity: 1 }}
-                                exit={{ x: -20, opacity: 0 }}
-                                type="checkbox"
-                                checked={done}
-                                onChange={handleCompleteStatus}
-                                name="complete"
-                                className="mr-2 absolute font-semibold"
-                            />
+                                exit={{ x: -10, opacity: 0 }}
+                                className="mr-2 absolute left-0"
+                            >
+                                <Checkbox
+                                    checked={done}
+                                    onChange={handleCompleteStatus}
+                                    className="font-semibold"
+                                />
+                            </motion.div>
                         )}
                     </AnimatePresence>
                     {/** Item name */}
