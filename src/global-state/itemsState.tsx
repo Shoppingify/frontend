@@ -7,6 +7,6 @@ export const itemsState = atom<ListOfItems[]>({
 })
 
 export const itemModifiedState = atom<boolean>({
-    key: 'itemDeleted',
+    key: 'itemModified',
     default: false,
 })
