@@ -1,13 +1,15 @@
 import { format } from 'date-fns'
 import { motion } from 'framer-motion'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { MdDateRange } from 'react-icons/md'
 import { useHistory, useParams } from 'react-router-dom'
+import { useRecoilState } from 'recoil'
 import { v4 as uuidv4 } from 'uuid'
 import client from '../../api/client'
 import Button from '../../components/button/Button'
 import Item from '../../components/cards/Item'
 import Heading from '../../components/heading/Heading'
+import { itemModifiedState } from '../../global-state/itemsState'
 import { ListType } from '../../types/interfaces/db_interfaces'
 import { ItemType } from '../../types/items/types'
 
@@ -42,31 +44,42 @@ const HistoryShowPage = () => {
     // Local state
     const [itemsWithCategories, setItemsWithCategories] = useState([])
     const [list, setList] = useState<ListType | null>(null)
+    const [itemModified, setItemModified] = useRecoilState(itemModifiedState)
+
+    const getList = useCallback(async () => {
+        if (!listId) return
+        try {
+            const res = await client.get(`lists/${listId}`)
+            console.log('Get list res', res.data)
+            setList(res.data.data)
+        } catch (e) {
+            console.log('Error while fetching the list', e)
+        }
+    }, [])
+
+    const getItems = useCallback(async () => {
+        if (!listId) return
+        try {
+            const res = await client.get(`lists/${listId}/items`)
+            console.log('res', res.data.data)
+            setItemsWithCategories(res.data.data.items)
+        } catch (e) {
+            console.log('Error', e)
+        }
+    }, [])
 
     useEffect(() => {
-        async function getList() {
-            if (!listId) return
-            try {
-                const res = await client.get(`lists/${listId}`)
-                console.log('Get list res', res.data)
-                setList(res.data.data)
-            } catch (e) {
-                console.log('Error while fetching the list', e)
-            }
-        }
-        async function getItems() {
-            if (!listId) return
-            try {
-                const res = await client.get(`lists/${listId}/items`)
-                console.log('res', res.data.data)
-                setItemsWithCategories(res.data.data.items)
-            } catch (e) {
-                console.log('Error', e)
-            }
-        }
         getList()
         getItems()
     }, [])
+
+    useEffect(() => {
+        if (itemModified) {
+            getList()
+            getItems()
+            setItemModified(false)
+        }
+    }, [itemModified])
 
     if (!list) return <div>Loading...</div>
 
