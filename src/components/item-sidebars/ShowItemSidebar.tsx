@@ -79,7 +79,9 @@ const ShowItemSidebar = () => {
      * Completely useless error images
      * Useless therefore essential ;)
      */
-    const randomImageError = () => {
+    const randomImageError = (
+        e: React.SyntheticEvent<HTMLImageElement, Event>
+    ) => {
         const images = [
             'https://media1.tenor.com/images/5020db30df28f5e56129752ab68732e3/tenor.gif?itemid=3407679',
             'https://media1.tenor.com/images/b3fef669ae866655eee51d59728e9065/tenor.gif?itemid=13908286',
@@ -88,7 +90,8 @@ const ShowItemSidebar = () => {
             'https://media.tenor.com/images/8d483e909ec3618f521e9700d6fbf2e1/tenor.gif',
         ]
 
-        return images[Math.floor(Math.random() * images.length)]
+        return ((e.target as HTMLImageElement).src =
+            images[Math.floor(Math.random() * images.length)])
     }
 
     return (
@@ -118,8 +121,10 @@ const ShowItemSidebar = () => {
 
                 {currentItem?.image && (
                     <LazyLoadImage
+                        onError={randomImageError}
                         effect="blur"
                         style={{ maxHeight: '200px' }}
+                        wrapperClassName="w-full"
                         className="rounded-24 w-full mb-12 object-cover"
                         src={currentItem.image}
                         alt={currentItem.name}
