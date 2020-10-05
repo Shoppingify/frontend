@@ -45,6 +45,9 @@ const RenderShopList: React.FC<PropTypes> = React.memo(({ editing }) => {
                                         opacity: 1,
                                     }}
                                     key={`${item.name}__${indexItem}`}
+                                    className={
+                                        indexItem > 4 ? 'hidden' : 'block'
+                                    }
                                 >
                                     <ShoppingListItem
                                         quantity={item.quantity}
