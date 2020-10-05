@@ -8,6 +8,7 @@ module.exports = {
         opacity: ['responsive', 'hover', 'focus', 'group-hover'],
         translate: ['responsive', 'hover', 'focus', 'group-hover'],
         pointerEvents: ['responsive', 'hover', 'focus', 'group-hover'],
+        borderColor: ['focus'],
     },
     theme: {
         colors: {
