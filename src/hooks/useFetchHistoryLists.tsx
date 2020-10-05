@@ -6,7 +6,10 @@ import { useSetRecoilState } from 'recoil'
 import client from '../api/client'
 
 // Global state
-import { shopListHistoryState } from '../global-state/shopListHistoryState'
+import {
+    shopListHistoryLoadingState,
+    shopListHistoryState,
+} from '../global-state/shopListHistoryState'
 
 /**
  * Group the lists by date
@@ -42,6 +45,7 @@ const groupByDate = (data: any) => {
 const useLoadHistoryLists = () => {
     // Use global recoil state for history lists
     const setLists = useSetRecoilState(shopListHistoryState)
+    const setLoading = useSetRecoilState(shopListHistoryLoadingState)
 
     // Return function for fetching/updating history lists
     return async () => {
@@ -57,6 +61,8 @@ const useLoadHistoryLists = () => {
             setLists(sorted)
         } catch (e) {
             console.log(e)
+        } finally {
+            setLoading(false)
         }
     }
 }
