@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 
 // Libs
 import { Switch, useHistory, useLocation, Redirect } from 'react-router-dom'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 import { isMobile } from 'react-device-detect'
 import { Swipeable } from 'react-swipeable'
 
@@ -29,6 +29,7 @@ import useFetchCategories from './hooks/useFetchCategories'
 import useFetchItems from './hooks/useFetchItems'
 import { sidebarMobileShowState } from './global-state/sidebarState'
 import useLoadHistoryLists from './hooks/useFetchHistoryLists'
+import useSidebarShow from './hooks/useSidebarShow'
 
 /**
  * Main app component
@@ -37,7 +38,6 @@ const App: React.FC = () => {
     // Recoil user state
     const [user, setUser] = useRecoilState(userState)
     const [init, setInit] = useState(true)
-    const [sidebarShow, setSidebarShow] = useRecoilState(sidebarMobileShowState)
 
     // Router
     const history = useHistory()
@@ -48,6 +48,7 @@ const App: React.FC = () => {
     const fetchCategories = useFetchCategories()
     const fetchItems = useFetchItems()
     const fetchShopListHistory = useLoadHistoryLists()
+    const showSidebar = useSidebarShow()
 
     useEffect(() => {
         if (location.search.length > 0) {
@@ -73,9 +74,6 @@ const App: React.FC = () => {
             setInit(false)
             history.push('/login')
         }
-
-        console.log('Is app mobile?')
-        console.log(isMobile)
     }, [])
 
     const initData = async () => {
@@ -115,10 +113,8 @@ const App: React.FC = () => {
         return (
             <Swipeable
                 onSwiped={(eventData) => {
-                    if (eventData.dir === 'Left') {
-                        setSidebarShow(true)
-                    } else if (eventData.dir === 'Right') {
-                        setSidebarShow(false)
+                    if (eventData.dir === 'Left' || eventData.dir === 'Right') {
+                        showSidebar(eventData.dir)
                     }
                 }}
             >
