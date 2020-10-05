@@ -51,6 +51,7 @@ const ShoppingListTitle: React.FC<PropTypes> = React.memo(
                             html={shopListName}
                             onChange={setShopListName}
                             className="p-2"
+                            enterPressCallback={setEditing}
                         />
                     </Heading>
                 </div>
