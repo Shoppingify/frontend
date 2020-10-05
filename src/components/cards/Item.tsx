@@ -54,8 +54,10 @@ const Item: React.FC<PropTypes> = ({ data, category, history }) => {
     return (
         <div
             className={`p-3 ${
-                data.deleted_at === null ? 'bg-white' : 'border border-danger'
-            } overflow-hidden shadow-item rounded-lg flex justify-between items-center`}
+                data.deleted_at === null
+                    ? 'bg-white items-center'
+                    : 'border border-danger flex-col items-start'
+            } overflow-hidden shadow-item rounded-lg flex justify-between`}
         >
             <button
                 className="break-all flex-auto"
@@ -72,7 +74,7 @@ const Item: React.FC<PropTypes> = ({ data, category, history }) => {
                 </h4>
             </button>
             <button
-                className="m-2"
+                className={`${data.deleted_at ? '' : 'm-2'}`}
                 onClick={handleAddItem}
                 disabled={data.deleted_at !== null}
             >

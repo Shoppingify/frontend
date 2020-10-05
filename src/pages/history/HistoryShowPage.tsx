@@ -72,7 +72,7 @@ const HistoryShowPage = () => {
 
     return (
         <div className="container mx-auto flex flex-col h-full">
-            <div className="flex flex-col mb-5 px-6 lg:px-20 py-4">
+            <div className="flex flex-col mb-5 px-6 lg:px-10 py-4">
                 <a
                     className="block text-primary cursor-pointer hover:text-gray
                  transition-color duration-300 mb-4"
@@ -94,7 +94,7 @@ const HistoryShowPage = () => {
                 variants={containerVariants}
                 initial="hidden"
                 animate="show"
-                className="overflow-y-auto px-6 lg:px-20"
+                className="overflow-y-auto px-6 lg:px-10"
             >
                 {itemsWithCategories.length > 0 &&
                     itemsWithCategories.map(
@@ -108,7 +108,7 @@ const HistoryShowPage = () => {
                                     {listOfItems.category}
                                 </Heading>
 
-                                <ul className="grid grid-cols-2 xl:grid-cols-3 gap-x-2 gap-y-6 w-full">
+                                <ul className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-2 gap-y-6 w-full">
                                     {listOfItems.items.length > 0 &&
                                         listOfItems.items.map(
                                             (item: ItemType) => (
