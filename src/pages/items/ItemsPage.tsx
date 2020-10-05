@@ -1,33 +1,24 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 // Libs
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import { v4 as uuidv4 } from 'uuid'
+import { useRecoilValue } from 'recoil'
 import { motion } from 'framer-motion'
 
 // Api client
 import client from '../../api/client'
 
 // Components
-import Button from '../../components/button/Button'
 import Item from '../../components/cards/Item'
 import CategoryHeadingEditable from '../../components/heading/CategoryHeadingEditable'
 import SearchInput from '../../components/form-elements/SearchInput'
 
 // Global state
-import { currentItemState } from '../../global-state/currentItemState'
 import { itemsState } from '../../global-state/itemsState'
-import { shopListState } from '../../global-state/shopListState'
-import { ADD_NEW_ITEM, sidebarState } from '../../global-state/sidebarState'
 
 // Types
 import { ItemType } from '../../types/items/types'
-import {
-    categoriesLoadedState,
-    categoriesState,
-} from '../../global-state/categoriesState'
-import useFetchCategories from '../../hooks/useFetchCategories'
 import AddItemButton from '../../components/button/AddItemButton'
+import { useInfiniteScroll } from '../../hooks/useInfiniteScroll'
 
 // Animation variants
 const containerVariants = {
@@ -60,17 +51,57 @@ const ItemsPage: React.FC = () => {
 
     const itemsWithCategories = useRecoilValue(itemsState)
     const [filteredItems, setFilteredItems] = useState<any[]>([])
-    const setCurrentItem = useSetRecoilState(currentItemState)
-    const setSidebarType = useSetRecoilState(sidebarState)
     const [loading, setLoading] = useState(true)
+    const [toShow, setToShow] = useState<number[]>([0])
+
+    const containerRef = useRef<HTMLUListElement | null>(null)
+    // To avoid renders which might be skipped from the useEffect hook
+    const setContainerRef = useCallback(
+        (node: HTMLUListElement) => {
+            if (node) {
+                // If the container doesn't fill the height, I can add more items
+                if (node.scrollHeight < window.screen.height) {
+                    setToShow((old) => old.concat(old.length))
+                }
+            }
+
+            containerRef.current = node
+        },
+        [itemsWithCategories]
+    )
+
+    /**
+     * Infinite scroll hook
+     */
+    const [setIsFetching, isExhausted, setIsExhausted] = useInfiniteScroll(
+        () => {
+            if (toShow.length < itemsWithCategories.length) {
+                setToShow((old) => old.concat(toShow.length))
+                setIsFetching(false)
+            } else {
+                setIsExhausted(true)
+            }
+        },
+        containerRef
+    )
 
     useEffect(() => {
-        console.log('ItemsWithCategories called', itemsWithCategories)
         if (itemsWithCategories.length > 0) {
             setFilteredItems(itemsWithCategories)
             setLoading(false)
         }
     }, [itemsWithCategories])
+
+    // Check the containerHeight to add new items to display
+    useEffect(() => {
+        if (toShow.length < itemsWithCategories.length) {
+            if (containerRef && containerRef.current) {
+                if (containerRef.current.scrollTop < window.screen.height) {
+                    setToShow((old) => old.concat(old.length))
+                }
+            }
+        }
+    }, [toShow, itemsWithCategories])
 
     /**
      * Search the items in the lists
@@ -113,40 +144,55 @@ const ItemsPage: React.FC = () => {
 
             {filteredItems.length > 0 && (
                 <motion.ul
+                    ref={setContainerRef}
                     variants={containerVariants}
                     initial="hidden"
                     animate="show"
                     className="overflow-y-auto px-3 md:px-5 lg:px-10"
                 >
-                    {filteredItems.map((listOfItems: ItemsWithCategories) => (
-                        <li key={listOfItems.category_id} className="mb-10">
-                            {/* Category name component */}
-                            <CategoryHeadingEditable
-                                category={listOfItems.category}
-                                category_id={listOfItems.category_id}
-                            />
-                            <ul className="grid grid-cols-2 xl:grid-cols-3 gap-x-2 gap-y-6 w-full">
-                                {listOfItems.items.length > 0 &&
-                                    listOfItems.items.map((item: ItemType) => (
-                                        <motion.li
-                                            variants={itemVariants}
-                                            key={item.id}
-                                        >
-                                            <Item
-                                                data={item}
-                                                category={listOfItems.category}
-                                            />
-                                        </motion.li>
-                                    ))}
+                    {filteredItems.map(
+                        (listOfItems: ItemsWithCategories, index: number) => {
+                            return (
+                                toShow.includes(index) && (
+                                    <li
+                                        key={listOfItems.category_id}
+                                        className="mb-10"
+                                    >
+                                        {/* Category name component */}
+                                        <CategoryHeadingEditable
+                                            category={listOfItems.category}
+                                            category_id={
+                                                listOfItems.category_id
+                                            }
+                                        />
+                                        <ul className="grid grid-cols-2 xl:grid-cols-3 gap-x-2 gap-y-6 w-full">
+                                            {listOfItems.items.length > 0 &&
+                                                listOfItems.items.map(
+                                                    (item: ItemType) => (
+                                                        <li key={item.id}>
+                                                            <Item
+                                                                data={item}
+                                                                category={
+                                                                    listOfItems.category
+                                                                }
+                                                            />
+                                                        </li>
+                                                    )
+                                                )}
 
-                                {listOfItems.items.length === 0 && (
-                                    <AddItemButton
-                                        category_id={listOfItems.category_id}
-                                    />
-                                )}
-                            </ul>
-                        </li>
-                    ))}
+                                            {listOfItems.items.length === 0 && (
+                                                <AddItemButton
+                                                    category_id={
+                                                        listOfItems.category_id
+                                                    }
+                                                />
+                                            )}
+                                        </ul>
+                                    </li>
+                                )
+                            )
+                        }
+                    )}
                 </motion.ul>
             )}
         </div>
