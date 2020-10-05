@@ -208,7 +208,7 @@ const ShoppingListItem: React.FC<PropTypes> = React.memo(
                                 initial={{ x: -10, opacity: 0 }}
                                 animate={{ x: 0, opacity: 1 }}
                                 exit={{ x: -10, opacity: 0 }}
-                                className="mr-2 absolute left-0"
+                                className="mr-2 absolute left-0 cursor-pointer"
                             >
                                 <Checkbox
                                     checked={done}
