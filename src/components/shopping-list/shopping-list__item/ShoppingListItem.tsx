@@ -18,6 +18,7 @@ import ShoppingListItemQuantity from './ShoppingListItemQuantity'
 import { toast } from 'react-toastify'
 import { useCallback } from 'react'
 import Checkbox from '../../form-elements/Checkbox'
+import { useInView } from 'react-intersection-observer'
 
 // Prop Types
 interface PropTypes {
@@ -42,6 +43,9 @@ const ShoppingListItem: React.FC<PropTypes> = React.memo(
         // Global state - read only
         const shopListInfo = useRecoilValue(shopListInfoState)
         const setShopList = useSetRecoilState(shopListState)
+        const [ref, inView] = useInView({
+            triggerOnce: true,
+        })
 
         /**
          * Effect runs on component mount

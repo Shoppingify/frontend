@@ -21,6 +21,11 @@ const shopListInfoStateConst: shopListInfoStateType = {
     },
 }
 
+export const shopListLoadingState = atom({
+    key: 'shopListLoadingState',
+    default: true,
+})
+
 // Shopping list state
 export const shopListState = atom(shopListStateConst)
 

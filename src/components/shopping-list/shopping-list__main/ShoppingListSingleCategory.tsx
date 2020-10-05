@@ -7,6 +7,7 @@ import { motion } from 'framer-motion'
 import CategoryHeading from '../../heading/CategoryHeading'
 import ShoppingListItem from '../shopping-list__item/ShoppingListItem'
 import Button from '../../button/Button'
+import { useInView } from 'react-intersection-observer'
 
 type PropTypes = {
     category: any
@@ -20,17 +21,21 @@ const ShoppingListSingleCategory: React.FC<PropTypes> = ({
     catIndex,
 }) => {
     const [expand, setExpand] = useState(false)
+    const [ref, inView] = useInView({
+        triggerOnce: true,
+    })
 
     return (
-        <div className="mb-12">
+        <div style={{ minHeight: '100px' }} className="mb-12">
             <CategoryHeading
                 level={3}
                 className="text-gray-light mb-6"
                 category_id={category.category_id}
             />
-            <ul>
+
+            <ul ref={ref}>
                 {category.items.map((item: any, indexItem: number) => {
-                    return (
+                    return inView ? (
                         <motion.li
                             initial={{
                                 y: 100,
@@ -41,9 +46,6 @@ const ShoppingListSingleCategory: React.FC<PropTypes> = ({
                                 opacity: 1,
                             }}
                             key={`${item.name}__${indexItem}`}
-                            className={
-                                indexItem > 4 && !expand ? 'hidden' : 'block'
-                            }
                         >
                             <ShoppingListItem
                                 quantity={item.quantity}
@@ -56,21 +58,8 @@ const ShoppingListSingleCategory: React.FC<PropTypes> = ({
                                 itemIndex={indexItem}
                             />
                         </motion.li>
-                    )
+                    ) : null
                 })}
-                {category.items.length > 5 && (
-                    <div className="flex justify-end pr-5">
-                        <Button
-                            modifier="primary"
-                            onClick={() =>
-                                setExpand((current: boolean) => !current)
-                            }
-                            className="w-full"
-                        >
-                            + {category.items.length - 5} items
-                        </Button>
-                    </div>
-                )}
             </ul>
         </div>
     )

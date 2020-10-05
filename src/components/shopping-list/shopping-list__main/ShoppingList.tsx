@@ -12,6 +12,7 @@ import { useRecoilValue } from 'recoil'
 import {
     shopListState,
     shopListInfoState,
+    shopListLoadingState,
 } from '../../../global-state/shopListState'
 
 // Components
@@ -24,6 +25,7 @@ import RenderShopList from './RenderShopList'
 import RenderNoItems from './RenderNoItems'
 import useCreateNewShoppingList from '../../../hooks/useCreateNewShoppingList'
 import { fadeInRightBig } from '../../../animation/variants/move-in/fade-in'
+import BasicLoader from '../../loader/BasicLoader'
 
 /**
  * Main shopping list component
@@ -32,6 +34,7 @@ const ShoppingList: React.FC = React.memo(() => {
     // Global state
     const shopList = useRecoilValue(shopListState)
     const shopListInfo = useRecoilValue(shopListInfoState)
+    const loading = useRecoilValue(shopListLoadingState)
 
     // Local state
     const [editing, setEditing] = useState<boolean>(false)
@@ -120,29 +123,38 @@ const ShoppingList: React.FC = React.memo(() => {
         []
     )
 
+    if (loading) {
+        return <BasicLoader />
+    }
+
     return (
-        <motion.div
+        <div
             key="shoppinglistkey"
-            variants={fadeInRightBig}
-            initial="hidden"
-            animate="show"
-            exit="exit"
-            transition={{ type: 'Tween' }}
+            // variants={fadeInRightBig}
+            // initial="hidden"
+            // animate="show"
+            // exit="exit"
+            // transition={{ type: 'Tween' }}
             className="flex flex-col h-full overflow-hidden"
         >
             <div className="flex-auto overflow-y-auto">
                 <div className="flex flex-col h-full p-8">
                     <AddNewItem />
-                    <ShoppingListTitle
-                        editing={editing}
-                        setShopListName={handleSetShopListName}
-                        setEditing={handleSetEditing}
-                        shopListName={shopListName}
-                    />
-                    {shopList.length === 0 ? (
-                        <RenderNoItems />
-                    ) : (
-                        <RenderShopList editing={editing} />
+
+                    {!loading && (
+                        <>
+                            <ShoppingListTitle
+                                editing={editing}
+                                setShopListName={handleSetShopListName}
+                                setEditing={handleSetEditing}
+                                shopListName={shopListName}
+                            />
+                            {shopList.length === 0 ? (
+                                <RenderNoItems />
+                            ) : (
+                                <RenderShopList editing={editing} />
+                            )}
+                        </>
                     )}
                 </div>
             </div>
@@ -166,7 +178,7 @@ const ShoppingList: React.FC = React.memo(() => {
                     )}
                 </AnimatePresence>
             </div>
-        </motion.div>
+        </div>
     )
 })
 
