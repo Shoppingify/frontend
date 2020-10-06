@@ -101,7 +101,7 @@ const ItemsPage: React.FC = () => {
                 }
             }
         }
-    }, [toShow])
+    }, [toShow, itemsWithCategories])
 
     /**
      * Search the items in the lists
