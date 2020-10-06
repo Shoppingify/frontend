@@ -1,13 +1,16 @@
 import { format } from 'date-fns'
 import { motion } from 'framer-motion'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { MdDateRange } from 'react-icons/md'
 import { useHistory, useParams } from 'react-router-dom'
-import { v4 as uuidv4 } from 'uuid'
+import { useRecoilState } from 'recoil'
 import client from '../../api/client'
 import Button from '../../components/button/Button'
 import Item from '../../components/cards/Item'
+import BasicError from '../../components/errors/BasicError'
 import Heading from '../../components/heading/Heading'
+import BasicLoader from '../../components/loader/BasicLoader'
+import { itemModifiedState } from '../../global-state/itemsState'
 import { ListType } from '../../types/interfaces/db_interfaces'
 import { ItemType } from '../../types/items/types'
 
@@ -19,11 +22,6 @@ const containerVariants = {
             staggerChildren: 0.1,
         },
     },
-}
-
-const itemVariants = {
-    hidden: { opacity: 0 },
-    show: { opacity: 1 },
 }
 
 interface ItemsWithCategories {
@@ -42,33 +40,40 @@ const HistoryShowPage = () => {
     // Local state
     const [itemsWithCategories, setItemsWithCategories] = useState([])
     const [list, setList] = useState<ListType | null>(null)
+    const [itemModified, setItemModified] = useRecoilState(itemModifiedState)
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState<string | null>(null)
 
-    useEffect(() => {
-        async function getList() {
-            if (!listId) return
-            try {
-                const res = await client.get(`lists/${listId}`)
-                console.log('Get list res', res.data)
-                setList(res.data.data)
-            } catch (e) {
-                console.log('Error while fetching the list', e)
-            }
+    const getList = useCallback(async () => {
+        setLoading(true)
+        if (!listId) return
+        try {
+            const listRes = await client.get(`lists/${listId}`)
+            const itemsRes = await client.get(`lists/${listId}/items`)
+            setList(listRes.data.data)
+            setItemsWithCategories(itemsRes.data.data.items)
+        } catch (e) {
+            console.log('Error while fetching the list', e)
+            setError('An error occured, please refresh the page')
+        } finally {
+            setLoading(false)
         }
-        async function getItems() {
-            if (!listId) return
-            try {
-                const res = await client.get(`lists/${listId}/items`)
-                console.log('res', res.data.data)
-                setItemsWithCategories(res.data.data.items)
-            } catch (e) {
-                console.log('Error', e)
-            }
-        }
-        getList()
-        getItems()
     }, [])
 
-    if (!list) return <div>Loading...</div>
+    useEffect(() => {
+        getList()
+    }, [])
+
+    useEffect(() => {
+        if (itemModified) {
+            getList()
+            setItemModified(false)
+        }
+    }, [itemModified])
+
+    if (loading) return <BasicLoader />
+
+    if (!loading && error) return <BasicError message={error} />
 
     return (
         <div className="container mx-auto flex flex-col h-full">
@@ -86,7 +91,7 @@ const HistoryShowPage = () => {
                 <div className="flex items-center">
                     <MdDateRange className="text-gray-light mr-2 w-6 h-6" />
                     <div className=" text-gray-light text-sm font-medium">
-                        {format(new Date(list.created_at), 'iii d.M.yyyy ')}
+                        {format(new Date(list!.created_at), 'iii d.M.yyyy ')}
                     </div>
                 </div>
             </div>
@@ -99,7 +104,7 @@ const HistoryShowPage = () => {
                 {itemsWithCategories.length > 0 &&
                     itemsWithCategories.map(
                         (listOfItems: ItemsWithCategories) => (
-                            <li key={uuidv4()} className="mb-5">
+                            <li key={listOfItems.category_id} className="mb-5">
                                 {/* Category name component */}
                                 <Heading
                                     level={3}
@@ -112,10 +117,7 @@ const HistoryShowPage = () => {
                                     {listOfItems.items.length > 0 &&
                                         listOfItems.items.map(
                                             (item: ItemType) => (
-                                                <motion.li
-                                                    variants={itemVariants}
-                                                    key={uuidv4()}
-                                                >
+                                                <li key={item.id}>
                                                     <Item
                                                         data={item}
                                                         category={
@@ -123,7 +125,7 @@ const HistoryShowPage = () => {
                                                         }
                                                         history={true}
                                                     />
-                                                </motion.li>
+                                                </li>
                                             )
                                         )}
 
