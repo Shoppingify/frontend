@@ -16,7 +16,7 @@ const Modal = ({ isVisible, content, onDelete, onClose }: ModalProps) => {
             variants={fadeIn}
             animate="show"
             initial="hidden"
-            className="fixed z-10 inset-0 overflow-y-auto"
+            className="fixed z-50 inset-0 overflow-y-auto"
         >
             <motion.div
                 variants={fadeInRight}
@@ -38,9 +38,9 @@ const Modal = ({ isVisible, content, onDelete, onClose }: ModalProps) => {
                     {/* Close */}
                     <button
                         onClick={onClose}
-                        className="absolute right-0 top-0 cursor-pointer font-bold hover:text-primary pr-4 pt-2 transition-colors duration-200"
+                        className="absolute text-3xl right-0 top-0 cursor-pointer hover:text-primary pr-4 transition-colors duration-200"
                     >
-                        X
+                        &times;
                     </button>
 
                     <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
@@ -73,7 +73,7 @@ const Modal = ({ isVisible, content, onDelete, onClose }: ModalProps) => {
                     <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                         <span className="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
                             <Button onClick={onDelete} modifier="danger">
-                                Delete
+                                Yes
                             </Button>
                         </span>
                         <span className="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
