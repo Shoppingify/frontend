@@ -7,7 +7,9 @@ interface ModalProps {
     isVisible: boolean
     content: string
     onDelete?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
-    onClose?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+    onClose?: (
+        event: React.MouseEvent<HTMLDivElement | HTMLButtonElement, MouseEvent>
+    ) => void
 }
 
 const Modal = ({ isVisible, content, onDelete, onClose }: ModalProps) => {
@@ -17,6 +19,7 @@ const Modal = ({ isVisible, content, onDelete, onClose }: ModalProps) => {
             animate="show"
             initial="hidden"
             className="fixed z-50 inset-0 overflow-y-auto"
+            onClick={onClose}
         >
             <motion.div
                 variants={fadeInRight}
@@ -30,6 +33,7 @@ const Modal = ({ isVisible, content, onDelete, onClose }: ModalProps) => {
                 <span className="hidden sm:inline-block sm:align-middle sm:h-screen"></span>
                 &#8203;
                 <div
+                    onClick={(e) => e.stopPropagation()}
                     className="relative inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
                     role="dialog"
                     aria-modal="true"
