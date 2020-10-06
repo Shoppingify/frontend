@@ -42,11 +42,18 @@ module.exports = {
                 '1/8': '12.5%',
                 '7/8': '87.5%',
             },
+            screens: {
+                md: '769px',
+            },
             boxShadow: {
                 item: '0px 2px 12px rgba(0, 0, 0, 0.05);',
             },
             spacing: {
                 71: '17.75rem',
+            },
+            inset: {
+                '-1': '-1rem',
+                '-3': '-3rem',
             },
         },
     },
