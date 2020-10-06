@@ -21,6 +21,7 @@ import useFetchItems from '../../hooks/useFetchItems'
 import useAddItemToShopList from '../../hooks/useAddItemToShopList'
 import useLoadActiveListData from '../../hooks/useLoadActiveListData'
 import { useLocation } from 'react-router-dom'
+import Modal from '../modal/Modal'
 
 const ShowItemSidebar = () => {
     const [currentItem, setCurrentItem] = useRecoilState<ItemType | null>(
@@ -29,6 +30,8 @@ const ShowItemSidebar = () => {
     const setSidebarType = useSetRecoilState(sidebarState)
     const setSidebarHistory = useSetRecoilState(sidebarHistoryState)
     const setItemModified = useSetRecoilState(itemModifiedState)
+
+    const [showModal, setShowModal] = useState<boolean>(false)
 
     // Hooks
     const fetchItems = useFetchItems()
@@ -51,7 +54,7 @@ const ShowItemSidebar = () => {
     const deleteItem = async () => {
         try {
             await client.delete(`items/${currentItem?.id}`)
-
+            setShowModal(false)
             await fetchItems()
             await fetchActiveList()
 
@@ -162,7 +165,7 @@ const ShowItemSidebar = () => {
             {/* Buttons */}
             <div className="flex justify-center items-center">
                 <Button
-                    onClick={deleteItem}
+                    onClick={() => setShowModal(true)}
                     modifier="danger"
                     className="text-white mr-2"
                 >
@@ -172,6 +175,13 @@ const ShowItemSidebar = () => {
                     Add to list
                 </Button>
             </div>
+
+            <Modal
+                content="Are you sure that you want to delete this item?"
+                isVisible={showModal}
+                onDelete={deleteItem}
+                onClose={() => setShowModal(false)}
+            />
         </motion.div>
     )
 }
