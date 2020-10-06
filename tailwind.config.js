@@ -37,6 +37,7 @@ module.exports = {
             },
             width: {
                 'sidebar-mobile': 'calc(100vw - 4rem)',
+                'sidebar-tablet': 'calc(100vw - 6rem)',
                 sidebar: '410px',
                 '1/8': '12.5%',
                 '7/8': '87.5%',

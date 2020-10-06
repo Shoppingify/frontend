@@ -2,6 +2,9 @@ import React, { useRef, useEffect } from 'react'
 
 // Libs
 import { MdCreate, MdClose } from 'react-icons/md'
+import { isMobile } from 'react-device-detect'
+
+// Components
 import ContentEditable from '../../content/ContentEditable'
 import Heading from '../../heading/Heading'
 
@@ -32,9 +35,9 @@ const ShoppingListTitle: React.FC<PropTypes> = React.memo(
 
         return (
             <div
-                className="flex justify-between mb-8 pr-2 sticky bg-primary-light pt-4 z-30 border-b-2 border-gray border-opacity-0"
+                className="flex justify-between mb-3 sm:mb-8 pr-2 sticky bg-primary-light pt-4 z-30 border-b-2 border-gray border-opacity-0"
                 style={{
-                    top: '-3rem',
+                    top: isMobile ? '-1.5rem' : '-3rem',
                 }}
                 ref={titleHeaderRef}
             >

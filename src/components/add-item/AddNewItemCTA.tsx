@@ -18,7 +18,7 @@ const AddNewItem: React.FC = React.memo(() => {
     const setCurrentItem = useSetRecoilState(currentItemState)
 
     return (
-        <div className="bg-purple px-4 py-6 flex justify-center items-center rounded-24">
+        <div className="bg-purple px-4 py-4 sm:py-6 flex justify-center items-center rounded-24">
             <div className="w-1/3">
                 <SupermarketSVG />
             </div>
