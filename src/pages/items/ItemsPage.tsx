@@ -165,7 +165,7 @@ const ItemsPage: React.FC = () => {
                                                 listOfItems.category_id
                                             }
                                         />
-                                        <ul className="grid grid-cols-2 xl:grid-cols-3 gap-x-2 gap-y-6 w-full">
+                                        <ul className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-2 gap-y-6 w-full">
                                             {listOfItems.items.length > 0 &&
                                                 listOfItems.items.map(
                                                     (item: ItemType) => (

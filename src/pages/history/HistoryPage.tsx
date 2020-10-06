@@ -6,26 +6,27 @@ import { useRecoilValue } from 'recoil'
 import BasicLoader from '../../components/loader/BasicLoader'
 import { motion } from 'framer-motion'
 import { fadeIn } from '../../animation/variants/move-in/fade-in'
-import { shopListHistoryState } from '../../global-state/shopListHistoryState'
+import {
+    shopListHistoryLoadingState,
+    shopListHistoryState,
+} from '../../global-state/shopListHistoryState'
 
 /**
  * Simple history page component
  */
 
 const HistoryPage = () => {
-    const [mounted, setMounted] = useState(false)
     const lists = useRecoilValue(shopListHistoryState)
-
-    useEffect(() => {
-        setMounted(true)
-    }, [])
+    const loading = useRecoilValue(shopListHistoryLoadingState)
 
     return (
-        <div className="flex flex-col px-2 lg:px-5 bg-gray-extra-light h-full">
-            <h1 className="text-2xl font-bold pt-8 mb-8">Shopping History</h1>
+        <div className="flex flex-col bg-gray-extra-light h-full">
+            <h1 className="text-2xl font-bold pt-8 mb-8 text-center">
+                Shopping History
+            </h1>
 
             {/* TODO: Make a proper loader */}
-            {lists.length === 0 && (
+            {lists.length === 0 && !loading && (
                 <div className="flex justify-center">
                     <h3 className="text-xl font-bold">
                         No list in the history yet
@@ -34,20 +35,24 @@ const HistoryPage = () => {
             )}
 
             {/* Lists */}
-            {lists.map((item: any) => (
-                <div className="mt-10 px-4 overflow-y-auto" key={item.date}>
-                    <h3 className="text-sm mb-4 font-medium">{item.date}</h3>
-                    <motion.ul
-                        variants={fadeIn}
-                        initial="hidden"
-                        animate="show"
-                    >
-                        {item.lists.map((list: any) => (
-                            <List key={list.id} list={list} />
-                        ))}
-                    </motion.ul>
-                </div>
-            ))}
+            <div className="overflow-y-auto px-3">
+                {lists.map((item: any) => (
+                    <div className="mt-10" key={item.date}>
+                        <h3 className="text-sm mb-4 font-medium">
+                            {item.date}
+                        </h3>
+                        <motion.ul
+                            variants={fadeIn}
+                            initial="hidden"
+                            animate="show"
+                        >
+                            {item.lists.map((list: any) => (
+                                <List key={list.id} list={list} />
+                            ))}
+                        </motion.ul>
+                    </div>
+                ))}
+            </div>
         </div>
     )
 }
