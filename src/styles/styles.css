@@ -72,14 +72,6 @@
     @apply rounded-12 p-3;
 }
 
-/* Progress for stats */
-progress[value]::-webkit-progress-bar {
-    @apply rounded-lg bg-gray-progress h-2 w-full;
-}
-progress[value]::-webkit-progress-value {
-    @apply bg-primary rounded-lg;
-}
-
 /* custom checkbox styles */
 .checkbox input:focus + .icon {
     outline: -webkit-focus-ring-color auto 1px;
