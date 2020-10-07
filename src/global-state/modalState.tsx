@@ -18,17 +18,3 @@ export const modalState = atom<ModalState>({
         show: false,
     },
 })
-
-export const showModalState = selector({
-    key: 'showModal',
-    get: ({ get }) => {
-        return get(modalState).show
-    },
-})
-
-export const typeModalState = selector({
-    key: 'typeModal',
-    get: ({ get }) => {
-        return get(modalState).type
-    },
-})

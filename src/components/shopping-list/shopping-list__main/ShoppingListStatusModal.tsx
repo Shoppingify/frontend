@@ -6,11 +6,7 @@ import { motion } from 'framer-motion'
 import Modal from '../../modal/Modal'
 import { fi } from 'date-fns/locale'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import {
-    modalState,
-    ModalType,
-    typeModalState,
-} from '../../../global-state/modalState'
+import { modalState, ModalType } from '../../../global-state/modalState'
 
 type PropTypes = {
     handleListStatus: (status: string) => void
@@ -27,8 +23,6 @@ const ShoppingListStatusModal: React.FC<PropTypes> = React.memo(
                         modifier="danger"
                         className="mr-3"
                         onClick={() => {
-                            // setModalType('canceled')
-                            // setShowModal(true)
                             setModal(() => {
                                 return {
                                     show: true,
@@ -44,8 +38,6 @@ const ShoppingListStatusModal: React.FC<PropTypes> = React.memo(
                     <Button
                         modifier="secondary"
                         onClick={() => {
-                            // setModalType('completed')
-                            // setShowModal(true)
                             setModal(() => {
                                 return {
                                     show: true,

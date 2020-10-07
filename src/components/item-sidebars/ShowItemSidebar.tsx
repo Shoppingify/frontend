@@ -55,7 +55,6 @@ const ShowItemSidebar = () => {
     const deleteItem = async () => {
         try {
             await client.delete(`items/${currentItem?.id}`)
-            // setShowModal(false)
             setModal(() => {
                 return {
                     show: false,
