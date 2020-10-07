@@ -75,6 +75,11 @@ const ShowItemSidebar = () => {
         }
     }
 
+    const addNewItem = () => {
+        setCurrentItem(null)
+        setSidebarType(ADD_NEW_ITEM)
+    }
+
     const loader = () => {
         return (
             <div
@@ -184,8 +189,16 @@ const ShowItemSidebar = () => {
                 >
                     Delete
                 </Button>
-                <Button onClick={addItem} type="submit" modifier="primary">
+                <Button
+                    onClick={addItem}
+                    type="submit"
+                    modifier="primary"
+                    className="mr-2"
+                >
                     Add to list
+                </Button>
+                <Button onClick={addNewItem} modifier="" className="text-black">
+                    New item
                 </Button>
             </div>
 
