@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef } from 'react'
 
 // Libs
 import { motion } from 'framer-motion'
@@ -8,11 +8,7 @@ import { useRecoilValue } from 'recoil'
 import { shopListState } from '../../../global-state/shopListState'
 
 // Components
-import Heading from '../../heading/Heading'
-import ShoppingListItem from '../shopping-list__item/ShoppingListItem'
-import { useRef } from 'react'
-import { useEffect } from 'react'
-import CategoryHeading from '../../heading/CategoryHeading'
+import ShoppingListSingleCategory from './ShoppingListSingleCategory'
 
 // Types
 type PropTypes = {
@@ -26,41 +22,12 @@ const RenderShopList: React.FC<PropTypes> = React.memo(({ editing }) => {
     return (
         <div ref={renderListRef}>
             {shopList.map((category: any, index: number) => (
-                <div key={index} className="mb-12">
-                    <CategoryHeading
-                        level={3}
-                        className="text-gray-light mb-6"
-                        category_id={category.category_id}
-                    />
-                    <ul>
-                        {category.items.map((item: any, indexItem: number) => {
-                            return (
-                                <motion.li
-                                    initial={{
-                                        y: 100,
-                                        opacity: 0,
-                                    }}
-                                    animate={{
-                                        y: 0,
-                                        opacity: 1,
-                                    }}
-                                    key={`${item.name}__${indexItem}`}
-                                >
-                                    <ShoppingListItem
-                                        quantity={item.quantity}
-                                        name={item.name}
-                                        category={item.categoryName}
-                                        item_id={item.id}
-                                        editing={editing}
-                                        done={item.done}
-                                        catIndex={index}
-                                        itemIndex={indexItem}
-                                    />
-                                </motion.li>
-                            )
-                        })}
-                    </ul>
-                </div>
+                <ShoppingListSingleCategory
+                    key={index}
+                    category={category}
+                    catIndex={index}
+                    editing={editing}
+                />
             ))}
         </div>
     )
