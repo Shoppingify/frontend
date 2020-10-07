@@ -66,6 +66,11 @@ const ShowItemSidebar = () => {
         }
     }
 
+    const addNewItem = () => {
+        setCurrentItem(null)
+        setSidebarType(ADD_NEW_ITEM)
+    }
+
     const loader = () => {
         return (
             <div
@@ -161,15 +166,19 @@ const ShowItemSidebar = () => {
             </div>
             {/* Buttons */}
             <div className="flex justify-center items-center">
-                <Button
-                    onClick={deleteItem}
-                    modifier="danger"
-                    className="text-white mr-2"
-                >
+                <Button onClick={deleteItem} modifier="danger" className="mr-2">
                     Delete
                 </Button>
-                <Button onClick={addItem} type="submit" modifier="primary">
+                <Button
+                    onClick={addItem}
+                    type="submit"
+                    modifier="primary"
+                    className="mr-2"
+                >
                     Add to list
+                </Button>
+                <Button onClick={addNewItem} modifier="" className="text-black">
+                    New item
                 </Button>
             </div>
         </motion.div>
