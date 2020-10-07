@@ -24,11 +24,11 @@ import { AnimatePresence } from 'framer-motion'
  * Sidebar of the app
  */
 function Sidebar() {
-    const [sidebarType, setSidebarType] = useRecoilState(sidebarState)
+    const sidebarType = useRecoilValue(sidebarState)
     const [sidebarHistory, setSidebarHistory] = useRecoilState(
         sidebarHistoryState
     )
-    const [sidebarShow, setSidebarShow] = useRecoilState(sidebarMobileShowState)
+    const sidebarShow = useRecoilValue(sidebarMobileShowState)
 
     const selectSidebar = () => {
         switch (sidebarType) {
