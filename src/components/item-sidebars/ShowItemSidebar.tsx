@@ -163,24 +163,22 @@ const ShowItemSidebar = () => {
                         <div className="text-xl mt-2">{currentItem?.note}</div>
                     </div>
                 )}
-
-                <div className="flex w-full mt-2 justify-end">
-                    <Button
-                        onClick={addNewItem}
-                        modifier=""
-                        className="text-black mr-2"
-                    >
-                        Add a new item
-                    </Button>
-                </div>
             </div>
             {/* Buttons */}
             <div className="flex justify-center items-center">
                 <Button onClick={deleteItem} modifier="danger" className="mr-2">
                     Delete
                 </Button>
-                <Button onClick={addItem} type="submit" modifier="primary">
+                <Button
+                    onClick={addItem}
+                    type="submit"
+                    modifier="primary"
+                    className="mr-2"
+                >
                     Add to list
+                </Button>
+                <Button onClick={addNewItem} modifier="" className="text-black">
+                    New item
                 </Button>
             </div>
         </motion.div>
