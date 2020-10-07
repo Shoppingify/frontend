@@ -197,7 +197,7 @@ const ShoppingListItem: React.FC<PropTypes> = React.memo(
         return (
             <div className="flex justify-between items-center mb-6 xl:flex-wrap group relative">
                 <label
-                    className={`flex items-center relative pl-4 ${
+                    className={`flex items-center relative pl-4 cursor-pointer ${
                         editing ? 'w-1/3' : ''
                     }`}
                 >
@@ -208,7 +208,7 @@ const ShoppingListItem: React.FC<PropTypes> = React.memo(
                                 initial={{ x: -10, opacity: 0 }}
                                 animate={{ x: 0, opacity: 1 }}
                                 exit={{ x: -10, opacity: 0 }}
-                                className="mr-2 absolute left-0 cursor-pointer"
+                                className="mr-2 absolute left-0"
                             >
                                 <Checkbox
                                     checked={done}

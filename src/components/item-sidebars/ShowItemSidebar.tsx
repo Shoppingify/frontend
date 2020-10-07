@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import client from '../../api/client'
-import { itemsState } from '../../global-state/itemsState'
+import { itemModifiedState } from '../../global-state/itemsState'
 import { currentItemState } from '../../global-state/currentItemState'
 import {
     ADD_NEW_ITEM,
@@ -20,6 +20,7 @@ import CategoryHeading from '../heading/CategoryHeading'
 import useFetchItems from '../../hooks/useFetchItems'
 import useAddItemToShopList from '../../hooks/useAddItemToShopList'
 import useLoadActiveListData from '../../hooks/useLoadActiveListData'
+import { useLocation } from 'react-router-dom'
 
 const ShowItemSidebar = () => {
     const [currentItem, setCurrentItem] = useRecoilState<ItemType | null>(
@@ -27,11 +28,14 @@ const ShowItemSidebar = () => {
     )
     const setSidebarType = useSetRecoilState(sidebarState)
     const setSidebarHistory = useSetRecoilState(sidebarHistoryState)
+    const setItemModified = useSetRecoilState(itemModifiedState)
 
     // Hooks
     const fetchItems = useFetchItems()
     const addItemToShopList = useAddItemToShopList()
     const fetchActiveList = useLoadActiveListData()
+
+    const location = useLocation()
 
     const addItem = async () => {
         try {
@@ -51,11 +55,20 @@ const ShowItemSidebar = () => {
             await fetchItems()
             await fetchActiveList()
 
+            if (location.pathname.startsWith('/history/')) {
+                setItemModified(true)
+            }
+
             setCurrentItem(null)
             setSidebarType(SHOW_SHOPPING_LIST)
         } catch (e) {
             console.log('Error', e)
         }
+    }
+
+    const addNewItem = () => {
+        setCurrentItem(null)
+        setSidebarType(ADD_NEW_ITEM)
     }
 
     const loader = () => {
@@ -68,8 +81,6 @@ const ShowItemSidebar = () => {
     }
 
     const back = () => {
-        // console.log('sidebarHistory back', sidebarHistory)
-        // const goTo = sidebarHistory[sidebarHistory.length - 2]
         // Reset l'history?
         setSidebarHistory([])
         setSidebarType(SHOW_SHOPPING_LIST)
@@ -155,15 +166,19 @@ const ShowItemSidebar = () => {
             </div>
             {/* Buttons */}
             <div className="flex justify-center items-center">
-                <Button
-                    onClick={deleteItem}
-                    modifier="danger"
-                    className="text-white mr-2"
-                >
+                <Button onClick={deleteItem} modifier="danger" className="mr-2">
                     Delete
                 </Button>
-                <Button onClick={addItem} type="submit" modifier="primary">
+                <Button
+                    onClick={addItem}
+                    type="submit"
+                    modifier="primary"
+                    className="mr-2"
+                >
                     Add to list
+                </Button>
+                <Button onClick={addNewItem} modifier="" className="text-black">
+                    New item
                 </Button>
             </div>
         </motion.div>
