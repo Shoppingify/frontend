@@ -22,6 +22,7 @@ import useAddItemToShopList from '../../hooks/useAddItemToShopList'
 import useLoadActiveListData from '../../hooks/useLoadActiveListData'
 import { useLocation } from 'react-router-dom'
 import Modal from '../modal/Modal'
+import { modalState, ModalType } from '../../global-state/modalState'
 
 const ShowItemSidebar = () => {
     const [currentItem, setCurrentItem] = useRecoilState<ItemType | null>(
@@ -31,7 +32,7 @@ const ShowItemSidebar = () => {
     const setSidebarHistory = useSetRecoilState(sidebarHistoryState)
     const setItemModified = useSetRecoilState(itemModifiedState)
 
-    const [showModal, setShowModal] = useState<boolean>(false)
+    const [modal, setModal] = useRecoilState(modalState)
 
     // Hooks
     const fetchItems = useFetchItems()
@@ -54,7 +55,13 @@ const ShowItemSidebar = () => {
     const deleteItem = async () => {
         try {
             await client.delete(`items/${currentItem?.id}`)
-            setShowModal(false)
+            // setShowModal(false)
+            setModal(() => {
+                return {
+                    show: false,
+                    type: ModalType.Canceled,
+                }
+            })
             await fetchItems()
             await fetchActiveList()
 
@@ -165,7 +172,14 @@ const ShowItemSidebar = () => {
             {/* Buttons */}
             <div className="flex justify-center items-center">
                 <Button
-                    onClick={() => setShowModal(true)}
+                    onClick={() =>
+                        setModal(() => {
+                            return {
+                                show: true,
+                                type: ModalType.Deleted,
+                            }
+                        })
+                    }
                     modifier="danger"
                     className="text-white mr-2"
                 >
@@ -177,10 +191,17 @@ const ShowItemSidebar = () => {
             </div>
 
             <Modal
-                content="Are you sure that you want to delete this item?"
-                isVisible={showModal}
+                content={ModalType.Deleted}
+                isVisible={modal.show}
                 onDelete={deleteItem}
-                onClose={() => setShowModal(false)}
+                onClose={() =>
+                    setModal(() => {
+                        return {
+                            show: false,
+                            type: ModalType.Canceled,
+                        }
+                    })
+                }
             />
         </motion.div>
     )

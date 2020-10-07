@@ -5,6 +5,12 @@ import Button from '../../button/Button'
 import { motion } from 'framer-motion'
 import Modal from '../../modal/Modal'
 import { fi } from 'date-fns/locale'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import {
+    modalState,
+    ModalType,
+    typeModalState,
+} from '../../../global-state/modalState'
 
 type PropTypes = {
     handleListStatus: (status: string) => void
@@ -12,32 +18,7 @@ type PropTypes = {
 
 const ShoppingListStatusModal: React.FC<PropTypes> = React.memo(
     ({ handleListStatus }) => {
-        const [showModal, setShowModal] = useState<{
-            type: string
-            show: boolean
-        }>({ type: '', show: false })
-
-        /** Create different modal if we cancel or complete a list */
-        const createModal = () => {
-            if (showModal.type === '') return null
-
-            const modalProps = {
-                content:
-                    showModal.type === 'cancel'
-                        ? 'Are you sure that you want to cancel this list'
-                        : 'Are you sure that you want mark that list as complete?',
-                action: showModal.type === 'cancel' ? 'canceled' : 'completed',
-            }
-
-            return (
-                <Modal
-                    content={modalProps.content}
-                    isVisible={showModal.show}
-                    onDelete={() => handleListStatus(modalProps.action)}
-                    onClose={() => setShowModal({ type: '', show: false })}
-                />
-            )
-        }
+        const [modal, setModal] = useRecoilState(modalState)
 
         return (
             <div className="bg-white h-24 flex justify-center items-center">
@@ -45,9 +26,16 @@ const ShoppingListStatusModal: React.FC<PropTypes> = React.memo(
                     <Button
                         modifier="danger"
                         className="mr-3"
-                        onClick={() =>
-                            setShowModal({ type: 'cancel', show: true })
-                        }
+                        onClick={() => {
+                            // setModalType('canceled')
+                            // setShowModal(true)
+                            setModal(() => {
+                                return {
+                                    show: true,
+                                    type: ModalType.Canceled,
+                                }
+                            })
+                        }}
                     >
                         Cancel
                     </Button>
@@ -55,15 +43,34 @@ const ShoppingListStatusModal: React.FC<PropTypes> = React.memo(
                 <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}>
                     <Button
                         modifier="secondary"
-                        onClick={() =>
-                            setShowModal({ type: 'complete', show: true })
-                        }
+                        onClick={() => {
+                            // setModalType('completed')
+                            // setShowModal(true)
+                            setModal(() => {
+                                return {
+                                    show: true,
+                                    type: ModalType.Completed,
+                                }
+                            })
+                        }}
                     >
                         Complete
                     </Button>
                 </motion.div>
 
-                {createModal()}
+                <Modal
+                    content={modal.type}
+                    isVisible={modal.show}
+                    onDelete={() => handleListStatus(modal.type)}
+                    onClose={() =>
+                        setModal(() => {
+                            return {
+                                show: false,
+                                type: ModalType.Canceled,
+                            }
+                        })
+                    }
+                />
             </div>
         )
     }

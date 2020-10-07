@@ -1,15 +1,28 @@
 import { motion } from 'framer-motion'
 import React from 'react'
 import { fadeIn, fadeInRight } from '../../animation/variants/move-in/fade-in'
+import { ModalType } from '../../global-state/modalState'
 import Button from '../button/Button'
 
 interface ModalProps {
     isVisible: boolean
-    content: string
+    content: ModalType
     onDelete?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
     onClose?: (
         event: React.MouseEvent<HTMLDivElement | HTMLButtonElement, MouseEvent>
     ) => void
+}
+
+const types = {
+    canceled: {
+        message: 'Are you sure that you want to cancel this list?',
+    },
+    completed: {
+        message: 'Are you sure that you want mark that list as complete?',
+    },
+    deleted: {
+        message: 'Are you sure that you want to delete this item?',
+    },
 }
 
 const Modal = ({ isVisible, content, onDelete, onClose }: ModalProps) => {
@@ -68,7 +81,7 @@ const Modal = ({ isVisible, content, onDelete, onClose }: ModalProps) => {
                             <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                                 <div className="mt-2">
                                     <p className="text-sm leading-5 text-gray-500">
-                                        {content}
+                                        {types[content].message}
                                     </p>
                                 </div>
                             </div>

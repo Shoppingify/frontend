@@ -8,7 +8,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { toast } from 'react-toastify'
 
 // state
-import { useRecoilValue } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import {
     shopListState,
     shopListInfoState,
@@ -24,6 +24,7 @@ import RenderShopList from './RenderShopList'
 import RenderNoItems from './RenderNoItems'
 import useCreateNewShoppingList from '../../../hooks/useCreateNewShoppingList'
 import { fadeInRightBig } from '../../../animation/variants/move-in/fade-in'
+import { modalState, ModalType } from '../../../global-state/modalState'
 
 /**
  * Main shopping list component
@@ -32,6 +33,7 @@ const ShoppingList: React.FC = React.memo(() => {
     // Global state
     const shopList = useRecoilValue(shopListState)
     const shopListInfo = useRecoilValue(shopListInfoState)
+    const setModal = useSetRecoilState(modalState)
 
     // Local state
     const [editing, setEditing] = useState<boolean>(false)
@@ -94,6 +96,13 @@ const ShoppingList: React.FC = React.memo(() => {
             } else {
                 toast.info(`Shopping list was ${status}`)
             }
+
+            setModal(() => {
+                return {
+                    show: false,
+                    type: ModalType.Canceled,
+                }
+            })
 
             // After status is updated create a new list
             createNewList()
