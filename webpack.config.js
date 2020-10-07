@@ -72,7 +72,7 @@ const config = {
     },
     plugins: [
         new CopyPlugin({
-            patterns: [{ from: 'src/index.html' }],
+            patterns: [{ from: 'src/index.html' }, { from: 'src/_redirects' }],
         }),
         new MiniCssExtractPlugin(),
         new CleanWebpackPlugin(),
