@@ -11,11 +11,14 @@ import 'tippy.js/dist/tippy.css' // optional for styling
 // Components
 import ShoppingBasket from '../shopping-basket/ShoppingBasket'
 import UserMenu from './UserMenu'
+import { useSetRecoilState } from 'recoil'
+import { sidebarMobileShowState } from '../../global-state/sidebarState'
 
 /**
  * Simple navbar component
  */
 const Navbar = () => {
+    const setShowMobileSidebar = useSetRecoilState(sidebarMobileShowState)
     /**
      * Effect runs on component mount
      */
@@ -54,6 +57,7 @@ const Navbar = () => {
                             className="navbar__item lg:py-2"
                             data-tippy-content={link.name}
                             to={link.to}
+                            onClick={() => setShowMobileSidebar(false)}
                         >
                             {
                                 //@ts-ignore TODO Type

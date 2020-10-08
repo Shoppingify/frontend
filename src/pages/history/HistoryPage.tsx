@@ -20,7 +20,7 @@ const HistoryPage = () => {
     const loading = useRecoilValue(shopListHistoryLoadingState)
 
     return (
-        <div className="flex flex-col bg-gray-extra-light h-full">
+        <div className="container mx-auto flex flex-col bg-gray-extra-light h-full">
             <h1 className="text-2xl font-bold pt-8 mb-8 text-center">
                 Shopping History
             </h1>

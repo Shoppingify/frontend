@@ -113,7 +113,7 @@ const ShowItemSidebar = () => {
             animate="show"
             exit="exit"
             transition={{ type: 'Tween' }}
-            className="flex flex-col h-full justify-between p-8 overflow-hidden"
+            className="flex flex-col h-full justify-between p-3 lg:p-8 overflow-hidden"
         >
             <div>
                 <div className="flex w-full justify-between items-center mb-6">
@@ -136,7 +136,7 @@ const ShowItemSidebar = () => {
                         effect="blur"
                         style={{ maxHeight: '200px' }}
                         wrapperClassName="w-full"
-                        className="rounded-24 w-full mb-12 object-cover"
+                        className="rounded-24 w-full mb-4 md:mb-12 object-cover"
                         src={currentItem.image}
                         alt={currentItem.name}
                         placeholder={loader()}
@@ -145,7 +145,9 @@ const ShowItemSidebar = () => {
 
                 <div className="mb-4">
                     <div className="text-sm text-gray-light">Name</div>
-                    <div className="text-xl mt-2">{currentItem?.name}</div>
+                    <div className="text-xl mt-2 break-all">
+                        {currentItem?.name}
+                    </div>
                 </div>
                 {currentItem?.category_id && (
                     <div className="mb-4">
@@ -165,7 +167,7 @@ const ShowItemSidebar = () => {
                 )}
             </div>
             {/* Buttons */}
-            <div className="flex justify-center items-center">
+            <div className="flex justify-center items-center flex-wrap md:flex-no-wrap">
                 <Button onClick={deleteItem} modifier="danger" className="mr-2">
                     Delete
                 </Button>
