@@ -86,7 +86,7 @@ const ShowItemSidebar = () => {
     const back = () => {
         // Reset l'history?
         setSidebarHistory([])
-        showSidebar('Right')
+        // showSidebar('Right')
         setSidebarType(SHOW_SHOPPING_LIST)
     }
 
