@@ -82,7 +82,7 @@ const ShowItemSidebar = () => {
         // Reset l'history?
         setSidebarHistory([])
         showSidebar('Right')
-        if (!isMobile) setSidebarType(SHOW_SHOPPING_LIST)
+        setSidebarType(SHOW_SHOPPING_LIST)
     }
 
     /**
