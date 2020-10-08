@@ -24,11 +24,11 @@ import { AnimatePresence } from 'framer-motion'
  * Sidebar of the app
  */
 function Sidebar() {
-    const [sidebarType, setSidebarType] = useRecoilState(sidebarState)
+    const sidebarType = useRecoilValue(sidebarState)
     const [sidebarHistory, setSidebarHistory] = useRecoilState(
         sidebarHistoryState
     )
-    const [sidebarShow, setSidebarShow] = useRecoilState(sidebarMobileShowState)
+    const sidebarShow = useRecoilValue(sidebarMobileShowState)
 
     const selectSidebar = () => {
         switch (sidebarType) {
@@ -50,7 +50,7 @@ function Sidebar() {
 
     return (
         <div
-            className={`w-sidebar-mobile absolute right-0 h-screen md:relative md:transform-none md:w-sidebar  lg:block flex-none overflow-y-auto overflow-x-hidden transform transition-transform duration-300 ease-in-out ${
+            className={`w-sidebar-mobile absolute right-0 h-screen md:w-sidebar md:relative md:transform-none md:block flex-none overflow-y-auto overflow-x-hidden transform transition-transform duration-300 ease-in-out ${
                 sidebarType === ADD_SHOPPING_LIST ||
                 sidebarType === SHOW_SHOPPING_LIST
                     ? 'bg-primary-light'

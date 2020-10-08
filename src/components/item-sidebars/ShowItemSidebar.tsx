@@ -21,6 +21,8 @@ import useFetchItems from '../../hooks/useFetchItems'
 import useAddItemToShopList from '../../hooks/useAddItemToShopList'
 import useLoadActiveListData from '../../hooks/useLoadActiveListData'
 import { useLocation } from 'react-router-dom'
+import { isMobile } from 'react-device-detect'
+import useSidebarShow from '../../hooks/useSidebarShow'
 
 const ShowItemSidebar = () => {
     const [currentItem, setCurrentItem] = useRecoilState<ItemType | null>(
@@ -34,6 +36,7 @@ const ShowItemSidebar = () => {
     const fetchItems = useFetchItems()
     const addItemToShopList = useAddItemToShopList()
     const fetchActiveList = useLoadActiveListData()
+    const showSidebar = useSidebarShow()
 
     const location = useLocation()
 
@@ -83,6 +86,7 @@ const ShowItemSidebar = () => {
     const back = () => {
         // Reset l'history?
         setSidebarHistory([])
+        showSidebar('Right')
         setSidebarType(SHOW_SHOPPING_LIST)
     }
 

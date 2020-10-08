@@ -7,18 +7,22 @@ import { sidebarMobileShowState } from '../global-state/sidebarState'
 
 const useSidebarShow = () => {
     const setSidebarShow = useSetRecoilState(sidebarMobileShowState)
-    return (direction = 'Left') => {
+    return (direction?: 'Left' | 'Right') => {
+        let localDirection = direction
+        if (!localDirection) {
+            localDirection = 'Left'
+        }
         if (isMobile) {
             setSidebarShow((current: boolean) => {
-                if (current && direction === 'Right') {
+                if (current && localDirection === 'Right') {
                     return false
                 }
 
-                if (!current && direction === 'Left') {
+                if (!current && localDirection === 'Left') {
                     return true
                 }
 
-                if (direction === 'Right') {
+                if (localDirection === 'Right') {
                     return false
                 }
 
