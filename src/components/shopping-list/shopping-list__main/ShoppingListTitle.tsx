@@ -34,7 +34,7 @@ const ShoppingListTitle: React.FC<PropTypes> = React.memo(
 
         return (
             <div
-                className="flex justify-between mb-3 -top-1 sm:mb-8 md:-top-3 pr-2 sticky bg-primary-light md:pt-4 z-30 border-b-2 border-gray border-opacity-0"
+                className="flex justify-between mb-8 pr-2 -top-1 lg:-top-3 sticky bg-primary-light py-3 z-30 border-b-2 border-gray border-opacity-0"
                 ref={titleHeaderRef}
             >
                 <div className="w-7/8">
@@ -56,7 +56,7 @@ const ShoppingListTitle: React.FC<PropTypes> = React.memo(
                 </div>
                 <button
                     onClick={setEditing}
-                    className="w-1/8 flex justify-center pt-2"
+                    className="w-1/8 flex justify-center items-center"
                 >
                     {editing ? <MdClose size={24} /> : <MdCreate size={24} />}
                 </button>

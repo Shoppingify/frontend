@@ -21,8 +21,7 @@ import { sidebarMobileShowState } from '../../global-state/sidebarState'
  * Simple navbar component
  */
 const Navbar = () => {
-    const setSidebarShow = useSetRecoilState(sidebarMobileShowState)
-
+    const setShowMobileSidebar = useSetRecoilState(sidebarMobileShowState)
     /**
      * Effect runs on component mount
      */
@@ -61,9 +60,7 @@ const Navbar = () => {
                             className="navbar__item lg:py-2"
                             data-tippy-content={link.name}
                             to={link.to}
-                            onClick={() => {
-                                if (isMobile) setSidebarShow(false)
-                            }}
+                            onClick={() => setShowMobileSidebar(false)}
                         >
                             {
                                 //@ts-ignore TODO Type

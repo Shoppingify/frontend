@@ -56,7 +56,7 @@ const StatisticsPage: React.FC = () => {
             variants={fadeIn}
             initial="hidden"
             animate="show"
-            className="h-full overflow-y-auto p-4 md:p-6"
+            className="container mx-auto h-full overflow-y-auto p-4 md:p-6"
         >
             {/* Switch */}
             <div className="flex justify-end mb-8">

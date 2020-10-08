@@ -50,7 +50,7 @@ function Sidebar() {
 
     return (
         <div
-            className={`w-sidebar-mobile absolute right-0 h-screen md:w-sidebar md:relative md:transform-none md:block flex-none overflow-y-auto overflow-x-hidden transform transition-transform duration-300 ease-in-out ${
+            className={`w-sidebar-mobile md:w-sidebar-tablet absolute right-0 h-screen lg:relative lg:transform-none lg:w-sidebar lg:block flex-none overflow-y-auto overflow-x-hidden transform transition-transform duration-300 ease-in-out ${
                 sidebarType === ADD_SHOPPING_LIST ||
                 sidebarType === SHOW_SHOPPING_LIST
                     ? 'bg-primary-light'

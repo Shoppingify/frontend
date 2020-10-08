@@ -15,7 +15,7 @@ const AddItemSidebar: React.FC = () => {
             animate="show"
             exit="exit"
             transition={{ type: 'Tween' }}
-            className="flex flex-col h-full p-8 overflow-hidden"
+            className="flex flex-col h-full p-3 lg:p-8 overflow-hidden"
         >
             <h3 className="text-2xl mb-6 font-medium">
                 {currentItem ? 'Edit an ' : 'Add a new '}item
