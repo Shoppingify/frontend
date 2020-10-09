@@ -21,12 +21,12 @@ const StatsListing: React.FC<StatsListingProps> = ({
                         <li key={index}>
                             <div className="flex justify-between">
                                 <Heading
-                                    className="font-medium mb-2 text-sm"
+                                    className="font-medium mb-2 text-sm break-all mr-4"
                                     level={4}
                                 >
                                     {item.name}
                                 </Heading>
-                                <span className="font-medium text-sm">
+                                <span className="font-medium text-sm flex-none">
                                     {item.quantity} %
                                 </span>
                             </div>

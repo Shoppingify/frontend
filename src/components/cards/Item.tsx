@@ -2,20 +2,18 @@ import React, { useCallback } from 'react'
 
 // Libs
 import { MdAdd } from 'react-icons/md'
-import { toast } from 'react-toastify'
 
 // Recoil
-import {
-    shopListState,
-    shopListInfoState,
-} from '../../global-state/shopListState'
-import { useSetRecoilState, useRecoilValue } from 'recoil'
+import { useSetRecoilState } from 'recoil'
 import { currentItemState } from '../../global-state/currentItemState'
 import { sidebarState, SHOW_ITEM } from '../../global-state/sidebarState'
 
 // Types
 import { ItemType } from '../../types/items/types'
+
+// Hooks
 import useAddItemToShopList from '../../hooks/useAddItemToShopList'
+import useSidebarShow from '../../hooks/useSidebarShow'
 
 // Prop types
 type PropTypes = {
@@ -35,6 +33,7 @@ const Item: React.FC<PropTypes> = ({ data, category, history }) => {
 
     // Hooks
     const addItemToShopList = useAddItemToShopList()
+    const showSidebar = useSidebarShow()
 
     /**
      * Loads the item in the sidebar
@@ -42,6 +41,7 @@ const Item: React.FC<PropTypes> = ({ data, category, history }) => {
     const showItem = useCallback(() => {
         setCurrentItem(data)
         setSidebarType(SHOW_ITEM)
+        showSidebar()
     }, [])
 
     /**

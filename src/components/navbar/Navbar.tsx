@@ -4,6 +4,8 @@ import React, { useEffect } from 'react'
 import { NavLink } from 'react-router-dom'
 import { MdInsertChart, MdList, MdRefresh } from 'react-icons/md'
 import tippy from 'tippy.js'
+import { useSetRecoilState } from 'recoil'
+import { isMobile } from 'react-device-detect'
 
 // Styles
 import 'tippy.js/dist/tippy.css' // optional for styling
@@ -12,10 +14,14 @@ import 'tippy.js/dist/tippy.css' // optional for styling
 import ShoppingBasket from '../shopping-basket/ShoppingBasket'
 import UserMenu from './UserMenu'
 
+// State
+import { sidebarMobileShowState } from '../../global-state/sidebarState'
+
 /**
  * Simple navbar component
  */
 const Navbar = () => {
+    const setShowMobileSidebar = useSetRecoilState(sidebarMobileShowState)
     /**
      * Effect runs on component mount
      */
@@ -54,6 +60,7 @@ const Navbar = () => {
                             className="navbar__item lg:py-2"
                             data-tippy-content={link.name}
                             to={link.to}
+                            onClick={() => setShowMobileSidebar(false)}
                         >
                             {
                                 //@ts-ignore TODO Type

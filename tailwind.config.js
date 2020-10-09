@@ -1,6 +1,6 @@
 module.exports = {
     purge: {
-        enabled: true,
+        enabled: false,
         content: ['./src/**/*.jsx', './src/**/*.tsx'],
     },
     variants: {
@@ -36,15 +36,24 @@ module.exports = {
                 12: '12px',
             },
             width: {
+                'sidebar-mobile': 'calc(100vw - 4rem)',
+                'sidebar-tablet': 'calc(100vw - 6rem)',
                 sidebar: '410px',
                 '1/8': '12.5%',
                 '7/8': '87.5%',
+            },
+            screens: {
+                md: '769px',
             },
             boxShadow: {
                 item: '0px 2px 12px rgba(0, 0, 0, 0.05);',
             },
             spacing: {
                 71: '17.75rem',
+            },
+            inset: {
+                '-1': '-1rem',
+                '-3': '-3rem',
             },
         },
     },

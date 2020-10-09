@@ -1647,6 +1647,13 @@
     "@types/react" "*"
     csstype "^3.0.2"
 
+"@types/react-onclickoutside@^6.7.3":
+  version "6.7.3"
+  resolved "https://registry.yarnpkg.com/@types/react-onclickoutside/-/react-onclickoutside-6.7.3.tgz#48708067f88a3ec6673e7ccb6e33463dc81a4846"
+  integrity sha512-ByQX2ns3KlOrOzJBVhQ2VZmQVV6w718TXFVAdCdHBeXMXr5QseQVN+BsOmLf2+KZGz7+Y4ov9jPxRDCDNJZMLg==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-router-dom@^5.1.5":
   version "5.1.5"
   resolved "https://registry.yarnpkg.com/@types/react-router-dom/-/react-router-dom-5.1.5.tgz#7c334a2ea785dbad2b2dcdd83d2cf3d9973da090"
@@ -8992,6 +8999,11 @@ react-lifecycles-compat@^3.0.4:
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
+react-onclickoutside@^6.9.0:
+  version "6.9.0"
+  resolved "https://registry.yarnpkg.com/react-onclickoutside/-/react-onclickoutside-6.9.0.tgz#a54bc317ae8cf6131a5d78acea55a11067f37a1f"
+  integrity sha512-8ltIY3bC7oGhj2nPAvWOGi+xGFybPNhJM0V1H8hY/whNcXgmDeaeoCMPPd8VatrpTsUWjb/vGzrmu6SrXVty3A==
+
 react-resize-detector@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/react-resize-detector/-/react-resize-detector-2.3.0.tgz#57bad1ae26a28a62a2ddb678ba6ffdf8fa2b599c"
@@ -9040,6 +9052,13 @@ react-smooth@^1.0.5:
     prop-types "^15.6.0"
     raf "^3.4.0"
     react-transition-group "^2.5.0"
+
+react-swipeable@^5.5.1:
+  version "5.5.1"
+  resolved "https://registry.yarnpkg.com/react-swipeable/-/react-swipeable-5.5.1.tgz#48ae6182deaf62f21d4b87469b60281dbd7c4a76"
+  integrity sha512-EQObuU3Qg3JdX3WxOn5reZvOSCpU4fwpUAs+NlXSN3y+qtsO2r8VGkVnOQzmByt3BSYj9EWYdUOUfi7vaMdZZw==
+  dependencies:
+    prop-types "^15.6.2"
 
 react-test-renderer@^16.13.1:
   version "16.13.1"

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 
 // Global state
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import {
     ADD_NEW_ITEM,
     ADD_SHOPPING_LIST,
@@ -9,22 +9,26 @@ import {
     SHOW_SHOPPING_LIST,
     sidebarState,
     sidebarHistoryState,
+    sidebarMobileShowState,
 } from '../../global-state/sidebarState'
 
 // Components
 import ShoppingList from '../shopping-list/shopping-list__main/ShoppingList'
 import AddItemSidebar from '../item-sidebars/AddItemSidebar'
 import ShowItemSidebar from '../item-sidebars/ShowItemSidebar'
+
+// Libs
 import { AnimatePresence } from 'framer-motion'
 
 /**
  * Sidebar of the app
  */
 function Sidebar() {
-    const [sidebarType, setSidebarType] = useRecoilState(sidebarState)
+    const sidebarType = useRecoilValue(sidebarState)
     const [sidebarHistory, setSidebarHistory] = useRecoilState(
         sidebarHistoryState
     )
+    const sidebarShow = useRecoilValue(sidebarMobileShowState)
 
     const selectSidebar = () => {
         switch (sidebarType) {
@@ -46,12 +50,12 @@ function Sidebar() {
 
     return (
         <div
-            className={`hidden lg:block w-sidebar relative flex-none overflow-y-auto overflow-x-hidden ${
+            className={`w-sidebar-mobile md:w-sidebar-tablet absolute right-0 h-screen lg:relative lg:transform-none lg:w-sidebar lg:block flex-none overflow-y-auto overflow-x-hidden transform transition-transform duration-300 ease-in-out ${
                 sidebarType === ADD_SHOPPING_LIST ||
                 sidebarType === SHOW_SHOPPING_LIST
                     ? 'bg-primary-light'
                     : 'bg-white'
-            }`}
+            } ${sidebarShow ? 'translate-x-0' : 'translate-x-full'}`}
         >
             {/* <ShoppingList /> */}
             <AnimatePresence exitBeforeEnter>{selectSidebar()}</AnimatePresence>

@@ -24,7 +24,7 @@ const RenderShopList: React.FC<PropTypes> = React.memo(({ editing }) => {
     const renderListRef = useRef(document.createElement('div'))
 
     return (
-        <div ref={renderListRef}>
+        <div ref={renderListRef} className="p-2">
             {shopList.map((category: any, index: number) => (
                 <div key={index} className="mb-12">
                     <CategoryHeading
