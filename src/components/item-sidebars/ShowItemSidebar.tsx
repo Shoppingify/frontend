@@ -117,7 +117,7 @@ const ShowItemSidebar = () => {
             animate="show"
             exit="exit"
             transition={{ type: 'Tween' }}
-            className="flex flex-col h-full justify-between p-3 lg:p-8 overflow-hidden"
+            className="flex flex-col h-full justify-between p-3 lg:p-8 overflow-y-auto"
         >
             <div>
                 <div className="flex w-full justify-between items-center mb-6">

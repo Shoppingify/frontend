@@ -110,6 +110,7 @@ const CategorySelect = ({ label, ...props }: any) => {
      * @param cat
      */
     const onKeyDown = (e: React.KeyboardEvent, cat: Category) => {
+        e.preventDefault()
         if (e.key === 'Enter') {
             helpers.setValue(cat.name, true)
             helpers.setTouched(true, true)
