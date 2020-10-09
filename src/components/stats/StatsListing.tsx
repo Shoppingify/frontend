@@ -1,5 +1,6 @@
 import React from 'react'
 import Heading from '../heading/Heading'
+import Progress from './Progress'
 
 interface StatsListingProps {
     data: any[]
@@ -29,11 +30,12 @@ const StatsListing: React.FC<StatsListingProps> = ({
                                     {item.quantity} %
                                 </span>
                             </div>
-                            <progress
+                            <Progress value={item.quantity} />
+                            {/* <progress
                                 className="w-full"
                                 max="100"
                                 value={item.quantity}
-                            ></progress>
+                            ></progress> */}
                         </li>
                     )
                 })}

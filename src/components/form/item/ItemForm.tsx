@@ -5,7 +5,7 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
 import * as Yup from 'yup'
 import client from '../../../api/client'
-import { itemsState } from '../../../global-state/itemsState'
+import { itemModifiedState, itemsState } from '../../../global-state/itemsState'
 import { currentItemState } from '../../../global-state/currentItemState'
 import {
     ADD_SHOPPING_LIST,
@@ -20,6 +20,7 @@ import useFetchItems from '../../../hooks/useFetchItems'
 import useFetchCategories from '../../../hooks/useFetchCategories'
 import { categoriesState } from '../../../global-state/categoriesState'
 import useLoadActiveListData from '../../../hooks/useLoadActiveListData'
+import { useLocation } from 'react-router-dom'
 
 // Validation schema
 const ItemSchema = Yup.object().shape({
@@ -30,9 +31,13 @@ const ItemSchema = Yup.object().shape({
 })
 
 const ItemForm: React.FC = () => {
+    const location = useLocation()
+
+    // Recoil state
     const setSidebarType = useSetRecoilState(sidebarState)
     const [currentItem, setCurrentItem] = useRecoilState(currentItemState)
     const categories = useRecoilValue(categoriesState)
+    const setItemModified = useSetRecoilState(itemModifiedState)
 
     const fetchItems = useFetchItems()
     const fetchCategories = useFetchCategories()
@@ -71,6 +76,10 @@ const ItemForm: React.FC = () => {
             }
             await fetchItems()
             await fetchActiveList()
+
+            if (location.pathname.startsWith('/history/')) {
+                setItemModified(true)
+            }
 
             resetForm({ name: '', note: '', image: '', category: '' })
             setCurrentItem(response.data.data)
