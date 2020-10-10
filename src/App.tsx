@@ -3,8 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 
 // Libs
 import { Switch, useHistory, useLocation, Redirect } from 'react-router-dom'
-import { useRecoilState, useSetRecoilState } from 'recoil'
-import { isMobile } from 'react-device-detect'
+import { useRecoilState } from 'recoil'
 import { Swipeable } from 'react-swipeable'
 
 // Router components
@@ -27,7 +26,6 @@ import client from './api/client'
 import useLoadActiveListData from './hooks/useLoadActiveListData'
 import useFetchCategories from './hooks/useFetchCategories'
 import useFetchItems from './hooks/useFetchItems'
-import { sidebarMobileShowState } from './global-state/sidebarState'
 import useLoadHistoryLists from './hooks/useFetchHistoryLists'
 import useSidebarShow from './hooks/useSidebarShow'
 
@@ -38,6 +36,7 @@ const App: React.FC = () => {
     // Recoil user state
     const [user, setUser] = useRecoilState(userState)
     const [init, setInit] = useState(true)
+    const [lastHeight, setLastHeight] = useState(0)
 
     // Router
     const history = useHistory()
@@ -73,6 +72,22 @@ const App: React.FC = () => {
         } else {
             setInit(false)
             history.push('/login')
+        }
+    }, [])
+
+    // css trick to avoid the 100 vh problem on mobile
+    useEffect(() => {
+        const resize = () => {
+            // First we get the viewport height and we multiple it by 1% to get a value for a vh unit
+            let vh = window.innerHeight * 0.01
+            // Then we set the value in the --vh custom property to the root of the document
+            document.documentElement.style.setProperty('--vh', `${vh}px`)
+        }
+
+        resize()
+        window.addEventListener('resize', resize)
+        return () => {
+            window.removeEventListener('resize', resize)
         }
     }, [])
 
@@ -118,7 +133,7 @@ const App: React.FC = () => {
                     }
                 }}
             >
-                <div className="flex justify-between h-screen w-full overflow-hidden relative">
+                <div className="flex justify-between custom100vh w-full overflow-hidden relative">
                     <Navbar />
                     <div className="flex-grow bg-gray-extra-light">
                         <PrivateRoutesController />

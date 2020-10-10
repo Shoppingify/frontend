@@ -5,6 +5,7 @@ const headers = {
     'Content-Type': 'application/json',
 }
 const client = axios.create({
+    // baseURL: 'https://shoppingify-challenge.herokuapp.com/api/',
     baseURL: process.env.REACT_APP_API_URL || 'http://localhost:3000/api/',
     headers,
 })
