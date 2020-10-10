@@ -21,6 +21,8 @@ import useFetchItems from '../../hooks/useFetchItems'
 import useAddItemToShopList from '../../hooks/useAddItemToShopList'
 import useLoadActiveListData from '../../hooks/useLoadActiveListData'
 import { useLocation } from 'react-router-dom'
+import Modal from '../modal/Modal'
+import { modalState, ModalType } from '../../global-state/modalState'
 import { isMobile } from 'react-device-detect'
 import useSidebarShow from '../../hooks/useSidebarShow'
 
@@ -31,6 +33,8 @@ const ShowItemSidebar = () => {
     const setSidebarType = useSetRecoilState(sidebarState)
     const setSidebarHistory = useSetRecoilState(sidebarHistoryState)
     const setItemModified = useSetRecoilState(itemModifiedState)
+
+    const [modal, setModal] = useRecoilState(modalState)
 
     // Hooks
     const fetchItems = useFetchItems()
@@ -54,7 +58,12 @@ const ShowItemSidebar = () => {
     const deleteItem = async () => {
         try {
             await client.delete(`items/${currentItem?.id}`)
-
+            setModal(() => {
+                return {
+                    show: false,
+                    type: ModalType.Canceled,
+                }
+            })
             await fetchItems()
             await fetchActiveList()
 
@@ -171,8 +180,19 @@ const ShowItemSidebar = () => {
                 )}
             </div>
             {/* Buttons */}
-            <div className="flex justify-center items-center flex-wrap md:flex-no-wrap">
-                <Button onClick={deleteItem} modifier="danger" className="mr-2">
+            <div className="flex justify-center items-center">
+                <Button
+                    onClick={() =>
+                        setModal(() => {
+                            return {
+                                show: true,
+                                type: ModalType.Deleted,
+                            }
+                        })
+                    }
+                    modifier="danger"
+                    className="text-white mr-2"
+                >
                     Delete
                 </Button>
                 <Button
@@ -187,6 +207,20 @@ const ShowItemSidebar = () => {
                     New item
                 </Button>
             </div>
+
+            <Modal
+                content={ModalType.Deleted}
+                isVisible={modal.show}
+                onDelete={deleteItem}
+                onClose={() =>
+                    setModal(() => {
+                        return {
+                            show: false,
+                            type: ModalType.Canceled,
+                        }
+                    })
+                }
+            />
         </motion.div>
     )
 }
