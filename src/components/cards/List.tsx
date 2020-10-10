@@ -29,20 +29,21 @@ const iconStyle = {
 }
 
 /**
- * @param {ListProps} list
+ * Displays list info, used on history page
  */
 const List: React.FC<ListProps> = ({
     list: { id, name, status, created_at },
 }) => {
     /**
      * Format the date
-     * @param date
-     * @returns {string}
      */
     const formattedDate = (date: string): string => {
         return format(new Date(date), 'iii d.M.yyyy ')
     }
 
+    /**
+     * Set status color
+     */
     const statusColor = (status: string): string => {
         switch (status) {
             case 'active':
@@ -55,6 +56,7 @@ const List: React.FC<ListProps> = ({
                 return 'active'
         }
     }
+
     return (
         <Link to={`/history/${id}`}>
             <div className="flex flex-col md:flex-row w-full p-4 shadow rounded-lg justify-between md:items-center mb-8 bg-white hover:bg-gray-extra-light transition-colors duration-300">

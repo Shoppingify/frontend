@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 // Libs
-import { Field, Form, Formik } from 'formik'
+import { Form, Formik } from 'formik'
 import { useHistory } from 'react-router-dom'
 import * as Yup from 'yup'
 
@@ -13,7 +13,6 @@ import { MdEmail, MdLock } from 'react-icons/md'
 // Global state
 import { useRecoilState } from 'recoil'
 import { userState } from '../../../global-state/miscState'
-import { userStateInterface } from '../../../types/state/userStateTypes'
 
 import client from '../../../api/client'
 
@@ -23,7 +22,6 @@ const LoginSchema = Yup.object().shape({
     password: Yup.string().min(6).required('Required'),
 })
 
-// TODO cleanup into own components
 /**
  * Login form component
  * @constructor
