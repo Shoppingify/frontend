@@ -3,6 +3,7 @@ const path = require('path')
 const CopyPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const Dotenv = require('dotenv-webpack')
 
 const config = {
     entry: ['react-hot-loader/patch', './src/index.tsx'],
@@ -72,10 +73,11 @@ const config = {
     },
     plugins: [
         new CopyPlugin({
-            patterns: [{ from: 'src/index.html' }],
+            patterns: [{ from: 'src/index.html' }, { from: 'src/_redirects' }],
         }),
         new MiniCssExtractPlugin(),
         new CleanWebpackPlugin(),
+        new Dotenv(),
     ],
 }
 

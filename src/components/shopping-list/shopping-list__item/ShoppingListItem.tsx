@@ -18,6 +18,7 @@ import ShoppingListItemQuantity from './ShoppingListItemQuantity'
 import { toast } from 'react-toastify'
 import { useCallback } from 'react'
 import Checkbox from '../../form-elements/Checkbox'
+import ShoppingListDisplayItem from './ShoppingListDisplayItem'
 
 // Prop Types
 interface PropTypes {
@@ -195,48 +196,25 @@ const ShoppingListItem: React.FC<PropTypes> = React.memo(
         }, [])
 
         return (
-            <div className="flex justify-between items-center mb-6 xl:flex-wrap group relative">
-                <label
-                    className={`flex items-center relative pl-4 cursor-pointer ${
-                        editing ? 'w-1/3' : ''
-                    }`}
-                >
-                    {/** Checkbox */}
-                    <AnimatePresence>
-                        {!editing && (
-                            <motion.div
-                                initial={{ x: -10, opacity: 0 }}
-                                animate={{ x: 0, opacity: 1 }}
-                                exit={{ x: -10, opacity: 0 }}
-                                className="mr-2 absolute left-0"
-                            >
-                                <Checkbox
-                                    checked={done}
-                                    onChange={handleCompleteStatus}
-                                    className="font-semibold"
-                                />
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-                    {/** Item name */}
-                    <h2
-                        className={`lg:w-full xl:w-auto font-semibold ${
-                            done ? 'line-through' : undefined
-                        }`}
-                        style={{
-                            transition: 'all 0.3s ease-out',
-                            transform: `translateX(${editing ? 0 : '20px'})`,
-                        }}
-                    >
-                        {name}
-                    </h2>
-                </label>
-                <ShoppingListItemQuantity
-                    quantity={quantity}
-                    editing={editing}
-                    handleItemDelete={handleItemDelete}
-                    handleInOrDecBtnClick={handleInOrDecBtnClick}
-                />
+            <div className="flex justify-between items-center mb-6 group relative">
+                {!editing && (
+                    <ShoppingListDisplayItem
+                        editing={editing}
+                        quantity={quantity}
+                        name={name}
+                        handleCompleteStatus={handleCompleteStatus}
+                        done={done}
+                    />
+                )}
+                {editing && (
+                    <ShoppingListItemQuantity
+                        name={name}
+                        quantity={quantity}
+                        editing={editing}
+                        handleItemDelete={handleItemDelete}
+                        handleInOrDecBtnClick={handleInOrDecBtnClick}
+                    />
+                )}
             </div>
         )
     }

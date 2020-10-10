@@ -3,7 +3,9 @@ import React, { useCallback, useEffect, useState } from 'react'
 
 // Libs
 import { Switch, useHistory, useLocation, Redirect } from 'react-router-dom'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useSetRecoilState } from 'recoil'
+import { isMobile } from 'react-device-detect'
+import { Swipeable } from 'react-swipeable'
 
 // Router components
 import PrivateRoutesController from './routes/PrivateRoutesController'
@@ -25,7 +27,9 @@ import client from './api/client'
 import useLoadActiveListData from './hooks/useLoadActiveListData'
 import useFetchCategories from './hooks/useFetchCategories'
 import useFetchItems from './hooks/useFetchItems'
+import { sidebarMobileShowState } from './global-state/sidebarState'
 import useLoadHistoryLists from './hooks/useFetchHistoryLists'
+import useSidebarShow from './hooks/useSidebarShow'
 
 /**
  * Main app component
@@ -44,6 +48,7 @@ const App: React.FC = () => {
     const fetchCategories = useFetchCategories()
     const fetchItems = useFetchItems()
     const fetchShopListHistory = useLoadHistoryLists()
+    const showSidebar = useSidebarShow()
 
     useEffect(() => {
         if (location.search.length > 0) {
@@ -106,13 +111,21 @@ const App: React.FC = () => {
 
     if (user) {
         return (
-            <div className="flex justify-between h-screen">
-                <Navbar />
-                <div className="flex-grow bg-gray-extra-light">
-                    <PrivateRoutesController />
+            <Swipeable
+                onSwiped={(eventData) => {
+                    if (eventData.dir === 'Left' || eventData.dir === 'Right') {
+                        showSidebar(eventData.dir)
+                    }
+                }}
+            >
+                <div className="flex justify-between h-screen w-full overflow-hidden relative">
+                    <Navbar />
+                    <div className="flex-grow bg-gray-extra-light">
+                        <PrivateRoutesController />
+                    </div>
+                    <Sidebar />
                 </div>
-                <Sidebar />
-            </div>
+            </Swipeable>
         )
     }
 

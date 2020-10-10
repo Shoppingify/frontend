@@ -15,3 +15,8 @@ export const sidebarHistoryState = atom({
     key: 'sidebar_history',
     default: [SHOW_SHOPPING_LIST],
 })
+
+export const sidebarMobileShowState = atom({
+    key: 'sidebarMobileShowState',
+    default: false,
+})

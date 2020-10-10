@@ -140,7 +140,7 @@ const ShoppingList: React.FC = React.memo(() => {
             className="flex flex-col h-full overflow-hidden"
         >
             <div className="flex-auto overflow-y-auto">
-                <div className="flex flex-col h-full p-8 overflow-y-auto">
+                <div className="flex flex-col h-full p-3 lg:p-8 overflow-y-auto">
                     <AddNewItem />
                     <ShoppingListTitle
                         editing={editing}

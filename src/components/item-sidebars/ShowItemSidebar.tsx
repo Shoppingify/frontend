@@ -23,6 +23,8 @@ import useLoadActiveListData from '../../hooks/useLoadActiveListData'
 import { useLocation } from 'react-router-dom'
 import Modal from '../modal/Modal'
 import { modalState, ModalType } from '../../global-state/modalState'
+import { isMobile } from 'react-device-detect'
+import useSidebarShow from '../../hooks/useSidebarShow'
 
 const ShowItemSidebar = () => {
     const [currentItem, setCurrentItem] = useRecoilState<ItemType | null>(
@@ -38,6 +40,7 @@ const ShowItemSidebar = () => {
     const fetchItems = useFetchItems()
     const addItemToShopList = useAddItemToShopList()
     const fetchActiveList = useLoadActiveListData()
+    const showSidebar = useSidebarShow()
 
     const location = useLocation()
 
@@ -92,6 +95,7 @@ const ShowItemSidebar = () => {
     const back = () => {
         // Reset l'history?
         setSidebarHistory([])
+        // showSidebar('Right')
         setSidebarType(SHOW_SHOPPING_LIST)
     }
 
@@ -122,7 +126,7 @@ const ShowItemSidebar = () => {
             animate="show"
             exit="exit"
             transition={{ type: 'Tween' }}
-            className="flex flex-col h-full justify-between p-8 overflow-hidden"
+            className="flex flex-col h-full justify-between p-3 lg:p-8 overflow-hidden"
         >
             <div>
                 <div className="flex w-full justify-between items-center mb-6">
@@ -145,7 +149,7 @@ const ShowItemSidebar = () => {
                         effect="blur"
                         style={{ maxHeight: '200px' }}
                         wrapperClassName="w-full"
-                        className="rounded-24 w-full mb-12 object-cover"
+                        className="rounded-24 w-full mb-4 md:mb-12 object-cover"
                         src={currentItem.image}
                         alt={currentItem.name}
                         placeholder={loader()}
@@ -154,7 +158,9 @@ const ShowItemSidebar = () => {
 
                 <div className="mb-4">
                     <div className="text-sm text-gray-light">Name</div>
-                    <div className="text-xl mt-2">{currentItem?.name}</div>
+                    <div className="text-xl mt-2 break-all">
+                        {currentItem?.name}
+                    </div>
                 </div>
                 {currentItem?.category_id && (
                     <div className="mb-4">
