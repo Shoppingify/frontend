@@ -1,6 +1,6 @@
 import { ErrorMessage, Field, useField } from 'formik'
 import React, { useCallback, useEffect, useState } from 'react'
-import { isMobileOnly } from 'react-device-detect'
+import { isMobile, isMobileOnly } from 'react-device-detect'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import client from '../../api/client'
 import { categoriesState } from '../../global-state/categoriesState'
@@ -120,7 +120,7 @@ const CategorySelect = ({ label, ...props }: any) => {
         helpers.setValue(cat.name, true)
         // helpers.setTouched(true, true)
         helpers.setError(null)
-        isMobileOnly ? setShowCategoryModal(false) : setShowAutocomplete(false)
+        isMobile ? setShowCategoryModal(false) : setShowAutocomplete(false)
     }
 
     return (
@@ -132,9 +132,7 @@ const CategorySelect = ({ label, ...props }: any) => {
                 className="p-3 rounded-lg border-2 border-gray-input"
                 onChange={autocomplete}
                 autoComplete="off"
-                onClick={() =>
-                    isMobileOnly ? setShowCategoryModal(true) : null
-                }
+                onClick={() => (isMobile ? setShowCategoryModal(true) : null)}
                 {...props}
             />
             <ErrorMessage name={props.name}>
@@ -143,7 +141,7 @@ const CategorySelect = ({ label, ...props }: any) => {
                 )}
             </ErrorMessage>
 
-            {filtered.length > 0 && showAutocomplete && !isMobileOnly && (
+            {filtered.length > 0 && showAutocomplete && !isMobile && (
                 <ul
                     style={{ maxHeight: '150px' }}
                     className="mt-2 shadow rounded-lg p-2 overflow-y-auto"
@@ -162,7 +160,7 @@ const CategorySelect = ({ label, ...props }: any) => {
                 </ul>
             )}
 
-            {isMobileOnly && (
+            {isMobile && (
                 <CategoryModal
                     isVisible={showCategoryModal}
                     data={categories}

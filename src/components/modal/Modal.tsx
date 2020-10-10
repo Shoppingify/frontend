@@ -87,21 +87,21 @@ const Modal = ({ isVisible, content, onDelete, onClose }: ModalProps) => {
                             </div>
                         </div>
                     </div>
-                    <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                        <span className="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
-                            <Button onClick={onDelete} modifier="danger">
-                                Yes
-                            </Button>
-                        </span>
-                        <span className="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
-                            <Button
-                                modifier=""
-                                className="text-black"
-                                onClick={onClose}
-                            >
-                                Cancel
-                            </Button>
-                        </span>
+                    <div className="bg-gray-50 px-4 py-3 sm:px-6 flex justify-center">
+                        <Button
+                            onClick={onDelete}
+                            modifier="danger"
+                            className="mx-2"
+                        >
+                            Yes
+                        </Button>
+                        <Button
+                            modifier=""
+                            className="text-black mx-2"
+                            onClick={onClose}
+                        >
+                            Cancel
+                        </Button>
                     </div>
                 </div>
             </motion.div>

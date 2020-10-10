@@ -22,7 +22,7 @@ const InputModal = ({ autocomplete, onTrigger }: any) => {
         <input
             id="modalInput"
             ref={inputRef}
-            className="p-3 rounded-lg border-2 border-gray-input"
+            className="p-3 rounded-lg border-2 border-gray-input w-full"
             type="text"
             value={value}
             onChange={(e) => {
@@ -94,7 +94,7 @@ const CategoryModal = ({
 
                     <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                         <div className="sm:flex sm:items-start">
-                            <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left pt-4">
+                            <div className="mt-3 w-full text-center sm:mt-0 sm:ml-4 sm:text-left pt-4">
                                 <InputModal
                                     onTrigger={onTrigger}
                                     autocomplete={autocomplete}

@@ -129,6 +129,7 @@ const ItemForm: React.FC = () => {
                             name="name"
                             type="text"
                             placeholder="Enter a name"
+                            autoComplete="off"
                         />
                         <BasicInput
                             label="Note (optional)"
