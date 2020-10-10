@@ -1,26 +1,33 @@
-import { Form, Formik } from 'formik'
-
 import React, { useEffect } from 'react'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
-import * as Yup from 'yup'
-import client from '../../../api/client'
-import { itemModifiedState, itemsState } from '../../../global-state/itemsState'
+// Global state
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { itemModifiedState } from '../../../global-state/itemsState'
 import { currentItemState } from '../../../global-state/currentItemState'
 import {
-    ADD_SHOPPING_LIST,
     SHOW_ITEM,
     SHOW_SHOPPING_LIST,
     sidebarState,
 } from '../../../global-state/sidebarState'
+import { categoriesState } from '../../../global-state/categoriesState'
+
+// Libs
+import { Form, Formik } from 'formik'
+import * as Yup from 'yup'
+import { useLocation } from 'react-router-dom'
+
+// Api client
+import client from '../../../api/client'
+
+// Components
 import Button from '../../button/Button'
 import BasicInput from '../../form-elements/BasicInput'
 import CategorySelect from '../../form-elements/CategorySelect'
+
+// Hooks
 import useFetchItems from '../../../hooks/useFetchItems'
 import useFetchCategories from '../../../hooks/useFetchCategories'
-import { categoriesState } from '../../../global-state/categoriesState'
 import useLoadActiveListData from '../../../hooks/useLoadActiveListData'
-import { useLocation } from 'react-router-dom'
 
 // Validation schema
 const ItemSchema = Yup.object().shape({
@@ -39,6 +46,7 @@ const ItemForm: React.FC = () => {
     const categories = useRecoilValue(categoriesState)
     const setItemModified = useSetRecoilState(itemModifiedState)
 
+    // Hooks
     const fetchItems = useFetchItems()
     const fetchCategories = useFetchCategories()
     const fetchActiveList = useLoadActiveListData()
@@ -63,6 +71,7 @@ const ItemForm: React.FC = () => {
         }
     }
 
+    // Update item
     const updateItem = async (
         values: any,
         { setSubmitting, resetForm }: any
@@ -89,12 +98,17 @@ const ItemForm: React.FC = () => {
         }
     }
 
-    // Cancel the addition of a new item
+    /**
+     * Cancels the addition of a new item
+     */
     const cancel = () => {
         setCurrentItem(null)
         setSidebarType(SHOW_SHOPPING_LIST)
     }
 
+    /**
+     * Gets item initial values
+     */
     const getInitialValues = () => {
         return {
             name: currentItem?.name || '',
@@ -104,12 +118,18 @@ const ItemForm: React.FC = () => {
         }
     }
 
+    /**
+     * Checks if category exists
+     */
     const categoryExists = (category: string) => {
         return categories.find(
             (cat) => cat.name.toLowerCase() === category.toLowerCase()
         )
     }
 
+    /**
+     * Effect runs on currentItem change, fetches initial values/resets
+     */
     useEffect(() => {
         getInitialValues()
     }, [currentItem])

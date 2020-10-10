@@ -1,21 +1,21 @@
 import React, { useState } from 'react'
 
 // Libs
-import { Field, Form, Formik } from 'formik'
+import { Form, Formik } from 'formik'
 import { useHistory } from 'react-router-dom'
 import * as Yup from 'yup'
-
-// Components
-import Button from '../../button/Button'
+import { MdEmail, MdLock } from 'react-icons/md'
 
 // Global state
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { userState } from '../../../global-state/miscState'
-import { userStateInterface } from '../../../types/state/userStateTypes'
-import AuthInput from '../../form-elements/AuthInput'
-import { MdEmail, MdLock } from 'react-icons/md'
+
+// Api client
 import client from '../../../api/client'
+
+// Components
 import LoadingButton from '../../button/LoadingButton'
+import AuthInput from '../../form-elements/AuthInput'
 
 // Validation schema
 const RegisterSchema = Yup.object().shape({
@@ -27,14 +27,13 @@ const RegisterSchema = Yup.object().shape({
     ),
 })
 
-// TODO cleanup into own components
 /**
  * Login form component
  * @constructor
  */
 const RegisterForm = () => {
     const history = useHistory()
-    const [user, setUser] = useRecoilState(userState)
+    const setUser = useSetRecoilState(userState)
     const [serverErrors, setServerErrors] = useState(null)
 
     /**
@@ -50,19 +49,19 @@ const RegisterForm = () => {
                 email,
                 password,
             })
-
-            console.log('user data', res.data)
             const { token, user } = res.data.data
+
             localStorage.setItem('token', token)
+
             setUser(user.id)
+
             history.push('/items')
         } catch (e) {
-            console.log('error while login', e)
-            if (e.response && e.response.data) {
-                setServerErrors(e.response.data.message)
-            } else {
-                setServerErrors(e.message)
-            }
+            setServerErrors(
+                e.response && e.response.data
+                    ? e.response.data.message
+                    : e.message
+            )
         }
     }
 
@@ -79,7 +78,6 @@ const RegisterForm = () => {
         await handleRegister(data)
     }
 
-    // TODO more cleanup
     return (
         <Formik
             initialValues={{
