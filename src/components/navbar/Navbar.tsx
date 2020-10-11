@@ -29,6 +29,7 @@ const Navbar = () => {
         tippy('[data-tippy-content]', {
             placement: 'right',
             offset: [0, -10],
+            touch: 'hold',
         })
     }, [])
 

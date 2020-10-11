@@ -22,6 +22,7 @@ const CategorySelect = ({ label, ...props }: any) => {
     const [showAutocomplete, setShowAutocomplete] = useState(false)
     const currentItem = useRecoilValue(currentItemState)
     const [showCategoryModal, setShowCategoryModal] = useState(false)
+    const [categorySelected, setCategorySelected] = useState<any>(null)
 
     /**
      * Get the user's categories
@@ -51,6 +52,7 @@ const CategorySelect = ({ label, ...props }: any) => {
     }, [currentItem])
 
     useEffect(() => {
+        console.log('called')
         let catNameUpToDate
 
         if (currentItem?.category_id) {
@@ -73,6 +75,16 @@ const CategorySelect = ({ label, ...props }: any) => {
         helpers.setValue(catNameUpToDate || '', true)
         helpers.setTouched(true, true)
     }, [currentItem])
+
+    useEffect(() => {
+        // Check if a category has been updated
+        if (categorySelected) {
+            const category = categories.find(
+                (cat: any) => cat.id === categorySelected.id
+            )
+            onSelected(category)
+        }
+    }, [categories])
 
     /**
      * Filter the categories while the user is typing
@@ -117,6 +129,7 @@ const CategorySelect = ({ label, ...props }: any) => {
     }
 
     const onSelected = (cat: any) => {
+        setCategorySelected(cat)
         helpers.setValue(cat.name, true)
         // helpers.setTouched(true, true)
         helpers.setError(null)

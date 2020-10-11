@@ -68,7 +68,7 @@ const config = {
         },
     },
     devServer: {
-        // host: "0.0.0.0",
+        host: "0.0.0.0",
         contentBase: './dist',
         historyApiFallback: true,
     },
