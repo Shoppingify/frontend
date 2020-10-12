@@ -1,9 +1,11 @@
 import { ErrorMessage, Field, useField } from 'formik'
 import React, { useCallback, useEffect, useState } from 'react'
+import { isMobile, isMobileOnly } from 'react-device-detect'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import client from '../../api/client'
 import { categoriesState } from '../../global-state/categoriesState'
 import { currentItemState } from '../../global-state/currentItemState'
+import CategoryModal from '../modal/CategoryModal'
 
 interface Category {
     id: number
@@ -19,6 +21,8 @@ const CategorySelect = ({ label, ...props }: any) => {
     const [filtered, setFiltered] = useState<any[]>([])
     const [showAutocomplete, setShowAutocomplete] = useState(false)
     const currentItem = useRecoilValue(currentItemState)
+    const [showCategoryModal, setShowCategoryModal] = useState(false)
+    const [categorySelected, setCategorySelected] = useState<any>(null)
 
     /**
      * Get the user's categories
@@ -48,6 +52,7 @@ const CategorySelect = ({ label, ...props }: any) => {
     }, [currentItem])
 
     useEffect(() => {
+        console.log('called')
         let catNameUpToDate
 
         if (currentItem?.category_id) {
@@ -70,6 +75,16 @@ const CategorySelect = ({ label, ...props }: any) => {
         helpers.setValue(catNameUpToDate || '', true)
         helpers.setTouched(true, true)
     }, [currentItem])
+
+    useEffect(() => {
+        // Check if a category has been updated
+        if (categorySelected) {
+            const category = categories.find(
+                (cat: any) => cat.id === categorySelected.id
+            )
+            onSelected(category)
+        }
+    }, [categories])
 
     /**
      * Filter the categories while the user is typing
@@ -98,10 +113,7 @@ const CategorySelect = ({ label, ...props }: any) => {
         e: React.MouseEvent<HTMLLIElement, MouseEvent>,
         cat: Category
     ) => {
-        helpers.setError(null)
-        helpers.setValue(cat.name, true)
-        helpers.setTouched(true, true)
-        setShowAutocomplete(false)
+        onSelected(cat)
     }
 
     /**
@@ -112,20 +124,28 @@ const CategorySelect = ({ label, ...props }: any) => {
     const onKeyDown = (e: React.KeyboardEvent, cat: Category) => {
         e.preventDefault()
         if (e.key === 'Enter') {
-            helpers.setValue(cat.name, true)
-            helpers.setTouched(true, true)
-            setShowAutocomplete(false)
+            onSelected(cat)
         }
     }
 
+    const onSelected = (cat: any) => {
+        setCategorySelected(cat)
+        helpers.setValue(cat.name, true)
+        // helpers.setTouched(true, true)
+        helpers.setError(null)
+        isMobile ? setShowCategoryModal(false) : setShowAutocomplete(false)
+    }
+
     return (
-        <div className="flex flex-col mb-3">
+        <div className="relative flex flex-col mb-3">
             <label className="font-medium" htmlFor={name}>
                 {label}
             </label>
             <Field
                 className="p-3 rounded-lg border-2 border-gray-input"
                 onChange={autocomplete}
+                autoComplete="off"
+                onClick={() => (isMobile ? setShowCategoryModal(true) : null)}
                 {...props}
             />
             <ErrorMessage name={props.name}>
@@ -134,7 +154,7 @@ const CategorySelect = ({ label, ...props }: any) => {
                 )}
             </ErrorMessage>
 
-            {filtered.length > 0 && showAutocomplete && (
+            {filtered.length > 0 && showAutocomplete && !isMobile && (
                 <ul
                     style={{ maxHeight: '150px' }}
                     className="mt-2 shadow rounded-lg p-2 overflow-y-auto"
@@ -151,6 +171,15 @@ const CategorySelect = ({ label, ...props }: any) => {
                         </li>
                     ))}
                 </ul>
+            )}
+
+            {isMobile && (
+                <CategoryModal
+                    isVisible={showCategoryModal}
+                    data={categories}
+                    onSelected={onSelected}
+                    onClose={() => setShowCategoryModal(false)}
+                />
             )}
         </div>
     )

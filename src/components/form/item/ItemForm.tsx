@@ -149,6 +149,7 @@ const ItemForm: React.FC = () => {
                             name="name"
                             type="text"
                             placeholder="Enter a name"
+                            autoComplete="off"
                         />
                         <BasicInput
                             label="Note (optional)"
@@ -170,6 +171,7 @@ const ItemForm: React.FC = () => {
                     </div>
                     <div className="flex justify-center items-center">
                         <Button
+                            type="button"
                             className="text-black mr-2"
                             onClick={cancel}
                             modifier=""
