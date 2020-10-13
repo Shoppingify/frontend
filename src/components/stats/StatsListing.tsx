@@ -30,12 +30,14 @@ const StatsListing: React.FC<StatsListingProps> = ({
                                     {item.quantity} %
                                 </span>
                             </div>
-                            <Progress value={item.quantity} />
-                            {/* <progress
-                                className="w-full"
-                                max="100"
+                            <Progress
                                 value={item.quantity}
-                            ></progress> */}
+                                colorClass={
+                                    title !== 'Top Categories'
+                                        ? 'bg-primary'
+                                        : 'bg-secondary'
+                                }
+                            />
                         </li>
                     )
                 })}
