@@ -115,12 +115,12 @@ export default class ContentEditable extends React.Component<Props> {
         replaceCaret(el)
     }
 
-    emitChange = (originalEvt: React.SyntheticEvent<any>) => {
+    emitChange = (originalEvt: React.KeyboardEvent<any>, type = '') => {
         const el = this.getEl()
         if (!el) return
 
         //@ts-ignore
-        if (originalEvt.keyCode === 13) {
+        if (originalEvt.key === 'Enter' && type === 'keydown') {
             originalEvt.preventDefault()
 
             // Remove extra spaces and reset caret
@@ -165,7 +165,7 @@ export default class ContentEditable extends React.Component<Props> {
                 onInput: this.emitChange,
                 onBlur: this.props.onBlur || this.emitChange,
                 onKeyUp: this.props.onKeyUp || this.emitChange,
-                onKeyDown: this.props.onKeyDown || this.emitChange,
+                onKeyDown: (e: any) => this.emitChange(e, 'keydown'),
                 contentEditable: !this.props.disabled,
                 dangerouslySetInnerHTML: { __html: normalizeHtml(html) },
                 className: this.props.className,

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { useEffect } from 'react'
 import { MdModeEdit, MdSave } from 'react-icons/md'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
@@ -48,6 +48,7 @@ const CategoryHeadingEditable: React.FC<CategoryTitleProps> = ({
      * Save category name to the db
      */
     const saveCategory = async () => {
+        console.log('called')
         setErrors(null)
 
         if (name.length < 2) {
