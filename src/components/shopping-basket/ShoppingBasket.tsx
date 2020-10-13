@@ -64,14 +64,14 @@ const ShoppingBasket = () => {
                 className={`rounded-full relative flex justify-center
                  items-center  w-10 h-10  text-white text-xl transition-colors duration-500
                 ${
-                    remainingItemCount === 0 && !activeListLoadingState
+                    remainingItemCount === 0 && !loadingActiveList
                         ? 'bg-success'
                         : 'bg-primary'
                 }
             `}
             >
                 <AnimatePresence exitBeforeEnter>
-                    {remainingItemCount !== 0 || activeListLoadingState ? (
+                    {remainingItemCount !== 0 || loadingActiveList ? (
                         <motion.div
                             key={'icon-cart'}
                             initial={{ scale: 0 }}

@@ -19,6 +19,7 @@ import { itemsState } from '../../global-state/itemsState'
 import { ItemType } from '../../types/items/types'
 import AddItemButton from '../../components/button/AddItemButton'
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll'
+import BasicLoader from '../../components/loader/BasicLoader'
 
 // Animation variants
 const containerVariants = {
@@ -124,6 +125,10 @@ const ItemsPage: React.FC = () => {
         setFilteredItems(() => filtered)
     }
 
+    if (loading) {
+        return <BasicLoader />
+    }
+
     return (
         <div className="container mx-auto flex flex-col h-full">
             <div className="flex flex-col xl:flex-row mb-5 px-6 lg:px-20 py-4">
@@ -134,11 +139,9 @@ const ItemsPage: React.FC = () => {
                 <SearchInput search={searchItems} />
             </div>
 
-            {filteredItems.length === 0 && (
+            {filteredItems.length === 0 && !loading && (
                 <div className="flex justify-center">
-                    <h3 className="text-xl font-bold">
-                        {loading ? 'Loading...' : 'No item found...'}
-                    </h3>
+                    <h3 className="text-xl font-bold">No item found...</h3>
                 </div>
             )}
 
