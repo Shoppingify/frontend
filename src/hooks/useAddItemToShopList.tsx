@@ -56,6 +56,7 @@ const useAddItemToShopList = () => {
             const currentItem: ItemType = {
                 ...itemData,
                 quantity: 1,
+                done: false,
             }
             // Id cant be undefined
             const { id = -1, categoryName } = currentItem
