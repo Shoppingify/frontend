@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { shopListState } from '../../global-state/shopListState'
+import {
+    activeListLoadingState,
+    shopListState,
+} from '../../global-state/shopListState'
 import { ItemType } from '../../types/items/types'
 import { MdShoppingCart, MdCheck } from 'react-icons/md'
 import { motion, AnimatePresence } from 'framer-motion'
 import { sidebarMobileShowState } from '../../global-state/sidebarState'
+import BasicLoader from '../loader/BasicLoader'
 
 const ShoppingBasket = () => {
     // Global state
     const shopList = useRecoilValue(shopListState)
     const setSidebarShow = useSetRecoilState(sidebarMobileShowState)
+    const loadingActiveList = useRecoilValue(activeListLoadingState)
 
     const [remainingItemCount, setRemainingItemCount] = useState(0)
 
@@ -58,11 +63,15 @@ const ShoppingBasket = () => {
             <div
                 className={`rounded-full relative flex justify-center
                  items-center  w-10 h-10  text-white text-xl transition-colors duration-500
-                ${remainingItemCount === 0 ? 'bg-success' : 'bg-primary'}
+                ${
+                    remainingItemCount === 0 && !activeListLoadingState
+                        ? 'bg-success'
+                        : 'bg-primary'
+                }
             `}
             >
                 <AnimatePresence exitBeforeEnter>
-                    {remainingItemCount !== 0 ? (
+                    {remainingItemCount !== 0 || activeListLoadingState ? (
                         <motion.div
                             key={'icon-cart'}
                             initial={{ scale: 0 }}

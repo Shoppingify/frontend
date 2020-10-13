@@ -20,6 +20,7 @@ module.exports = {
             white: '#fff',
             black: '#000000',
             gray: '#454545',
+            'gray-dark': '#828282',
             'gray-light': '#c1c1c4',
             'gray-medium-light': '#F2F2F2;',
             'gray-extra-light': '#FAFAFE',

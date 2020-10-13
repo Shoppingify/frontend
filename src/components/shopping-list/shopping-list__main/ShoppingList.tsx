@@ -12,6 +12,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil'
 import {
     shopListState,
     shopListInfoState,
+    activeListLoadingState,
 } from '../../../global-state/shopListState'
 
 // Components
@@ -25,6 +26,7 @@ import RenderNoItems from './RenderNoItems'
 import useCreateNewShoppingList from '../../../hooks/useCreateNewShoppingList'
 import { fadeInRightBig } from '../../../animation/variants/move-in/fade-in'
 import { modalState, ModalType } from '../../../global-state/modalState'
+import BasicLoader from '../../loader/BasicLoader'
 
 /**
  * Main shopping list component
@@ -34,6 +36,7 @@ const ShoppingList: React.FC = React.memo(() => {
     const shopList = useRecoilValue(shopListState)
     const shopListInfo = useRecoilValue(shopListInfoState)
     const setModal = useSetRecoilState(modalState)
+    const loading = useRecoilValue(activeListLoadingState)
 
     // Local state
     const [editing, setEditing] = useState<boolean>(false)
@@ -129,6 +132,10 @@ const ShoppingList: React.FC = React.memo(() => {
         []
     )
 
+    if (loading) {
+        if (loading) return <BasicLoader />
+    }
+
     return (
         <motion.div
             key="shoppinglistkey"
@@ -148,7 +155,7 @@ const ShoppingList: React.FC = React.memo(() => {
                         setEditing={handleSetEditing}
                         shopListName={shopListName}
                     />
-                    {shopList.length === 0 ? (
+                    {shopList.length === 0 && !loading ? (
                         <RenderNoItems />
                     ) : (
                         <RenderShopList editing={editing} />
