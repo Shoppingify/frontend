@@ -1,6 +1,6 @@
 module.exports = {
     purge: {
-        enabled: false,
+        enabled: true,
         content: ['./src/**/*.jsx', './src/**/*.tsx'],
     },
     variants: {
@@ -29,7 +29,7 @@ module.exports = {
             purple: '#80485B',
         },
         fontFamily: {
-            body: ['Quicksand', 'sans-serif'],
+            sans: ['Quicksand', 'sans-serif'],
         },
         extend: {
             borderRadius: {
