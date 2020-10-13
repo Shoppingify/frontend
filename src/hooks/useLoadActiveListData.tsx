@@ -6,7 +6,11 @@ import { useSetRecoilState } from 'recoil'
 import client from '../api/client'
 
 // Global state
-import { shopListInfoState, shopListState } from '../global-state/shopListState'
+import {
+    shopListInfoState,
+    shopListState,
+    activeListLoadingState,
+} from '../global-state/shopListState'
 
 // Types
 import { ItemType, ListOfItems } from '../types/items/types'
@@ -26,11 +30,13 @@ type activeListData = {
 const useLoadActiveListData = () => {
     const setShopListInfoState = useSetRecoilState(shopListInfoState)
     const setShopList = useSetRecoilState(shopListState)
+    const setActiveListLoadingState = useSetRecoilState(activeListLoadingState)
 
     // Hooks
     const createNewList = useCreateNewShoppingList()
 
     return async () => {
+        setActiveListLoadingState(true)
         try {
             const response = await client.get('lists?status=active')
             const {
@@ -70,6 +76,8 @@ const useLoadActiveListData = () => {
             toast.error('There was an error fetching active list')
             // TODO handle notifications
             console.log(error)
+        } finally {
+            setActiveListLoadingState(false)
         }
     }
 }

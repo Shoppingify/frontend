@@ -15,9 +15,9 @@ const UserMenu = () => {
             <LogoSVG />
             <div
                 style={{ left: '100%' }}
-                className="pl-4 group-hover:translate-x-0 group-hover:opacity-100 group-hover:pointer-events-auto pointer-events-none opacity-0 transform translate-x-40 absolute transition-transform duration-200"
+                className="pl-4 w-40 group-hover:translate-x-0 group-hover:opacity-100 group-hover:pointer-events-auto pointer-events-none opacity-0 transform translate-x-40 absolute transition-transform duration-200"
             >
-                <div className="p-4 bg-white">
+                <div className="flex items-center justify-center p-4 bg-white rounded-12">
                     <Button modifier="primary" onClick={handleLogout}>
                         Log out
                     </Button>

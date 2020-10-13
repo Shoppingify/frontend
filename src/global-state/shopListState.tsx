@@ -7,6 +7,11 @@ type shopListInfoStateType = {
     default: shopListInfoStateInterface
 }
 
+export const activeListLoadingState = atom({
+    key: 'activeListLoadingState',
+    default: false,
+})
+
 const shopListStateConst: { key: string; default: ListOfItems[] } = {
     key: 'shopList',
     default: [],

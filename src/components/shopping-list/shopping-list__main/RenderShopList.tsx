@@ -29,7 +29,7 @@ const RenderShopList: React.FC<PropTypes> = React.memo(({ editing }) => {
                 <div key={index} className="mb-12">
                     <CategoryHeading
                         level={3}
-                        className="text-gray-light mb-6"
+                        className="text-gray-dark mb-6 font-medium"
                         category_id={category.category_id}
                     />
                     <ul>
