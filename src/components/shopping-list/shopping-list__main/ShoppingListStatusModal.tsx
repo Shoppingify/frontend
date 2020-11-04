@@ -8,10 +8,14 @@ import { fi } from 'date-fns/locale'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { modalState, ModalType } from '../../../global-state/modalState'
 
+// Types
 type PropTypes = {
     handleListStatus: (status: string) => void
 }
 
+/**
+ * Component that displays modal at the bottom of the shopping list
+ */
 const ShoppingListStatusModal: React.FC<PropTypes> = React.memo(
     ({ handleListStatus }) => {
         const [modal, setModal] = useRecoilState(modalState)
